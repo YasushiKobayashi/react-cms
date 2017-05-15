@@ -13,4 +13,14 @@ export default class {
       });
     });
   }
+
+  static post(params) {
+    return new Promise((resolve, reject) => {
+      request.POST(apiUrl('v1', 'category'), params).then((obj) => {
+        resolve(new Category(obj));
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
 }

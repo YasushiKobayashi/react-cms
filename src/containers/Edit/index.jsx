@@ -1,8 +1,9 @@
 import React, { Component, PropTypes } from 'react';
+import { browserHistory } from 'react-router';
 import { TextField, RaisedButton } from 'material-ui';
 import md from 'markdown-it';
 import toMarkdown from 'to-markdown';
-import { pull, last } from 'lodash';
+import { pull, map } from 'lodash';
 
 import { Archive, Category } from '../../actions';
 import { request, validation } from '../../utils';
@@ -65,17 +66,18 @@ export default class Edit extends Component {
         reject(err);
       });
     });
-    const article = new Promise((resolve, reject) => {
-      this.getArticle().then((obj) => {
-        this.setState({
-          article: obj,
+
+    if (typeof this.props.params.id !== 'undefined') {
+      new Promise((resolve, reject) => {
+        this.getArticle().then((obj) => {
+          this.setState({
+            article: obj,
+          });
+        }).catch((err) => {
+          reject(err);
         });
-      }).catch((err) => {
-        reject(err);
       });
-    });
-    const res = (this.props.params.id !== '') ? article : false;
-    return res;
+    }
   }
 
   getArticle() {
@@ -101,10 +103,10 @@ export default class Edit extends Component {
   handleTitle(event) {
     const val = event.target.value;
     const valid = validation.validTitle(val);
+    const { article } = this.state;
+    article.title = val;
     this.setState({
-      article: {
-        title: val,
-      },
+      article: article,
       titleError: valid,
     });
   }
@@ -112,7 +114,7 @@ export default class Edit extends Component {
   handleContent(event, type) {
     const content = event.target.value;
     const selectionStart = event.target.selectionStart;
-    const newContent = (type === 'markdown') ? content : toMarkdown(content);
+    const newContent = (type === 'html') ? toMarkdown(content) : content;
     const htmlContent = (type === 'markdown') ? md().render(content) : content;
     this.manegeContent(newContent, htmlContent, selectionStart);
   }
@@ -139,24 +141,51 @@ export default class Edit extends Component {
   }
 
   manegeContent(newContent, htmlContent, selectionStart) {
+    const { article } = this.state;
     this.setState({
       selectionStart: selectionStart,
       article: {
+        title: article.title,
         content: newContent,
         htmlContent: htmlContent,
       },
     });
   }
 
-  sendArticle(content, status) {
-    console.log(content);
-    console.log(status);
+  sendArticle(wpFlg) {
+    const {
+      article,
+      categories,
+    } = this.state;
+    const params = {
+      title: article.title,
+      content: article.content,
+      wp_flg: wpFlg,
+      categories: map(categories, 'id'),
+    };
+
+    new Promise((resolve, reject) => {
+      this.postArchive(params).then((obj) => {
+        browserHistory.push(`/article.${obj.id}`);
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+
+  postArchive(params) {
+    return new Promise((resolve, reject) => {
+      Archive.postArticle(params).then((obj) => {
+        resolve(obj);
+      }).catch((err) => {
+        reject(err);
+      });
+    });
   }
 
   handleAddCatList(categoryNew) {
     const {
       categories,
-      categoryLists,
     } = this.state;
     const catValid = validation.validEmpty(categoryNew.name, 'カテゴリ');
     const slugValid = validation.validNonJpanese(categoryNew.slug, 'スラッグ');
@@ -167,18 +196,29 @@ export default class Edit extends Component {
         catSlugErrror: slugValid,
       });
     } else {
-      const lastCat = last(categoryLists);
-      categories[categories.length] = {
-        id: lastCat.id,
-        name: categoryNew.name,
-        slug: categoryNew.slug,
-      };
-      this.setState({
-        categories: categories,
-        catNameError: catValid,
-        catSlugErrror: slugValid,
+      new Promise((resolve, reject) => {
+        this.postCategory(categoryNew).then((obj) => {
+          categories[categories.length] = obj;
+          this.setState({
+            categories: categories,
+            catNameError: catValid,
+            catSlugErrror: slugValid,
+          });
+        }).catch((err) => {
+          reject(err);
+        });
       });
     }
+  }
+
+  postCategory(params) {
+    return new Promise((resolve, reject) => {
+      Category.post(params).then((obj) => {
+        resolve(obj);
+      }).catch((err) => {
+        reject(err);
+      });
+    });
   }
 
   handleAddCat(event) {
@@ -257,11 +297,13 @@ export default class Edit extends Component {
           <RaisedButton
             label='SAVE'
             styleName='btn'
+            onClick={() => { this.sendArticle(false); }}
             primary
           />
           <RaisedButton
             label='SAVE AS WIP'
             styleName='btn'
+            onClick={() => { this.sendArticle(true); }}
             secondary
           />
         </div>
