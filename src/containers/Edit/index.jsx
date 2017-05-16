@@ -5,13 +5,14 @@ import md from 'markdown-it';
 import toMarkdown from 'to-markdown';
 import { pull, map } from 'lodash';
 
-import { Archive, Category, Comment } from '../../actions';
-import { request, validation } from '../../utils';
 import EditArticle from './EditArticle';
 import EditSide from './EditSide';
+import { CommentList } from '../../components';
 import { Loading, Categories, CategoryFrom } from '../../parts';
+import { Archive, Category } from '../../actions';
+import { request, validation } from '../../utils';
 import style from '../../style';
-import './Index.scss';
+import './index.scss';
 
 const tabMark = 'markdown';
 const tabHtml = 'html';
@@ -316,6 +317,7 @@ export default class Edit extends Component {
             secondary
           />
         </div>
+        <CommentList comments={article.comments} />
       </div>
     );
   }

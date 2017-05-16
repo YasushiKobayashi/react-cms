@@ -5,7 +5,7 @@ import Comment from './Comment';
 import { CommentList } from '../../components';
 import { Loading } from '../../parts';
 import { Archive, CommentAction } from '../../actions';
-import './Index.scss';
+import './index.scss';
 
 export default class Single extends Component {
   static propTypes = {
@@ -17,7 +17,7 @@ export default class Single extends Component {
   constructor() {
     super();
     this.state = {
-      single: null,
+      article: null,
       loading: true,
     };
 
@@ -28,7 +28,7 @@ export default class Single extends Component {
     return new Promise((resolve, reject) => {
       Archive.getSigleArticle(this.props.params.id).then((obj) => {
         this.setState({
-          single: obj,
+          article: obj,
           loading: false,
         });
       }).catch((err) => {
@@ -42,12 +42,12 @@ export default class Single extends Component {
       post_id: parseInt(this.props.params.id, 10),
       content: params,
     };
-    const { single } = this.state;
+    const { article } = this.state;
     return new Promise((resolve, reject) => {
       CommentAction.postComment(post).then((obj) => {
-        single.comments[single.comments.length] = obj;
+        article.comments[article.comments.length] = obj;
         this.setState({
-          single: single,
+          article: article,
         });
       }).catch((err) => {
         reject(err);
@@ -57,19 +57,19 @@ export default class Single extends Component {
 
 
   render() {
-    const { single, loading } = this.state;
+    const { article, loading } = this.state;
     if (loading) return <Loading />;
 
     return (
       <div styleName='container'>
-        <h1>{single.title}</h1>
+        <h1>{article.title}</h1>
         <div styleName='content'>
           <Highlight innerHTML>
-            {single.htmlContent}
+            {article.htmlContent}
           </Highlight>
         </div>
         <Comment sendComment={this.sendComment} />
-        <CommentList comments={single.comments} />
+        <CommentList comments={article.comments} />
       </div>
     );
   }
