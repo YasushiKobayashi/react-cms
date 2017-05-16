@@ -11,10 +11,12 @@ export default class {
     return new Promise((resolve, reject) => {
       request.get(url)
       .end((err, res) => {
-        if (res) {
-          resolve(res.body);
-        } else {
+        const statusCode = res.statusCode;
+        if (statusCode > 299) {
+          console.log(res.body);
           reject(err);
+        } else {
+          resolve(res.body);
         }
       });
     });
@@ -33,10 +35,12 @@ export default class {
       .set('Accept', 'application/json')
       .send(params)
       .end((err, res) => {
-        if (res) {
-          resolve(res.body);
-        } else {
+        const statusCode = res.statusCode;
+        if (statusCode > 299) {
+          console.log(res.body);
           reject(err);
+        } else {
+          resolve(res.body);
         }
       });
     });
@@ -53,11 +57,12 @@ export default class {
       request.post(apiUrl('v1', url))
       .attach('file', files[0])
       .end((err, res) => {
-        if (res) {
-          resolve(JSON.parse(res.text));
-          // resolve(res.body);
-        } else {
+        const statusCode = res.statusCode;
+        if (statusCode > 299) {
+          console.log(res.body);
           reject(err);
+        } else {
+          resolve(res.body);
         }
       });
     });

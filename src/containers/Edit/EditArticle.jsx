@@ -1,10 +1,9 @@
 import React, { Component, PropTypes } from 'react';
-import Dropzone from 'react-dropzone';
 import { Tabs, Tab } from 'material-ui/Tabs';
-import PinDrop from 'material-ui/svg-icons/maps/pin-drop';
+
+import { DropZone } from '../../parts';
 
 import './EditArticle.scss';
-import style from '../../style';
 
 export default class EditArticle extends Component {
   static propTypes = {
@@ -18,13 +17,13 @@ export default class EditArticle extends Component {
   static defaultProps = {
     content: '',
     htmlContent: '',
-    dropZone: false,
   }
 
   constructor() {
     super();
     this.state = {
       tabValue: null,
+      dropZone: false,
     };
 
     this.handleTab = this.handleTab.bind(this);
@@ -66,7 +65,6 @@ export default class EditArticle extends Component {
       handleUploadImage,
     } = this.props;
     const { tabValue, dropZone } = this.state;
-    const dropStyle = (dropZone) ? style.show : style.hide;
 
     return (
       <div styleName='content'>
@@ -90,16 +88,12 @@ export default class EditArticle extends Component {
             />
           </Tab>
         </Tabs>
-        <Dropzone
-          style={dropStyle}
-          styleName='drop'
-          onDrop={(file) => { handleUploadImage(file, tabValue); }}
-          onDropAccepted={this.handleDragExit}
-          onDragLeave={this.handleDragExit}
-          onDropRejected={this.handleDragExit}
-          accept="image/*"
-        ><p><PinDrop style={style.icon} /><br />Drop image</p>
-        </Dropzone>
+        <DropZone
+          dropZone={dropZone}
+          tabValue={tabValue}
+          handleDragExit={this.handleDragExit}
+          handleUploadImage={handleUploadImage}
+        />
       </div>
     );
   }

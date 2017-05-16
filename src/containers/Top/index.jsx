@@ -12,7 +12,7 @@ import moment from 'moment';
 import { Archive, Category } from '../../actions';
 import { Loading } from '../../parts';
 import style from '../../style';
-import './Index.scss';
+import './index.scss';
 
 export default class Top extends Component {
   constructor() {

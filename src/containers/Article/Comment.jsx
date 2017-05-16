@@ -1,10 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import Highlight from 'react-highlight';
 import md from 'markdown-it';
 import { RaisedButton } from 'material-ui';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import CommentIcon from 'material-ui/svg-icons/communication/comment';
 
+import { DropZone } from '../../parts';
+import { request } from '../../utils';
 import style from '../../style';
 import './Comment.scss';
 
@@ -12,15 +14,25 @@ const tabComment = 'comment';
 const tabPrev = 'preveiw';
 
 export default class Comment extends Component {
+  static propTypes = {
+    sendComment: PropTypes.func.isRequired,
+  };
+
+
   constructor() {
     super();
     this.state = {
-      conmment: '',
+      comment: '',
       tabValue: tabComment,
+      dropZone: false,
+      selectionStart: 0,
     };
 
     this.handleTab = this.handleTab.bind(this);
     this.handleComment = this.handleComment.bind(this);
+    this.handleDragOver = this.handleDragOver.bind(this);
+    this.handleDragExit = this.handleDragExit.bind(this);
+    this.handleUploadImage = this.handleUploadImage.bind(this);
   }
 
   handleTab(value) {
@@ -30,20 +42,59 @@ export default class Comment extends Component {
   }
 
   handleComment(event) {
-    const val = event.target.value;
     this.setState({
-      conmment: val,
+      comment: event.target.value,
+      selectionStart: event.target.selectionStart,
     });
   }
 
-  handleSendComment() {
+  handleUploadImage(file) {
+    const { comment, selectionStart } = this.state;
+    return new Promise((resolve, reject) => {
+      this.uploadImage(file).then((imagePath) => {
+        const addStr = `\n![](${imagePath})\n`;
+        const content = this.insertStr(comment, selectionStart, addStr);
+        this.setState({
+          comment: content,
+        });
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
 
+  insertStr(str, index, insert) {
+    return str.slice(0, index) + insert + str.slice(index, str.length);
+  }
+
+  uploadImage(file) {
+    return new Promise((resolve, reject) => {
+      request.UPLOAD('upload', file).then((obj) => {
+        resolve(obj.path);
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+
+  handleDragOver() {
+    this.setState({
+      dropZone: true,
+    });
+  }
+
+  handleDragExit() {
+    this.setState({
+      dropZone: false,
+    });
   }
 
   render() {
+    const { sendComment } = this.props;
     const {
-      conmment,
+      comment,
       tabValue,
+      dropZone,
     } = this.state;
 
     return (
@@ -57,22 +108,29 @@ export default class Comment extends Component {
         >
           <Tab label={tabComment} value={tabComment}>
             <textarea
-              value={conmment}
+              value={comment}
               onChange={this.handleComment}
+              onDragOver={this.handleDragOver}
             />
           </Tab>
           <Tab label={tabPrev} value={tabPrev}>
             <Highlight styleName='content' innerHTML>
-              {md().render(conmment)}
+              {md().render(comment)}
             </Highlight>
           </Tab>
         </Tabs>
         <RaisedButton
           label='ADD'
-          onClick={this.handleSendComment}
+          onClick={() => { sendComment(comment); }}
           style={style.catagoryBtn}
           icon={<CommentIcon style={style.icon} />}
           primary
+        />
+        <DropZone
+          dropZone={dropZone}
+          tabValue={tabValue}
+          handleDragExit={this.handleDragExit}
+          handleUploadImage={this.handleUploadImage}
         />
       </div>
     );

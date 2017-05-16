@@ -2,8 +2,9 @@ import React, { Component, PropTypes } from 'react';
 import Highlight from 'react-highlight';
 
 import Comment from './Comment';
+import { CommentList } from '../../components';
 import { Loading } from '../../parts';
-import { Archive } from '../../actions';
+import { Archive, CommentAction } from '../../actions';
 import './Index.scss';
 
 export default class Single extends Component {
@@ -19,12 +20,13 @@ export default class Single extends Component {
       single: null,
       loading: true,
     };
-    this.getArticle = this.getArticle.bind(this);
+
+    this.sendComment = this.sendComment.bind(this);
   }
 
   componentDidMount() {
     return new Promise((resolve, reject) => {
-      this.getArticle().then((obj) => {
+      Archive.getSigleArticle(this.props.params.id).then((obj) => {
         this.setState({
           single: obj,
           loading: false,
@@ -35,15 +37,24 @@ export default class Single extends Component {
     });
   }
 
-  getArticle() {
+  sendComment(params) {
+    const post = {
+      post_id: parseInt(this.props.params.id, 10),
+      content: params,
+    };
+    const { single } = this.state;
     return new Promise((resolve, reject) => {
-      Archive.getSigleArticle(`${this.props.params.id}`).then((obj) => {
-        resolve(obj);
+      CommentAction.postComment(post).then((obj) => {
+        single.comments[single.comments.length] = obj;
+        this.setState({
+          single: single,
+        });
       }).catch((err) => {
         reject(err);
       });
     });
   }
+
 
   render() {
     const { single, loading } = this.state;
@@ -57,7 +68,8 @@ export default class Single extends Component {
             {single.htmlContent}
           </Highlight>
         </div>
-        <Comment />
+        <Comment sendComment={this.sendComment} />
+        <CommentList comments={single.comments} />
       </div>
     );
   }

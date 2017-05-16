@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import ReactHtmlParser from 'react-html-parser';
+import Highlight from 'react-highlight';
 import { TextField } from 'material-ui';
 
 import { Categories } from '../../parts';
@@ -42,7 +42,9 @@ export default class EditSide extends Component {
         />
         <h3 styleName='contentHead'>content</h3>
         <div styleName='content' id='content'>
-          { ReactHtmlParser(article.htmlContent) }
+          <Highlight innerHTML>
+            {article.htmlContent}
+          </Highlight>
         </div>
         <h3>category</h3>
         <div styleName='wrapper'>

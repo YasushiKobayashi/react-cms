@@ -5,7 +5,7 @@ import md from 'markdown-it';
 import toMarkdown from 'to-markdown';
 import { pull, map } from 'lodash';
 
-import { Archive, Category } from '../../actions';
+import { Archive, Category, Comment } from '../../actions';
 import { request, validation } from '../../utils';
 import EditArticle from './EditArticle';
 import EditSide from './EditSide';
@@ -122,14 +122,23 @@ export default class Edit extends Component {
   handleUploadImage(file, type) {
     const { article, selectionStart } = this.state;
     return new Promise((resolve, reject) => {
-      request.UPLOAD('upload', file).then((obj) => {
-        const imagePath = obj.path;
+      this.uploadImage(file).then((imagePath) => {
         let content = (type === 'markdown') ? article.content : article.htmlContent;
         const addStr = (type === 'markdown') ? `\n![](${imagePath})\n` : `\n<p><img src="${imagePath}" ></p>\n`;
         content = this.insertStr(content, selectionStart, addStr);
         const newContent = (type === 'markdown') ? content : toMarkdown(content);
         const htmlContent = (type === 'markdown') ? md().render(content) : content;
         resolve(this.manegeContent(newContent, htmlContent, selectionStart));
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+
+  uploadImage(file) {
+    return new Promise((resolve, reject) => {
+      request.UPLOAD('upload', file).then((obj) => {
+        resolve(obj.path);
       }).catch((err) => {
         reject(err);
       });
