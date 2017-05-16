@@ -3,8 +3,9 @@ import apiUrl from './apiUrl';
 
 export default class {
   /**
-   * [GET用のメソッド]
+   * GET用のメソッド
    * @param {string} url [GETのURL]
+   * @return {object} GETの返り値
    */
   static GET(url) {
     return new Promise((resolve, reject) => {
@@ -21,14 +22,14 @@ export default class {
   }
 
   /**
-   * [JSONのPOST用のメソッド]
-   * @param {[type]} url    [POSTのURL]
-   * @param {[type]} params [POSTする配列]
+   * JSONのPOST用のメソッド
+   * @param {string} url    POSTのURL
+   * @param {object} params [POSTする配列]
+   * @return {object} POSTの返り値
    */
   static POST(url, params) {
     return new Promise((resolve, reject) => {
       request.post(url)
-      .type('form')
       .set('Content-Type', 'application/json')
       .set('Accept', 'application/json')
       .send(JSON.stringify(params))
@@ -45,8 +46,9 @@ export default class {
 
   /**
    * [ファイルアップロード用のメソッド]
-   * @param {[type]} url   [POST先のURL（pathのみ）]
-   * @param {[type]} files [POSTするFILEオブジェクト]
+   * @param {string} url   [POST先のURL（pathのみ）]
+   * @param {object} files [POSTするFILEオブジェクト]
+   * @return {object} アップロードした画像のパス
    */
   static UPLOAD(url, files) {
     return new Promise((resolve, reject) => {
