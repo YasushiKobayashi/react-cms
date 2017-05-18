@@ -8,9 +8,10 @@ export default class Single {
     this.dateObj = new Date(obj.updated);
     this.content = obj.content;
     this.htmlContent = md().render(obj.content);
-    this.comments = obj.comments.map((commnet) => {
-      return new Comment(commnet);
-    });
+    this.comments = (obj.comments !== null) ?
+      obj.comments.map((commnet) => {
+        return new Comment(commnet);
+      }) : null;
     this.categories = obj.categories.map((category) => {
       return new Category(category);
     });

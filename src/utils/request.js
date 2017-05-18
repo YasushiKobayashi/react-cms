@@ -13,7 +13,6 @@ export default class {
       .end((err, res) => {
         const statusCode = res.statusCode;
         if (statusCode > 299) {
-          console.log(res.body);
           reject(err);
         } else {
           resolve(res.body);
@@ -83,7 +82,6 @@ export default class {
       .end((err, res) => {
         const statusCode = res.statusCode;
         if (statusCode > 299) {
-          console.log(res.body);
           reject(err);
         } else {
           resolve(res.body);
