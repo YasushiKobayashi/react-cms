@@ -231,7 +231,7 @@ export default class Edit extends Component {
     const { categories, categoryLists } = this.state;
     categoryLists[categoryLists.length] = categories[id];
     this.setState({
-      categories: pull(categories, categories[id]),
+      categories: _.pull(categories, categories[id]),
       categoryLists: categoryLists,
     });
   }
