@@ -3,7 +3,7 @@ import { browserHistory } from 'react-router';
 import { TextField, RaisedButton } from 'material-ui';
 import md from 'markdown-it';
 import toMarkdown from 'to-markdown';
-import { pull, map } from 'lodash';
+import _ from 'lodash';
 
 import EditArticle from './EditArticle';
 import EditSide from './EditSide';
@@ -58,43 +58,28 @@ export default class Edit extends Component {
 
   componentDidMount() {
     new Promise((resolve, reject) => {
-      this.getCategories().then((obj) => {
+      Category.get().then((obj) => {
         this.setState({
           categoryLists: obj,
           loading: false,
         });
-      }).catch((err) => {
-        reject(err);
-      });
-    });
-
-    if (typeof this.props.params.id !== 'undefined') {
-      new Promise((resolve, reject) => {
-        this.getArticle().then((obj) => {
-          this.setState({
-            article: obj,
+        return obj;
+      }).then((categoryLists) => {
+        if (typeof this.props.params.id !== 'undefined') {
+          Archive.getSigleArticle(this.props.params.id).then((obj) => {
+            const categoryIds = _.map(obj.categories, 'id');
+            _.forEach(categoryIds, (value) => {
+              categoryLists = _.reject(categoryLists, { id: value });
+            });
+            this.setState({
+              article: obj,
+              categories: obj.categories,
+              categoryLists: categoryLists,
+            });
+          }).catch((err) => {
+            reject(err);
           });
-        }).catch((err) => {
-          reject(err);
-        });
-      });
-    }
-  }
-
-  getArticle() {
-    return new Promise((resolve, reject) => {
-      Archive.getSigleArticle(this.props.params.id).then((obj) => {
-        resolve(obj);
-      }).catch((err) => {
-        reject(err);
-      });
-    });
-  }
-
-  getCategories() {
-    return new Promise((resolve, reject) => {
-      Category.get().then((obj) => {
-        resolve(obj);
+        }
       }).catch((err) => {
         reject(err);
       });
@@ -171,7 +156,7 @@ export default class Edit extends Component {
       title: article.title,
       content: article.content,
       wp_flg: wpFlg,
-      categories: map(categories, 'id'),
+      categories: _.map(categories, 'id'),
     };
 
     new Promise((resolve, reject) => {
@@ -237,7 +222,7 @@ export default class Edit extends Component {
     categories[categories.length] = categoryLists[id];
     this.setState({
       categories: categories,
-      categoryLists: pull(categoryLists, categoryLists[id]),
+      categoryLists: _.pull(categoryLists, categoryLists[id]),
     });
   }
 

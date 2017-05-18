@@ -1,5 +1,5 @@
 import md from 'markdown-it';
-import Comment from './Comment';
+import { Comment, Category } from './';
 
 export default class Single {
   constructor(obj) {
@@ -10,6 +10,9 @@ export default class Single {
     this.htmlContent = md().render(obj.content);
     this.comments = obj.comments.map((commnet) => {
       return new Comment(commnet);
+    });
+    this.categories = obj.categories.map((category) => {
+      return new Category(category);
     });
   }
 }
