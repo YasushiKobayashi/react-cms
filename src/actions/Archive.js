@@ -34,4 +34,14 @@ export default class {
       });
     });
   }
+
+  static putArticle(id, params) {
+    return new Promise((resolve, reject) => {
+      request.PUT(apiUrl('v1', `post/${id}`), params).then((obj) => {
+        resolve(new Single(obj));
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
 }

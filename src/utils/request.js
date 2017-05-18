@@ -5,7 +5,7 @@ export default class {
   /**
    * GET用のメソッド
    * @param {string} url [GETのURL]
-   * @return {object} GETの返り値
+   * @return {object} [GETの返り値]
    */
   static GET(url) {
     return new Promise((resolve, reject) => {
@@ -24,7 +24,7 @@ export default class {
 
   /**
    * JSONのPOST用のメソッド
-   * @param {string} url    POSTのURL
+   * @param {string} url    [POSTのURL]
    * @param {object} params [POSTする配列]
    * @return {object} POSTの返り値
    */
@@ -37,7 +37,31 @@ export default class {
       .end((err, res) => {
         const statusCode = res.statusCode;
         if (statusCode > 299) {
-          console.log(res.body);
+          reject(err);
+        } else {
+          resolve(res.body);
+        }
+      });
+    });
+  }
+
+  /**
+   * JSONのPUT用のメソッド
+   * @param {string} url    [PUTのURL]
+   * @param {object} params [PUTする配列]
+   * @return {object} PUTの返り値
+   */
+  static PUT(url, params) {
+    console.log(params);
+    return new Promise((resolve, reject) => {
+      request.put(url)
+      .set('Content-Type', 'application/json')
+      .set('Accept', 'application/json')
+      .send(params)
+      .end((err, res) => {
+        console.log(res);
+        const statusCode = res.statusCode;
+        if (statusCode > 299) {
           reject(err);
         } else {
           resolve(res.body);

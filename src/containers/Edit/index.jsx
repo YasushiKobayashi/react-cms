@@ -148,34 +148,47 @@ export default class Edit extends Component {
   }
 
   sendArticle(wpFlg) {
-    const {
-      article,
-      categories,
-    } = this.state;
+    const { article, categories } = this.state;
+    const categoryIds = _.map(categories, 'id');
+    _.forEach(categoryIds, (value) => {
+      _.filter(categoryIds, { id: value });
+    });
     const params = {
       title: article.title,
       content: article.content,
       wp_flg: wpFlg,
-      categories: _.map(categories, 'id'),
+      categories: categories,
     };
 
     new Promise((resolve, reject) => {
-      this.postArchive(params).then((obj) => {
-        browserHistory.push(`/article.${obj.id}`);
+      this.saveArticle(params).then((obj) => {
+        console.log(obj);
+        browserHistory.push(`/article/${obj.id}`);
       }).catch((err) => {
         reject(err);
       });
     });
   }
 
-  postArchive(params) {
-    return new Promise((resolve, reject) => {
-      Archive.postArticle(params).then((obj) => {
-        resolve(obj);
-      }).catch((err) => {
-        reject(err);
+  saveArticle(params) {
+    const id = this.props.params.id;
+    if (typeof id === 'undefined') {
+      return new Promise((resolve, reject) => {
+        Archive.postArticle(params).then((obj) => {
+          resolve(obj);
+        }).catch((err) => {
+          reject(err);
+        });
       });
-    });
+    } else {
+      return new Promise((resolve, reject) => {
+        Archive.putArticle(id, params).then((obj) => {
+          resolve(obj);
+        }).catch((err) => {
+          reject(err);
+        });
+      });
+    }
   }
 
   handleAddCatList(categoryNew) {
