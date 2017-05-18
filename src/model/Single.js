@@ -3,6 +3,7 @@ import { Comment, Category } from './';
 
 export default class Single {
   constructor(obj) {
+    this.id = obj.id;
     this.title = obj.title;
     this.date = obj.date;
     this.dateObj = new Date(obj.updated);
