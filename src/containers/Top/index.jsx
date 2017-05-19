@@ -27,50 +27,37 @@ export default class Top extends Component {
       loading: true,
     };
 
-    this.getArchives = this.getArchives.bind(this);
     this.handleSelectedCat = this.handleSelectedCat.bind(this);
     this.handleSort = this.handleSort.bind(this);
   }
 
   componentDidMount() {
-    new Promise((resolve, reject) => {
-      this.getCategories().then((obj) => {
-        this.setState({
-          categories: obj,
-        });
-      }).catch((err) => {
-        reject(err);
-      });
-    });
-    return new Promise((resolve, reject) => {
-      this.getArchives().then((obj) => {
-        this.setState({
-          archives: obj,
-          loading: false,
-        });
-      }).catch((err) => {
-        reject(err);
-      });
-    });
-  }
-
-  getArchives() {
-    return new Promise((resolve, reject) => {
-      Archive.getList().then((obj) => {
-        resolve(obj);
-      }).catch((err) => {
-        reject(err);
-      });
-    });
-  }
-
-  getCategories() {
-    return new Promise((resolve, reject) => {
-      Category.get().then((obj) => {
-        resolve(obj);
-      }).catch((err) => {
-        reject(err);
-      });
+    Promise.resolve().then(() => {
+      return Promise.all([
+        new Promise((resolve, reject) => {
+          Category.get().then((obj) => {
+            return obj;
+          }).then((obj) => {
+            this.setState({
+              categories: obj,
+            });
+          }).catch((err) => {
+            reject(err);
+          });
+        }),
+        new Promise((resolve, reject) => {
+          Archive.getList().then((obj) => {
+            return obj;
+          }).then((obj) => {
+            this.setState({
+              archives: obj,
+              loading: false,
+            });
+          }).catch((err) => {
+            reject(err);
+          });
+        }),
+      ]);
     });
   }
 
