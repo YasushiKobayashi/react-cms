@@ -14,6 +14,18 @@ export default class {
     });
   }
 
+  static getListFromCategory(id) {
+    return new Promise((resolve, reject) => {
+      request.GET(apiUrl('v1', `post/category/${id}`)).then((arr) => {
+        resolve(arr.posts.map((obj) => {
+          return new Archive(obj);
+        }));
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+
 
   static getSigleArticle(id) {
     return new Promise((resolve, reject) => {

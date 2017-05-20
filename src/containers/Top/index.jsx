@@ -29,35 +29,42 @@ export default class Top extends Component {
 
     this.handleSelectedCat = this.handleSelectedCat.bind(this);
     this.handleSort = this.handleSort.bind(this);
+    this.getCategory = this.getCategory.bind(this);
+    this.getList = this.getList.bind(this);
   }
 
   componentDidMount() {
     Promise.resolve().then(() => {
-      return Promise.all([
-        new Promise((resolve, reject) => {
-          Category.get().then((obj) => {
-            return obj;
-          }).then((obj) => {
-            this.setState({
-              categories: obj,
-            });
-          }).catch((err) => {
-            reject(err);
-          });
-        }),
-        new Promise((resolve, reject) => {
-          Archive.getList().then((obj) => {
-            return obj;
-          }).then((obj) => {
-            this.setState({
-              archives: obj,
-              loading: false,
-            });
-          }).catch((err) => {
-            reject(err);
-          });
-        }),
-      ]);
+      return Promise.all([this.getCategory(), this.getList()]);
+    });
+  }
+
+  getCategory() {
+    return new Promise((resolve, reject) => {
+      Category.get().then((obj) => {
+        return obj;
+      }).then((obj) => {
+        this.setState({
+          categories: obj,
+        });
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+
+  getList() {
+    return new Promise((resolve, reject) => {
+      Archive.getList().then((obj) => {
+        return obj;
+      }).then((obj) => {
+        this.setState({
+          archives: obj,
+          loading: false,
+        });
+      }).catch((err) => {
+        reject(err);
+      });
     });
   }
 
@@ -65,7 +72,19 @@ export default class Top extends Component {
     this.setState({
       selectedCat: value,
     });
+    new Promise((resolve, reject) => {
+      Archive.getListFromCategory(value).then((obj) => {
+        return obj;
+      }).then((obj) => {
+        this.setState({
+          archives: obj,
+        });
+      }).catch((err) => {
+        reject(err);
+      });
+    });
   }
+
 
   handleSort(event, index, value) {
     this.setState({
@@ -123,7 +142,7 @@ export default class Top extends Component {
       return (
         <MenuItem
           key={category.id}
-          value={category.slug}
+          value={category.id}
           primaryText={category.name}
         />
       );
