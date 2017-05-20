@@ -1,5 +1,7 @@
 import request from 'superagent';
 import apiUrl from './apiUrl';
+import cookie from './cookie';
+
 
 export default class {
   /**
@@ -8,11 +10,12 @@ export default class {
    * @return {object} [GETの返り値]
    */
   static GET(url) {
+    const token = cookie.read('token');
     return new Promise((resolve, reject) => {
       request.get(url)
+      .set('Authorization', `Bearer ${token}`)
       .end((err, res) => {
-        const statusCode = res.statusCode;
-        if (statusCode > 299) {
+        if (err) {
           reject(err);
         } else {
           resolve(res.body);
@@ -28,8 +31,10 @@ export default class {
    * @return {object} POSTの返り値
    */
   static POST(url, params) {
+    const token = cookie.read('token');
     return new Promise((resolve, reject) => {
       request.post(url)
+      .set('Authorization', `Bearer ${token}`)
       .set('Content-Type', 'application/json')
       .set('Accept', 'application/json')
       .send(params)
@@ -51,16 +56,15 @@ export default class {
    * @return {object} PUTの返り値
    */
   static PUT(url, params) {
-    console.log(params);
+    const token = cookie.read('token');
     return new Promise((resolve, reject) => {
       request.put(url)
+      .set('Authorization', `Bearer ${token}`)
       .set('Content-Type', 'application/json')
       .set('Accept', 'application/json')
       .send(params)
       .end((err, res) => {
-        console.log(res);
-        const statusCode = res.statusCode;
-        if (statusCode > 299) {
+        if (err) {
           reject(err);
         } else {
           resolve(res.body);
@@ -76,12 +80,13 @@ export default class {
    * @return {object} アップロードした画像のパス
    */
   static UPLOAD(url, files) {
+    const token = cookie.read('token');
     return new Promise((resolve, reject) => {
       request.post(apiUrl('v1', url))
+      .set('Authorization', `Bearer ${token}`)
       .attach('file', files[0])
       .end((err, res) => {
-        const statusCode = res.statusCode;
-        if (statusCode > 299) {
+        if (err) {
           reject(err);
         } else {
           resolve(res.body);

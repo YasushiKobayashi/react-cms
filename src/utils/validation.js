@@ -1,3 +1,5 @@
+import validator from 'validator';
+
 export default class {
   /**
    * 空白チェックのバリデーション
@@ -7,6 +9,38 @@ export default class {
    */
   static validEmpty(text, name) {
     const res = (text === '') ? `${name}は必須です。` : '';
+    return res;
+  }
+
+  /**
+   * メールアドレスのバリデーション
+   * @param  {string} text バリデーションを行なう値
+   * @return {string} エラーメッセージ
+   */
+  static validEmail(text) {
+    const name = 'メールアドレス';
+    let res = this.validEmpty(text, name);
+    if (!res) {
+      if (!validator.isEmail(text)) {
+        res = `${name}の形式ではありません。`;
+      }
+    }
+    return res;
+  }
+
+  /**
+   * パスワードのバリデーション
+   * @param  {string} text バリデーションを行なう値
+   * @return {string} エラーメッセージ
+   */
+  static validPassword(text) {
+    const name = 'パスワード';
+    let res = this.validEmpty(text, name);
+    if (!res) {
+      if (text.length < 8) {
+        res = `${name}は8文字以上で設定して下さい。`;
+      }
+    }
     return res;
   }
 
