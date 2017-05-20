@@ -1,10 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { Link, browserHistory } from 'react-router';
+import clipboard from 'clipboard-js';
 import IconButton from 'material-ui/IconButton';
 import MenuIcon from 'material-ui/svg-icons/navigation/menu';
 import ContentLink from 'material-ui/svg-icons/content/link';
+import Emoticon from 'material-ui/svg-icons/Editor/insert-emoticon';
 import Edit from 'material-ui/svg-icons/image/edit';
-import clipboard from 'clipboard-js';
+import Exit from 'material-ui/svg-icons/action/exit-to-app';
 import {
   AppBar,
   Popover,
@@ -13,10 +15,12 @@ import {
 } from 'material-ui';
 
 import config from '../../config';
+import { staticImage } from '../../utils';
 import './Header.scss';
 
 export default class Header extends Component {
   static propTypes = {
+    manageLogin: PropTypes.func.isRequired,
     user: PropTypes.shape({
       name: PropTypes.string,
       picture: PropTypes.string,
@@ -27,30 +31,47 @@ export default class Header extends Component {
     super();
     this.state = {
       siteTitle: config.siteTitle,
-      open: false,
-      anchorEl: null,
+      mainMenu: {
+        open: false,
+        anchorEl: null,
+      },
+      subMenu: {
+        open: false,
+        anchorEl: null,
+      },
     };
-    this.handleOpenMenu = this.handleOpenMenu.bind(this);
-    this.handleCloseMenu = this.handleCloseMenu.bind(this);
+    this.handleMainMenu = this.handleMainMenu.bind(this);
+    this.handleSubMenu = this.handleSubMenu.bind(this);
   }
 
-  handleOpenMenu(event) {
-    event.preventDefault();
+  handleMainMenu(event, type) {
+    console.log(event);
     this.setState({
-      open: true,
-      anchorEl: event.currentTarget,
+      mainMenu: {
+        open: type,
+        anchorEl: event.currentTarget,
+      },
     });
   }
 
-  handleCloseMenu() {
+  handleSubMenu(event, type) {
     this.setState({
-      open: false,
+      subMenu: {
+        open: type,
+        anchorEl: event.currentTarget,
+      },
     });
   }
+
 
   linkToEdit(e) {
     e.preventDefault();
     browserHistory.push('/edit');
+  }
+
+  linkToMypage(e) {
+    e.preventDefault();
+    browserHistory.push('/mypage');
   }
 
   copyClipboard() {
@@ -60,41 +81,63 @@ export default class Header extends Component {
   }
 
   render() {
-    const { user } = this.props;
+    const { user, manageLogin } = this.props;
     const {
       siteTitle,
-      open,
-      anchorEl,
+      mainMenu,
+      subMenu,
     } = this.state;
 
     const picture = user.picture ? (
       <div>
         <img
-          src={user.picture}
-          alt={user.name}
+          src={user.picture} alt={user.name}
+          onClick={(event) => { this.handleSubMenu(event, true); }}
         />
       </div>
-    ) : (<div />);
+    ) : (
+      <div>
+        <img
+          src={staticImage('no-image.png')} alt='no-image'
+          onClick={(event) => { this.handleSubMenu(event, true); }}
+        />
+      </div>
+    );
 
-    const navBtn = <IconButton onClick={this.handleOpenMenu} ><MenuIcon /></IconButton>;
-    const title = <Link to='/'>{siteTitle}</Link>;
     return (
       <div styleName='conteiner'>
         <AppBar
-          iconElementLeft={navBtn}
+          iconElementLeft={
+            <IconButton
+              onClick={(event) => { this.handleMainMenu(event, true); }}
+            ><MenuIcon /></IconButton>}
           iconElementRight={picture}
-          title={title}
+          title={<Link to='/'>{siteTitle}</Link>}
         />
         <Popover
-          open={open}
-          anchorEl={anchorEl}
+          open={mainMenu.open}
+          anchorEl={mainMenu.anchorEl}
           anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
           targetOrigin={{ horizontal: 'left', vertical: 'top' }}
-          onRequestClose={this.handleCloseMenu}
+          onRequestClose={(event) => { this.handleSubMenu(event, false); }}
         >
           <Menu>
             <MenuItem primaryText="NEW POST" leftIcon={<Edit />} onClick={this.linkToEdit} />
             <MenuItem primaryText="GET LINK" leftIcon={<ContentLink />} onClick={this.copyClipboard} />
+          </Menu>
+        </Popover>
+        <Popover
+          open={subMenu.open}
+          anchorEl={subMenu.anchorEl}
+          anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
+          targetOrigin={{ horizontal: 'left', vertical: 'top' }}
+          onRequestClose={(event) => { this.handleSubMenu(event, false); }}
+        >
+          <Menu>
+            <MenuItem primaryText="MYPAGE" leftIcon={<Emoticon />} onClick={this.linkToMypage} />
+            <MenuItem primaryText="Logout" leftIcon={<Exit />}
+              onClick={() => { manageLogin(false); }}
+            />
           </Menu>
         </Popover>
       </div>
