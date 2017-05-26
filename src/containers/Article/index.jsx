@@ -9,10 +9,16 @@ import './index.scss';
 
 export default class Single extends Component {
   static propTypes = {
+    user: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+    }).isRequired,
     params: PropTypes.shape({
       id: PropTypes.string.isRequired,
     }).isRequired,
   };
+  static defaultProps = {
+    userId: null,
+  }
 
   constructor() {
     super();
@@ -39,6 +45,7 @@ export default class Single extends Component {
 
   sendComment(params) {
     const post = {
+      user_id: this.props.user.id,
       post_id: parseInt(this.props.params.id, 10),
       content: params,
     };

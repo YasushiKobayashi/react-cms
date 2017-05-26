@@ -6,11 +6,13 @@ import {
   Top,
   Article,
   Edit,
+  Mypage,
 } from './containers';
 
 module.exports = (
   <Route component={App}>
     <Route path='/' component={Top} />
+    <Route path='/mypage' component={Mypage} />
     <Route path='/edit' component={Edit}>
       <Route path='/edit/:id' />
     </Route>

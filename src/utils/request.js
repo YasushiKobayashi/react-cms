@@ -43,6 +43,7 @@ export default class {
         if (statusCode > 299) {
           reject(err);
         } else {
+          console.log(res);
           resolve(res.body);
         }
       });

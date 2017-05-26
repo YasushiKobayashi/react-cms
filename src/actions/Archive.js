@@ -2,9 +2,9 @@ import { request, apiUrl } from '../utils';
 import { Archive, Single } from '../model';
 
 export default class {
-  static getList() {
+  static getList(url) {
     return new Promise((resolve, reject) => {
-      request.GET(apiUrl('v1', 'post')).then((arr) => {
+      request.GET(apiUrl('v1', url)).then((arr) => {
         resolve(arr.map((obj) => {
           return new Archive(obj);
         }));
@@ -18,6 +18,18 @@ export default class {
     return new Promise((resolve, reject) => {
       request.GET(apiUrl('v1', `post/category/${id}`)).then((arr) => {
         resolve(arr.posts.map((obj) => {
+          return new Archive(obj);
+        }));
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+
+  static serachArticle(params) {
+    return new Promise((resolve, reject) => {
+      request.POST(apiUrl('v1', 'post/search'), params).then((arr) => {
+        resolve(arr.map((obj) => {
           return new Archive(obj);
         }));
       }).catch((err) => {

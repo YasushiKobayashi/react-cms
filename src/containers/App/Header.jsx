@@ -15,7 +15,6 @@ import {
 } from 'material-ui';
 
 import config from '../../config';
-import { staticImage } from '../../utils';
 import './Header.scss';
 
 export default class Header extends Component {
@@ -42,10 +41,11 @@ export default class Header extends Component {
     };
     this.handleMainMenu = this.handleMainMenu.bind(this);
     this.handleSubMenu = this.handleSubMenu.bind(this);
+    this.closeMainMenu = this.closeMainMenu.bind(this);
+    this.closeSubMenu = this.closeSubMenu.bind(this);
   }
 
   handleMainMenu(event, type) {
-    console.log(event);
     this.setState({
       mainMenu: {
         open: type,
@@ -59,6 +59,22 @@ export default class Header extends Component {
       subMenu: {
         open: type,
         anchorEl: event.currentTarget,
+      },
+    });
+  }
+
+  closeMainMenu() {
+    this.setState({
+      mainMenu: {
+        open: false,
+      },
+    });
+  }
+
+  closeSubMenu() {
+    this.setState({
+      subMenu: {
+        open: false,
       },
     });
   }
@@ -88,17 +104,10 @@ export default class Header extends Component {
       subMenu,
     } = this.state;
 
-    const picture = user.picture ? (
+    const picture = (
       <div>
         <img
-          src={user.picture} alt={user.name}
-          onClick={(event) => { this.handleSubMenu(event, true); }}
-        />
-      </div>
-    ) : (
-      <div>
-        <img
-          src={staticImage('no-image.png')} alt='no-image'
+          src={user.image} alt={user.name}
           onClick={(event) => { this.handleSubMenu(event, true); }}
         />
       </div>
@@ -119,7 +128,7 @@ export default class Header extends Component {
           anchorEl={mainMenu.anchorEl}
           anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
           targetOrigin={{ horizontal: 'left', vertical: 'top' }}
-          onRequestClose={(event) => { this.handleSubMenu(event, false); }}
+          onRequestClose={this.closeMainMenu}
         >
           <Menu>
             <MenuItem primaryText="NEW POST" leftIcon={<Edit />} onClick={this.linkToEdit} />
@@ -131,11 +140,12 @@ export default class Header extends Component {
           anchorEl={subMenu.anchorEl}
           anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
           targetOrigin={{ horizontal: 'left', vertical: 'top' }}
-          onRequestClose={(event) => { this.handleSubMenu(event, false); }}
+          onRequestClose={this.closeSubMenu}
         >
           <Menu>
-            <MenuItem primaryText="MYPAGE" leftIcon={<Emoticon />} onClick={this.linkToMypage} />
-            <MenuItem primaryText="Logout" leftIcon={<Exit />}
+            <MenuItem primaryText='MYPAGE' leftIcon={<Emoticon />} onClick={this.linkToMypage} />
+            <MenuItem
+              primaryText='Logout' leftIcon={<Exit />}
               onClick={() => { manageLogin(false); }}
             />
           </Menu>

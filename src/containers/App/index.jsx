@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component, PropTypes, cloneElement } from 'react';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import { MuiThemeProvider } from 'material-ui/styles';
 
@@ -22,8 +22,9 @@ export default class App extends Component {
       isLogin: false,
       isLoading: true,
       user: {
-        name: null,
-        picture: null,
+        id: null,
+        name: '',
+        picture: '',
       },
     };
 
@@ -38,15 +39,17 @@ export default class App extends Component {
         isLoading: false,
       });
     } else {
-      new Promise((resolve, reject) => {
+      new Promise(() => {
         User.get('user').then((obj) => {
           this.setState({
             user: obj,
             isLoading: false,
             isLogin: true,
           });
-        }).catch((err) => {
-          reject(err);
+        }).catch(() => {
+          this.setState({
+            isLoading: false,
+          });
         });
       });
     }
@@ -65,8 +68,14 @@ export default class App extends Component {
       isLogin,
       isLoading,
     } = this.state;
-    const render = isLoading ? <Loading /> :
-    isLogin ? this.props.children : <Login manageLogin={this.manageLogin} />;
+
+    const children = cloneElement(
+      this.props.children,
+      { user: user },
+    );
+
+    const render = (isLoading) ? <Loading /> :
+      (isLogin) ? children : <Login manageLogin={this.manageLogin} />;
 
     return (
       <MuiThemeProvider muiTheme={theme}>

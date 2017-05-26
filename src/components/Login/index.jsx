@@ -5,12 +5,22 @@ import _ from 'lodash';
 import style from '../../style';
 import { request, validation, apiUrl, cookie } from '../../utils';
 import { User } from '../../actions';
-import './LoginComponent.scss';
+import './index.scss';
 
 export default class Login extends Component {
   static propTypes = {
-    manageLogin: PropTypes.func.isRequired,
+    manageLogin: PropTypes.func,
     type: PropTypes.string.isRequired,
+    user: PropTypes.shape({
+      name: PropTypes.string,
+      email: PropTypes.string,
+    }),
+  }
+  static defaultProps = {
+    user: {
+      name: '',
+      email: '',
+    },
   }
 
 
@@ -31,6 +41,16 @@ export default class Login extends Component {
 
     this.handleRegister = this.handleRegister.bind(this);
     this.handleSend = this.handleSend.bind(this);
+  }
+
+  componentWillMount() {
+    const { user } = this.props;
+    this.setState({
+      user: {
+        name: user.name,
+        email: user.email,
+      },
+    });
   }
 
   handleRegister(event, type) {
@@ -106,7 +126,7 @@ export default class Login extends Component {
     />) : false;
 
     return (
-      <div>
+      <div styleName='conteiner'>
         <Paper style={style.paper} zDepth={1} >
           {name}
           <TextField

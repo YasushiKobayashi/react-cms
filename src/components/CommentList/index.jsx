@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import Highlight from 'react-highlight';
+import md from 'markdown-it';
 
 import './index.scss';
 
@@ -24,11 +25,13 @@ export default class CommentList extends Component {
           key={comment.id}
         >
           <div styleName='author'>
-            hogehogeだよ
+            <img src={comment.user.image} alt={comment.user.name} />
+            <br />
+            {comment.user.name}
           </div>
           <div styleName='comment'>
             <Highlight innerHTML>
-              {comment.content}
+              {md().render(comment.content)}
             </Highlight>
           </div>
         </div>
@@ -36,7 +39,7 @@ export default class CommentList extends Component {
     });
 
     return (
-      <div>
+      <div styleName='commentList'>
         {commentList}
       </div>
     );

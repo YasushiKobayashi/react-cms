@@ -1,4 +1,6 @@
 import md from 'markdown-it';
+import _ from 'lodash';
+
 import { Comment, Category } from './';
 
 export default class Single {
@@ -9,6 +11,7 @@ export default class Single {
     this.dateObj = new Date(obj.updated);
     this.content = obj.content;
     this.htmlContent = md().render(obj.content);
+    this.commentsCount = _.size(obj.comments);
     this.comments = (obj.comments !== null) ?
       obj.comments.map((commnet) => {
         return new Comment(commnet);

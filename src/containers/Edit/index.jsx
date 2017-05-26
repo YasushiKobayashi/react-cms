@@ -19,6 +19,9 @@ const tabHtml = 'html';
 
 export default class Edit extends Component {
   static propTypes = {
+    user: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+    }).isRequired,
     params: PropTypes.shape({
       id: PropTypes.string,
     }),
@@ -154,6 +157,7 @@ export default class Edit extends Component {
       _.filter(categoryIds, { id: value });
     });
     const params = {
+      user_id: this.props.user.id,
       title: article.title,
       content: article.content,
       wp_flg: wpFlg,
@@ -162,7 +166,6 @@ export default class Edit extends Component {
 
     new Promise((resolve, reject) => {
       this.saveArticle(params).then((obj) => {
-        console.log(obj);
         browserHistory.push(`/article/${obj.id}`);
       }).catch((err) => {
         reject(err);
