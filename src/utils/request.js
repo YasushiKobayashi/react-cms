@@ -55,7 +55,6 @@ export default class {
    * @return {object} PUTの返り値
    */
   static PUT(url, params) {
-    console.log(params);
     const token = cookie.read('token');
     return new Promise((resolve, reject) => {
       request.put(url)

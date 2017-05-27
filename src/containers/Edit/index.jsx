@@ -277,10 +277,6 @@ export default class Edit extends Component {
               errorText={titleError}
               style={style.titleField}
             />
-            <p>
-              created：
-              updated：
-            </p>
             <EditArticle
               content={article.content}
               htmlContent={article.htmlContent}
