@@ -7,7 +7,7 @@ import './index.scss';
 
 export default class DropZone extends Component {
   static propTypes = {
-    dropZone: PropTypes.bool.isRequired,
+    isDropZone: PropTypes.bool.isRequired,
     handleUploadImage: PropTypes.func.isRequired,
     handleDragExit: PropTypes.func.isRequired,
     tabValue: PropTypes.string,
@@ -18,27 +18,27 @@ export default class DropZone extends Component {
   constructor() {
     super();
     this.state = {
-      dropZone: false,
+      isDropZone: false,
     };
   }
 
   componentWillMount() {
     this.setState({
-      dropZone: this.props.dropZone,
+      isDropZone: this.props.isDropZone,
     });
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      dropZone: nextProps.dropZone,
+      isDropZone: nextProps.isDropZone,
     });
   }
 
   render() {
     const { tabValue, handleUploadImage, handleDragExit } = this.props;
-    const { dropZone } = this.state;
+    const { isDropZone } = this.state;
 
-    const dropStyle = (dropZone) ? style.show : style.hide;
+    const dropStyle = (isDropZone) ? style.show : style.hide;
 
     return (
       <Dropzone

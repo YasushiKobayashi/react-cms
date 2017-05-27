@@ -39,11 +39,9 @@ export default class {
       .set('Accept', 'application/json')
       .send(params)
       .end((err, res) => {
-        const statusCode = res.statusCode;
-        if (statusCode > 299) {
+        if (err) {
           reject(err);
         } else {
-          console.log(res);
           resolve(res.body);
         }
       });
@@ -57,6 +55,7 @@ export default class {
    * @return {object} PUTの返り値
    */
   static PUT(url, params) {
+    console.log(params);
     const token = cookie.read('token');
     return new Promise((resolve, reject) => {
       request.put(url)

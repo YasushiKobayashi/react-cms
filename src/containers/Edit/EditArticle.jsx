@@ -7,23 +7,19 @@ import './EditArticle.scss';
 
 export default class EditArticle extends Component {
   static propTypes = {
-    content: PropTypes.string,
-    htmlContent: PropTypes.string,
+    content: PropTypes.string.isRequired,
+    htmlContent: PropTypes.string.isRequired,
     tabMark: PropTypes.string.isRequired,
     tabHtml: PropTypes.string.isRequired,
     handleContent: PropTypes.func.isRequired,
     handleUploadImage: PropTypes.func.isRequired,
-  }
-  static defaultProps = {
-    content: '',
-    htmlContent: '',
   }
 
   constructor() {
     super();
     this.state = {
       tabValue: null,
-      dropZone: false,
+      isDropZone: false,
     };
 
     this.handleTab = this.handleTab.bind(this);
@@ -45,13 +41,13 @@ export default class EditArticle extends Component {
 
   handleDragOver() {
     this.setState({
-      dropZone: true,
+      isDropZone: true,
     });
   }
 
   handleDragExit() {
     this.setState({
-      dropZone: false,
+      isDropZone: false,
     });
   }
 
@@ -64,7 +60,7 @@ export default class EditArticle extends Component {
       tabHtml,
       handleUploadImage,
     } = this.props;
-    const { tabValue, dropZone } = this.state;
+    const { tabValue, isDropZone } = this.state;
 
     return (
       <div styleName='content'>
@@ -89,7 +85,7 @@ export default class EditArticle extends Component {
           </Tab>
         </Tabs>
         <DropZone
-          dropZone={dropZone}
+          isDropZone={isDropZone}
           tabValue={tabValue}
           handleDragExit={this.handleDragExit}
           handleUploadImage={handleUploadImage}

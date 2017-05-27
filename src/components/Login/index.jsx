@@ -9,18 +9,13 @@ import './index.scss';
 
 export default class Login extends Component {
   static propTypes = {
-    manageLogin: PropTypes.func,
+    sendUserInfo: PropTypes.func.isRequired,
     type: PropTypes.string.isRequired,
     user: PropTypes.shape({
-      name: PropTypes.string,
-      email: PropTypes.string,
-    }),
-  }
-  static defaultProps = {
-    user: {
-      name: '',
-      email: '',
-    },
+      name: PropTypes.string.isRequired,
+      email: PropTypes.string.isRequired,
+      image: PropTypes.string.isRequired,
+    }).isRequired,
   }
 
 
@@ -40,7 +35,9 @@ export default class Login extends Component {
     };
 
     this.handleRegister = this.handleRegister.bind(this);
-    this.handleSend = this.handleSend.bind(this);
+    this.handlePost = this.handlePost.bind(this);
+    this.handlePut = this.handlePut.bind(this);
+    this.handelValid = this.handelValid.bind(this);
   }
 
   componentWillMount() {
@@ -49,6 +46,7 @@ export default class Login extends Component {
       user: {
         name: user.name,
         email: user.email,
+        password: user.password,
       },
     });
   }
@@ -70,15 +68,56 @@ export default class Login extends Component {
     });
   }
 
-  handleSend() {
-    const { type, manageLogin } = this.props;
+  handlePost() {
+    const { type, sendUserInfo } = this.props;
+    const { user } = this.state;
+    const url = type === 'SIGN UP' ? 'register' : 'login';
+    if (this.handelValid(type)) {
+      return new Promise((resolve, reject) => {
+        request.POST(apiUrl('v1', url), user).then((obj) => {
+          return obj.token;
+        }).then((token) => {
+          cookie.write('token', token);
+          return new Promise((resolve, reject) => {
+            User.get('user').then(() => {
+              sendUserInfo(true);
+            }).catch((err) => {
+              reject(err);
+            });
+          });
+        }).catch((err) => {
+          reject(err);
+        });
+      });
+    }
+  }
+
+  handlePut() {
+    // console.log('handlePut');
+    // const { user } = this.state;
+    // return new Promise((resolve, reject) => {
+    //   request.PUT(apiUrl('v1', 'user'), user).then((obj) => {
+    //     return obj.token;
+    //   }).then((token) => {
+    //     cookie.write('token', token);
+    //     return new Promise((resolve, reject) => {
+    //       User.get('user').then(() => {
+    //         sendUserInfo(true);
+    //       }).catch((err) => {
+    //         reject(err);
+    //       });
+    //     });
+    //   }).catch((err) => {
+    //     reject(err);
+    //   });
+    // });
+  }
+
+  handelValid(type) {
+    console.log(type);
     const { user, userError } = this.state;
-    let url;
-    if (type === 'SIGN UP') {
+    if (type !== 'SIGN IN') {
       userError.name = validation.validEmpty(user.name, '名前');
-      url = 'register';
-    } else {
-      url = 'login';
     }
     userError.password = validation.validPassword(user.password);
     userError.email = validation.validEmail(user.email);
@@ -91,23 +130,7 @@ export default class Login extends Component {
         userError: userError,
       });
     }
-
-    return new Promise((resolve, reject) => {
-      request.POST(apiUrl('v1', url), user).then((obj) => {
-        return obj.token;
-      }).then((token) => {
-        cookie.write('token', token);
-        return new Promise((resolve, reject) => {
-          User.get('user').then(() => {
-            manageLogin(true);
-          }).catch((err) => {
-            reject(err);
-          });
-        });
-      }).catch((err) => {
-        reject(err);
-      });
-    });
+    return valid;
   }
 
   render() {
@@ -117,13 +140,15 @@ export default class Login extends Component {
       userError,
     } = this.state;
 
-    const name = type === 'SIGN UP' ? (<TextField
+    const name = type !== 'SIGN IN' ? (<TextField
       floatingLabelText='name'
       onChange={(event) => { this.handleRegister(event, 'name'); }}
       value={user.name}
       errorText={userError.name}
       style={style.titleField}
     />) : false;
+
+    const send = type === 'Update' ? this.handlePut : this.handlePost;
 
     return (
       <div styleName='conteiner'>
@@ -148,7 +173,7 @@ export default class Login extends Component {
           <RaisedButton
             styleName='btn'
             label={type}
-            onClick={this.handleSend}
+            onClick={send}
             primary
           />
         </Paper>

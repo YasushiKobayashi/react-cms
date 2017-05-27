@@ -1,20 +1,27 @@
 .commentList {
-  width: 80%;
+  width: 90%;
   margin: 0 auto;
   .commment {
     display: flex;
     align-items: center;
     margin-bottom: 30px;
     .author {
-      max-width: 150px;
+      max-width: 15%;
       text-align: center;
       padding-right: 5%;
       img {
-        max-height: 150px;
+        max-height: 90%;
       }
     }
     .comment {
-
+      width: 85%;
+      position: relative;
+      .edit {
+        margin-top: -12px;
+        position: absolute;
+        top: 50%;
+        right: -30px;
+      }
     }
   }
 }

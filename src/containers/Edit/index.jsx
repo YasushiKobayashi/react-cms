@@ -39,6 +39,8 @@ export default class Edit extends Component {
         title: '',
         content: '',
         htmlContent: '',
+        created: new Date(),
+        updated: new Date(),
       },
       categories: [],
       categoryLists: [],
@@ -161,6 +163,7 @@ export default class Edit extends Component {
       title: article.title,
       content: article.content,
       wp_flg: wpFlg,
+      created: article,
       categories: categories,
     };
 
@@ -232,8 +235,8 @@ export default class Edit extends Component {
     });
   }
 
-  handleAddCat(event) {
-    const id = event.currentTarget.getAttribute('data-id');
+  handleAddCat(e) {
+    const id = e.currentTarget.getAttribute('data-id');
     const { categories, categoryLists } = this.state;
     categories[categories.length] = categoryLists[id];
     this.setState({
@@ -242,8 +245,8 @@ export default class Edit extends Component {
     });
   }
 
-  handleRemoveCat(event) {
-    const id = event.currentTarget.getAttribute('data-id');
+  handleRemoveCat(e) {
+    const id = e.currentTarget.getAttribute('data-id');
     const { categories, categoryLists } = this.state;
     categoryLists[categoryLists.length] = categories[id];
     this.setState({
@@ -275,6 +278,10 @@ export default class Edit extends Component {
               errorText={titleError}
               style={style.titleField}
             />
+            <p>
+              created：
+              updated：
+            </p>
             <EditArticle
               content={article.content}
               htmlContent={article.htmlContent}

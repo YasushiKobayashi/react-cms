@@ -8,10 +8,7 @@ import './index.scss';
 
 export default class Mypage extends Component {
   static propTypes = {
-    user: PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      picture: PropTypes.string.isRequired,
-    }).isRequired,
+    user: PropTypes.shape().isRequired,
   };
 
   constructor() {
@@ -37,17 +34,31 @@ export default class Mypage extends Component {
     });
   }
 
+  sendUserInfo() {
+
+  }
+
   render() {
+    const { user } = this.props;
     const { archives, loading } = this.state;
     if (loading) return <Loading />;
 
     return (
       <div styleName='content'>
-        <div styleName='login'>
-          <Login type='Update' />
+        <div styleName='loginWrapper'>
+          <div styleName='login'>
+            <Login
+              type='Update'
+              user={user}
+              sendUserInfo={this.sendUserInfo}
+            />
+          </div>
+          <div styleName='image'>
+            <img src={user.image} alt={user.name} />
+          </div>
         </div>
         <h2>Contents list</h2>
-        <ContentList archives={archives} user={this.props.user} />
+        <ContentList archives={archives} user={user} />
       </div>
     );
   }

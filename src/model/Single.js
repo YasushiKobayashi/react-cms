@@ -7,8 +7,8 @@ export default class Single {
   constructor(obj) {
     this.id = obj.id;
     this.title = obj.title;
-    this.date = obj.date;
-    this.dateObj = new Date(obj.updated);
+    this.created = new Date(obj.created);
+    this.updated = new Date(obj.updated);
     this.content = obj.content;
     this.htmlContent = md().render(obj.content);
     this.commentsCount = _.size(obj.comments);

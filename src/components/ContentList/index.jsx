@@ -14,7 +14,9 @@ export default class ContentList extends Component {
     archives: PropTypes.arrayOf(PropTypes.shape({
       title: PropTypes.string.isRequired,
       commentsCount: PropTypes.number.isRequired,
-      // dateObj: PropTypes.date.isRequired,
+      created: PropTypes.object.isRequired,
+      updated: PropTypes.object.isRequired,
+      WpFlg: PropTypes.bool.isRequired,
     })).isRequired,
   }
 
@@ -24,13 +26,17 @@ export default class ContentList extends Component {
     const iconStyle = Object.assign(style.icon, style.grayTxt, style.topIcon);
 
     const articles = archives.map((archive) => {
-      const date = moment(archive.date).format('YYYY/MM/DD');
+      const created = moment(archive.created).format('YYYY/MM/DD');
+      const updated = moment(archive.updated).format('YYYY/MM/DD');
       const url = `/edit/${archive.id}`;
       const articleUrl = `/article/${archive.id}`;
+
+      const wipStyle = archive.WpFlg ? null : style.hide;
       return (
         <dl styleName='content' key={archive.id}>
           <dt>
             <Link to={articleUrl}>
+              <span styleName="wip" style={wipStyle} >WIP</span>
               {archive.title}
             </Link>
             <Link to={url}>
@@ -40,18 +46,17 @@ export default class ContentList extends Component {
           <dd>
             <span>
               <Author style={iconStyle} />
-              author&nbsp;
               {archive.user.name}
             </span>
             <span>
               <Update style={iconStyle} />
               created&nbsp;
-              {date}
+              {created}
             </span>
             <span>
               <Update style={iconStyle} />
               updated&nbsp;
-              {date}
+              {updated}
             </span>
             <span>
               <ModeComment style={iconStyle} />

@@ -19,7 +19,7 @@ import './Header.scss';
 
 export default class Header extends Component {
   static propTypes = {
-    manageLogin: PropTypes.func.isRequired,
+    sendUserInfo: PropTypes.func.isRequired,
     user: PropTypes.shape({
       name: PropTypes.string,
       picture: PropTypes.string,
@@ -43,6 +43,7 @@ export default class Header extends Component {
     this.handleSubMenu = this.handleSubMenu.bind(this);
     this.closeMainMenu = this.closeMainMenu.bind(this);
     this.closeSubMenu = this.closeSubMenu.bind(this);
+    this.linkTo = this.linkTo.bind(this);
   }
 
   handleMainMenu(event, type) {
@@ -80,14 +81,12 @@ export default class Header extends Component {
   }
 
 
-  linkToEdit(e) {
+  linkTo(e) {
     e.preventDefault();
-    browserHistory.push('/edit');
-  }
-
-  linkToMypage(e) {
-    e.preventDefault();
-    browserHistory.push('/mypage');
+    const url = e.currentTarget.getAttribute('data-url');
+    browserHistory.push(`/${url}`);
+    this.closeMainMenu();
+    this.closeSubMenu();
   }
 
   copyClipboard() {
@@ -97,7 +96,7 @@ export default class Header extends Component {
   }
 
   render() {
-    const { user, manageLogin } = this.props;
+    const { user, sendUserInfo } = this.props;
     const {
       siteTitle,
       mainMenu,
@@ -131,7 +130,10 @@ export default class Header extends Component {
           onRequestClose={this.closeMainMenu}
         >
           <Menu>
-            <MenuItem primaryText="NEW POST" leftIcon={<Edit />} onClick={this.linkToEdit} />
+            <MenuItem
+              primaryText="NEW POST" leftIcon={<Edit />}
+              onClick={this.linkTo} data-url="edit"
+            />
             <MenuItem primaryText="GET LINK" leftIcon={<ContentLink />} onClick={this.copyClipboard} />
           </Menu>
         </Popover>
@@ -143,10 +145,13 @@ export default class Header extends Component {
           onRequestClose={this.closeSubMenu}
         >
           <Menu>
-            <MenuItem primaryText='MYPAGE' leftIcon={<Emoticon />} onClick={this.linkToMypage} />
+            <MenuItem
+              primaryText='MYPAGE' leftIcon={<Emoticon />}
+              onClick={this.linkTo} data-url="mypage"
+            />
             <MenuItem
               primaryText='Logout' leftIcon={<Exit />}
-              onClick={() => { manageLogin(false); }}
+              onClick={() => { sendUserInfo(false); }}
             />
           </Menu>
         </Popover>

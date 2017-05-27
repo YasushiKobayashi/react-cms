@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import Highlight from 'react-highlight';
 import { TextField } from 'material-ui';
+import moment from 'moment';
 
 import { Categories } from '../../parts';
 import style from '../../style';
@@ -10,19 +11,15 @@ export default class EditSide extends Component {
   static propTypes = {
     handleRemoveCat: PropTypes.func.isRequired,
     article: PropTypes.shape({
-      title: PropTypes.string,
-      htmlContent: PropTypes.string,
+      content: PropTypes.string.isRequired,
+      htmlContent: PropTypes.string.isRequired,
+      created: PropTypes.object.isRequired,
+      updated: PropTypes.object.isRequired,
     }).isRequired,
     categories: PropTypes.arrayOf(PropTypes.shape({
       name: PropTypes.string,
       slug: PropTypes.string,
     })).isRequired,
-  }
-  static defaultProps = {
-    article: {
-      title: '',
-      htmlContent: '',
-    },
   }
 
   render() {
@@ -32,6 +29,8 @@ export default class EditSide extends Component {
       handleRemoveCat,
     } = this.props;
 
+    const created = moment(article.created).format('YYYY/MM/DD');
+    const updated = moment(article.updated).format('YYYY/MM/DD');
     return (
       <div styleName='container'>
         <TextField
@@ -54,6 +53,12 @@ export default class EditSide extends Component {
             type='selected'
           />
         </div>
+        <h3>date</h3>
+        <p>
+          created：{created}
+          <br />
+          updated：{updated}
+        </p>
       </div>
     );
   }

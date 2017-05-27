@@ -1,8 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import Highlight from 'react-highlight';
 
-import Comment from './Comment';
-import { CommentList } from '../../components';
+import { CommentList, CommentForm } from '../../components';
 import { Loading } from '../../parts';
 import { Archive, CommentAction } from '../../actions';
 import './index.scss';
@@ -16,9 +15,6 @@ export default class Single extends Component {
       id: PropTypes.string.isRequired,
     }).isRequired,
   };
-  static defaultProps = {
-    userId: null,
-  }
 
   constructor() {
     super();
@@ -75,8 +71,8 @@ export default class Single extends Component {
             {article.htmlContent}
           </Highlight>
         </div>
-        <Comment sendComment={this.sendComment} />
-        <CommentList comments={article.comments} />
+        <CommentForm sendComment={this.sendComment} />
+        <CommentList comments={article.comments} user={this.props.user} />
       </div>
     );
   }

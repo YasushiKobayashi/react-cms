@@ -1,6 +1,19 @@
-.btn {
-  margin-left: -45px;
-  position: absolute;
-  bottom: 25px;
+.conteiner {
+  $height: 380px;
+  display: inline-flex;
+  justify-content: space-between;
+  width: 800px;
+  height: $height;
+  margin-top: -($height/2);
+  margin-left: -400px;
+  position: fixed;
+  top: 50%;
   left: 50%;
+  .content {
+    width: 45%;
+    position: relative;
+    & > div {
+      height: 100%;
+    }
+  }
 }

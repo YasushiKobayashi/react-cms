@@ -1,137 +1,38 @@
 import React, { Component, PropTypes } from 'react';
-import { Paper, TextField, RaisedButton } from 'material-ui';
-import _ from 'lodash';
 
-import style from '../../style';
-import { request, validation, apiUrl, cookie } from '../../utils';
-import { User } from '../../actions';
+import { Login } from '../../components';
 import './LoginComponent.scss';
 
-export default class Login extends Component {
+export default class LoginComponent extends Component {
   static propTypes = {
-    manageLogin: PropTypes.func.isRequired,
-    type: PropTypes.string.isRequired,
-  }
-
-
-  constructor() {
-    super();
-    this.state = {
-      user: {
-        name: '',
-        email: '',
-        password: '',
-      },
-      userError: {
-        name: '',
-        email: '',
-        password: '',
-      },
-    };
-
-    this.handleRegister = this.handleRegister.bind(this);
-    this.handleSend = this.handleSend.bind(this);
-  }
-
-  handleRegister(event, type) {
-    const { user, userError } = this.state;
-    const val = event.target.value;
-    user[type] = val;
-    if (type === 'password') {
-      userError.password = validation.validPassword(val);
-    } else if (type === 'email') {
-      userError.email = validation.validEmail(val);
-    } else {
-      userError.name = validation.validEmpty(val, '名前');
-    }
-    this.setState({
-      user: user,
-      userError: userError,
-    });
-  }
-
-  handleSend() {
-    const { type, manageLogin } = this.props;
-    const { user, userError } = this.state;
-    let url;
-    if (type === 'SIGN UP') {
-      userError.name = validation.validEmpty(user.name, '名前');
-      url = 'register';
-    } else {
-      url = 'login';
-    }
-    userError.password = validation.validPassword(user.password);
-    userError.email = validation.validEmail(user.email);
-    let valid = true;
-    _.each(userError, (value) => {
-      if (value !== '') return valid = false;
-    });
-    if (!valid) {
-      return this.setState({
-        userError: userError,
-      });
-    }
-
-    return new Promise((resolve, reject) => {
-      request.POST(apiUrl('v1', url), user).then((obj) => {
-        return obj.token;
-      }).then((token) => {
-        cookie.write('token', token);
-        return new Promise((resolve, reject) => {
-          User.get('user').then(() => {
-            manageLogin(true);
-          }).catch((err) => {
-            reject(err);
-          });
-        });
-      }).catch((err) => {
-        reject(err);
-      });
-    });
+    sendUserInfo: PropTypes.func.isRequired,
+    user: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      email: PropTypes.string.isRequired,
+      image: PropTypes.string.isRequired,
+    }).isRequired,
   }
 
   render() {
-    const { type } = this.props;
-    const {
-      user,
-      userError,
-    } = this.state;
-
-    const name = type === 'SIGN UP' ? (<TextField
-      floatingLabelText='name'
-      onChange={(event) => { this.handleRegister(event, 'name'); }}
-      value={user.name}
-      errorText={userError.name}
-      style={style.titleField}
-    />) : false;
+    const { user, sendUserInfo } = this.props;
 
     return (
-      <div>
-        <Paper style={style.paper} zDepth={1} >
-          {name}
-          <TextField
-            floatingLabelText='email'
-            onChange={(event) => { this.handleRegister(event, 'email'); }}
-            value={user.email}
-            errorText={userError.email}
-            style={style.titleField}
-            type="email"
+      <div styleName='conteiner'>
+        <div styleName='content'>
+          <Login
+            type='SIGN UP'
+            sendUserInfo={sendUserInfo}
+            user={user}
           />
-          <TextField
-            floatingLabelText='password'
-            onChange={(event) => { this.handleRegister(event, 'password'); }}
-            value={user.password}
-            errorText={userError.password}
-            style={style.titleField}
-            type="password"
+
+        </div>
+        <div styleName='content'>
+          <Login
+            type='SIGN IN'
+            sendUserInfo={sendUserInfo}
+            user={user}
           />
-          <RaisedButton
-            styleName='btn'
-            label={type}
-            onClick={this.handleSend}
-            primary
-          />
-        </Paper>
+        </div>
       </div>
     );
   }

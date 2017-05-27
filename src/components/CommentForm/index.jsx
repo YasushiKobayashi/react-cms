@@ -8,16 +8,15 @@ import CommentIcon from 'material-ui/svg-icons/communication/comment';
 import { DropZone } from '../../parts';
 import { request } from '../../utils';
 import style from '../../style';
-import './Comment.scss';
+import './index.scss';
 
 const tabComment = 'comment';
 const tabPrev = 'preveiw';
 
-export default class Comment extends Component {
+export default class CommentForm extends Component {
   static propTypes = {
     sendComment: PropTypes.func.isRequired,
   };
-
 
   constructor() {
     super();
@@ -120,7 +119,7 @@ export default class Comment extends Component {
           </Tab>
         </Tabs>
         <RaisedButton
-          label='ADD'
+          label='SEND'
           onClick={() => { sendComment(comment); }}
           style={style.catagoryBtn}
           icon={<CommentIcon style={style.icon} />}

@@ -1,0 +1,13 @@
+.container {
+  margin-top: 50px;
+  textarea {
+    width: 100%;
+    min-height: 300px;
+    border: 1px solid #666;
+  }
+  .content {
+    border: 1px solid #666;
+    padding: 20px;
+    min-height: 300px;
+  }
+}

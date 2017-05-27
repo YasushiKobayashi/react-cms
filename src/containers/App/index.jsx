@@ -3,7 +3,7 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import { MuiThemeProvider } from 'material-ui/styles';
 
 import { Loading } from '../../parts';
-import Login from './Login';
+import LoginComponent from './LoginComponent';
 
 import Header from './Header';
 import { User } from '../../actions';
@@ -24,23 +24,29 @@ export default class App extends Component {
       user: {
         id: null,
         name: '',
-        picture: '',
+        email: '',
+        image: '',
       },
     };
 
-    this.manageLogin = this.manageLogin.bind(this);
+    this.sendUserInfo = this.sendUserInfo.bind(this);
   }
 
-  componentDidMount() {
-    injectTapEventPlugin();
+  componentWillMount() {
     const token = cookie.read('token');
     if (typeof token === 'undefined') {
       this.setState({
         isLoading: false,
       });
-    } else {
+    }
+  }
+
+  componentDidMount() {
+    injectTapEventPlugin();
+    const token = cookie.read('token');
+    if (typeof token !== 'undefined') {
       new Promise(() => {
-        User.get('user').then((obj) => {
+        this.getUserInfo().then((obj) => {
           this.setState({
             user: obj,
             isLoading: false,
@@ -55,10 +61,34 @@ export default class App extends Component {
     }
   }
 
-  manageLogin(param) {
+  getUserInfo() {
+    return new Promise((resolve, reject) => {
+      User.get('user').then((obj) => {
+        resolve(obj);
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+
+  sendUserInfo(param) {
     if (!param) cookie.delite('token');
     this.setState({
       isLogin: param,
+    });
+    new Promise(() => {
+      this.getUserInfo().then((obj) => {
+        this.setState({
+          user: obj,
+          isLoading: false,
+          isLogin: true,
+        });
+      }).catch(() => {
+        cookie.delite('token');
+        this.setState({
+          isLoading: false,
+        });
+      });
     });
   }
 
@@ -75,13 +105,13 @@ export default class App extends Component {
     );
 
     const render = (isLoading) ? <Loading /> :
-      (isLogin) ? children : <Login manageLogin={this.manageLogin} />;
+      (isLogin) ? children : <LoginComponent sendUserInfo={this.sendUserInfo} user={user} />;
 
     return (
       <MuiThemeProvider muiTheme={theme}>
         <div styleName='container'>
           <Header
-            manageLogin={this.manageLogin}
+            sendUserInfo={this.sendUserInfo}
             user={user}
           />
           <div styleName='content'>

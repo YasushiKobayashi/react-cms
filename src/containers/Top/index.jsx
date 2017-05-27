@@ -152,6 +152,7 @@ export default class Top extends Component {
             <span>
               <SearchedFor
                 style={iconStyle}
+                hoverColor={style.blue}
                 onClick={this.sendSearch}
               />
             </span>
