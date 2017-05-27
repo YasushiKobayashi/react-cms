@@ -2,9 +2,11 @@ import React, { Component, PropTypes } from 'react';
 import Highlight from 'react-highlight';
 import Edit from 'material-ui/svg-icons/image/edit';
 import md from 'markdown-it';
+import moment from 'moment';
 import _ from 'lodash';
 
 import { CommentForm } from '../../components';
+import { CommentAction } from '../../actions';
 import style from '../../style';
 import './index.scss';
 
@@ -14,9 +16,10 @@ export default class CommentList extends Component {
       id: PropTypes.number.isRequired,
     }).isRequired,
     comments: PropTypes.arrayOf(PropTypes.shape({
-      dateObj: PropTypes.date,
+      id: PropTypes.number,
+      created: PropTypes.date,
+      updated: PropTypes.date,
       content: PropTypes.string,
-      edit: PropTypes.bool,
       user: PropTypes.shape({
         id: PropTypes.number,
         name: PropTypes.string,
@@ -34,6 +37,7 @@ export default class CommentList extends Component {
     };
 
     this.editMode = this.editMode.bind(this);
+    this.sendComment = this.sendComment.bind(this);
   }
 
   componentWillMount() {
@@ -44,11 +48,34 @@ export default class CommentList extends Component {
 
   editMode(e) {
     const id = e.currentTarget.getAttribute('data-id');
-    const { comments } = this.props;
+    const { comments } = this.state;
     const commentsId = _.findIndex(comments, { id: parseInt(id, 10) });
     comments[commentsId].edit = (!comments[commentsId].edit);
     this.setState({
       comments: comments,
+    });
+  }
+
+  sendComment(e) {
+    const id = e.currentTarget.getAttribute('data-id');
+    const content = e.currentTarget.getAttribute('data-content');
+    const { comments } = this.state;
+    const commentsId = _.findIndex(comments, { id: parseInt(id, 10) });
+
+    const param = {
+      content: content,
+    };
+    return new Promise((resolve, reject) => {
+      CommentAction.putComment(id, param).then((obj) => {
+        comments[commentsId].content = obj.content;
+        comments[commentsId].updated = obj.updated;
+        comments[commentsId].edit = false;
+        this.setState({
+          comments: comments,
+        });
+      }).catch((err) => {
+        reject(err);
+      });
     });
   }
 
@@ -58,6 +85,9 @@ export default class CommentList extends Component {
     const iconStyle = Object.assign(style.icon, style.grayTxt, style.topIcon);
 
     const commentList = comments.map((comment) => {
+      const created = moment(comment.created).format('YYYY/MM/DD');
+      const updated = moment(comment.updated).format('YYYY/MM/DD');
+
       const editBtn = comment.user.id === user.id ?
         <Edit
           styleName='edit' style={iconStyle} hoverColor={style.blue}
@@ -65,8 +95,10 @@ export default class CommentList extends Component {
         />
         : false;
 
-      const content = comment.edit ? <CommentForm />
-        : <Highlight innerHTML>{md().render(comment.content)}</Highlight>;
+      const content = comment.edit ?
+        <CommentForm sendComment={this.sendComment} comment={comment} /> :
+        <Highlight innerHTML>{md().render(comment.content)}</Highlight>;
+
       return (
         <div
           styleName='commment'
@@ -76,6 +108,10 @@ export default class CommentList extends Component {
             <img src={comment.user.image} alt={comment.user.name} />
             <br />
             {comment.user.name}
+            <br />
+            created {created}
+            <br />
+            updated {updated}
           </div>
           <div styleName='comment'>
             {content}

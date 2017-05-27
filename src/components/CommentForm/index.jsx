@@ -16,12 +16,22 @@ const tabPrev = 'preveiw';
 export default class CommentForm extends Component {
   static propTypes = {
     sendComment: PropTypes.func.isRequired,
+    comment: PropTypes.shape({
+      id: PropTypes.number,
+      content: PropTypes.string,
+    }),
   };
+  static defaultProps = {
+    comment: {
+      id: null,
+      content: '',
+    },
+  }
 
   constructor() {
     super();
     this.state = {
-      comment: '',
+      content: '',
       tabValue: tabComment,
       isDropZone: false,
       selectionStart: 0,
@@ -34,6 +44,12 @@ export default class CommentForm extends Component {
     this.handleUploadImage = this.handleUploadImage.bind(this);
   }
 
+  componentWillMount() {
+    this.setState({
+      content: this.props.comment.content,
+    });
+  }
+
   handleTab(value) {
     this.setState({
       tabValue: value,
@@ -42,19 +58,19 @@ export default class CommentForm extends Component {
 
   handleComment(event) {
     this.setState({
-      comment: event.target.value,
+      content: event.target.value,
       selectionStart: event.target.selectionStart,
     });
   }
 
   handleUploadImage(file) {
-    const { comment, selectionStart } = this.state;
+    const { content, selectionStart } = this.state;
     return new Promise((resolve, reject) => {
       this.uploadImage(file).then((imagePath) => {
         const addStr = `\n![](${imagePath})\n`;
-        const content = this.insertStr(comment, selectionStart, addStr);
+        const newContent = this.insertStr(content, selectionStart, addStr);
         this.setState({
-          comment: content,
+          content: newContent,
         });
       }).catch((err) => {
         reject(err);
@@ -89,9 +105,9 @@ export default class CommentForm extends Component {
   }
 
   render() {
-    const { sendComment } = this.props;
+    const { sendComment, comment } = this.props;
     const {
-      comment,
+      content,
       tabValue,
       isDropZone,
     } = this.state;
@@ -107,20 +123,22 @@ export default class CommentForm extends Component {
         >
           <Tab label={tabComment} value={tabComment}>
             <textarea
-              value={comment}
+              value={content}
               onChange={this.handleComment}
               onDragOver={this.handleDragOver}
             />
           </Tab>
           <Tab label={tabPrev} value={tabPrev}>
             <Highlight styleName='content' innerHTML>
-              {md().render(comment)}
+              {md().render(content)}
             </Highlight>
           </Tab>
         </Tabs>
         <RaisedButton
           label='SEND'
-          onClick={() => { sendComment(comment); }}
+          onClick={sendComment}
+          data-id={comment.id}
+          data-content={content}
           style={style.catagoryBtn}
           icon={<CommentIcon style={style.icon} />}
           primary

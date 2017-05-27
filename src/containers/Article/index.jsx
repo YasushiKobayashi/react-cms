@@ -6,7 +6,7 @@ import { Loading } from '../../parts';
 import { Archive, CommentAction } from '../../actions';
 import './index.scss';
 
-export default class Single extends Component {
+export default class Article extends Component {
   static propTypes = {
     user: PropTypes.shape({
       id: PropTypes.number.isRequired,
@@ -39,11 +39,11 @@ export default class Single extends Component {
     });
   }
 
-  sendComment(params) {
+  sendComment(e) {
+    const content = e.currentTarget.getAttribute('data-content');
     const post = {
-      user_id: this.props.user.id,
       post_id: parseInt(this.props.params.id, 10),
-      content: params,
+      content: content,
     };
     const { article } = this.state;
     return new Promise((resolve, reject) => {

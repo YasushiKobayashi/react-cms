@@ -11,4 +11,15 @@ export default class {
       });
     });
   }
+
+  static putComment(id, params) {
+    console.log(params);
+    return new Promise((resolve, reject) => {
+      request.PUT(apiUrl('v1', `comment/${id}`), params).then((obj) => {
+        resolve(new Comment(obj));
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
 }
