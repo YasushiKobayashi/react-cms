@@ -4,7 +4,7 @@ import clipboard from 'clipboard-js';
 import IconButton from 'material-ui/IconButton';
 import MenuIcon from 'material-ui/svg-icons/navigation/menu';
 import ContentLink from 'material-ui/svg-icons/content/link';
-import Emoticon from 'material-ui/svg-icons/Editor/insert-emoticon';
+import Emoticon from 'material-ui/svg-icons/editor/insert-emoticon';
 import Edit from 'material-ui/svg-icons/image/edit';
 import Exit from 'material-ui/svg-icons/action/exit-to-app';
 import {

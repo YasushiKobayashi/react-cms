@@ -163,7 +163,6 @@ export default class Edit extends Component {
       title: article.title,
       content: article.content,
       wp_flg: wpFlg,
-      created: article,
       categories: categories,
     };
 
