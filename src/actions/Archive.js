@@ -14,12 +14,10 @@ export default class {
     });
   }
 
-  static getListFromCategory(id) {
+  static getSigleArticle(id) {
     return new Promise((resolve, reject) => {
-      request.GET(apiUrl('v1', `post/category/${id}`)).then((arr) => {
-        resolve(arr.posts.map((obj) => {
-          return new Archive(obj);
-        }));
+      request.GET(apiUrl('v1', `post/${id}`)).then((obj) => {
+        resolve(new Single(obj));
       }).catch((err) => {
         reject(err);
       });
@@ -32,17 +30,6 @@ export default class {
         resolve(arr.map((obj) => {
           return new Archive(obj);
         }));
-      }).catch((err) => {
-        reject(err);
-      });
-    });
-  }
-
-
-  static getSigleArticle(id) {
-    return new Promise((resolve, reject) => {
-      request.GET(apiUrl('v1', `post/${id}`)).then((obj) => {
-        resolve(new Single(obj));
       }).catch((err) => {
         reject(err);
       });

@@ -95,7 +95,7 @@ export default class Top extends Component {
       selectedCat: value,
     });
     new Promise((resolve, reject) => {
-      Archive.getListFromCategory(value).then((obj) => {
+      Archive.getList(`post/category/${value}`).then((obj) => {
         return obj;
       }).then((obj) => {
         this.setState({
