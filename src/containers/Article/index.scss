@@ -1,4 +1,4 @@
-@import '../../common'
+@import '../../common';
 
 .container {
   max-width: 800px;
@@ -6,7 +6,7 @@
   .cat {
     color: #fff;
     background-color: $bgGray;
-    @extend box;
+    @extend %box;
   }
   .content {
     margin: 20px 0;

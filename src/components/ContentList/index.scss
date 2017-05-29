@@ -1,4 +1,4 @@
-@import '../../common'
+@import '../../common';
 
 .content {
   margin-bottom: 20px;
@@ -17,7 +17,7 @@
       .wip {
         color: #fff;
         background-color: $bgGray;
-        @extend box;
+        @extend %box;
       }
     }
   }
