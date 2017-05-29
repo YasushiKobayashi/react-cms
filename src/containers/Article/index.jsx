@@ -63,16 +63,28 @@ export default class Article extends Component {
     const { article, loading } = this.state;
     if (loading) return <Loading />;
 
+    const cat = article.categories.map((category) => {
+      return (
+        <span
+          key={category.id}
+          styleName='cat'
+        >
+          {category.name}
+        </span>
+      );
+    });
+
     return (
       <div styleName='container'>
         <h1>{article.title}</h1>
+        {cat}
         <div styleName='content'>
           <Highlight innerHTML>
             {article.htmlContent}
           </Highlight>
         </div>
-        <CommentForm sendComment={this.sendComment} />
         <CommentList comments={article.comments} user={this.props.user} />
+        <CommentForm sendComment={this.sendComment} />
       </div>
     );
   }

@@ -16,7 +16,7 @@ export default class ContentList extends Component {
       commentsCount: PropTypes.number.isRequired,
       created: PropTypes.object.isRequired,
       updated: PropTypes.object.isRequired,
-      WpFlg: PropTypes.bool.isRequired,
+      wpFlg: PropTypes.bool.isRequired,
     })).isRequired,
   }
 

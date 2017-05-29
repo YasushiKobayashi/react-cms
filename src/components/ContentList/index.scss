@@ -1,3 +1,5 @@
+@import '../../common'
+
 .content {
   margin-bottom: 20px;
   border-bottom: solid #666 1px;
@@ -14,10 +16,8 @@
       }
       .wip {
         color: #fff;
-        margin-right: 5px;
-        padding: 3px 5px;
-        background-color: rgba(60,74,96,0.3);
-        border-radius: 5px;
+        background-color: $bgGray;
+        @extend box;
       }
     }
   }

@@ -128,7 +128,7 @@ export default class Edit extends Component {
 
   uploadImage(file) {
     return new Promise((resolve, reject) => {
-      request.UPLOAD('upload', file).then((obj) => {
+      request.UPLOAD('post/upload', file).then((obj) => {
         resolve(obj.path);
       }).catch((err) => {
         reject(err);
