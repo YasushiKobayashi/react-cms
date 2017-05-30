@@ -1,13 +1,16 @@
 import React, { Component, PropTypes } from 'react';
 import Highlight from 'react-highlight';
 
-import Comment from './Comment';
+import { CommentList, CommentForm } from '../../components';
 import { Loading } from '../../parts';
-import { Archive } from '../../actions';
-import './Index.scss';
+import { Archive, CommentAction } from '../../actions';
+import './index.scss';
 
-export default class Single extends Component {
+export default class Article extends Component {
   static propTypes = {
+    user: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+    }).isRequired,
     params: PropTypes.shape({
       id: PropTypes.string.isRequired,
     }).isRequired,
@@ -16,17 +19,18 @@ export default class Single extends Component {
   constructor() {
     super();
     this.state = {
-      single: null,
+      article: null,
       loading: true,
     };
-    this.getArticle = this.getArticle.bind(this);
+
+    this.sendComment = this.sendComment.bind(this);
   }
 
   componentDidMount() {
     return new Promise((resolve, reject) => {
-      this.getArticle().then((obj) => {
+      Archive.getSigleArticle(this.props.params.id).then((obj) => {
         this.setState({
-          single: obj,
+          article: obj,
           loading: false,
         });
       }).catch((err) => {
@@ -35,29 +39,52 @@ export default class Single extends Component {
     });
   }
 
-  getArticle() {
+  sendComment(e) {
+    const content = e.currentTarget.getAttribute('data-content');
+    const post = {
+      post_id: parseInt(this.props.params.id, 10),
+      content: content,
+    };
+    const { article } = this.state;
     return new Promise((resolve, reject) => {
-      Archive.getSigleArticle(`${this.props.params.id}`).then((obj) => {
-        resolve(obj);
+      CommentAction.postComment(post).then((obj) => {
+        article.comments[article.comments.length] = obj;
+        this.setState({
+          article: article,
+        });
       }).catch((err) => {
         reject(err);
       });
     });
   }
 
+
   render() {
-    const { single, loading } = this.state;
+    const { article, loading } = this.state;
     if (loading) return <Loading />;
+
+    const cat = article.categories.map((category) => {
+      return (
+        <span
+          key={category.id}
+          styleName='cat'
+        >
+          {category.name}
+        </span>
+      );
+    });
 
     return (
       <div styleName='container'>
-        <h1>{single.title}</h1>
+        <h1>{article.title}</h1>
+        {cat}
         <div styleName='content'>
           <Highlight innerHTML>
-            {single.htmlContent}
+            {article.htmlContent}
           </Highlight>
         </div>
-        <Comment />
+        <CommentList comments={article.comments} user={this.props.user} />
+        <CommentForm sendComment={this.sendComment} />
       </div>
     );
   }

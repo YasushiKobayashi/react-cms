@@ -1,0 +1,18 @@
+.content {
+  .loginWrapper {
+    display: flex;
+    align-items: center;
+    width: 1000px;
+    .login {
+      width: 500px;
+      margin: 0 auto;
+    }
+    .image {
+      width: 500px;
+      text-align: center;
+      img {
+        max-width: 50%;
+      }
+    }
+  }
+}

@@ -1,0 +1,17 @@
+.topHeader {
+  margin-bottom: 30px;
+  .list {
+    display: flex;
+    align-items: center;
+    & > span {
+      margin: 0 10px;
+      &:first-child {
+        margin-left: 0;
+      }
+    }
+    .txt {
+      display: inline-block;
+      vertical-align: middle;
+    }
+  }
+}

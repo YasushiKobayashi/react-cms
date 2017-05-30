@@ -28,7 +28,6 @@ export default class Base extends Component {
         <Chip
           key={category.id}
           onClick={handleCat}
-          // onMouseEnter={this.handleBackground}
           data-id={number}
           style={style.chip}
           labelStyle={style.chipLabel}

@@ -1,3 +1,5 @@
+@import '../../common';
+
 .content {
   margin-bottom: 20px;
   border-bottom: solid #666 1px;
@@ -12,6 +14,11 @@
         margin-right: 20px;
         max-width: 90%;
       }
+      .wip {
+        color: #fff;
+        background-color: $bgGray;
+        @extend %box;
+      }
     }
   }
   dd {
@@ -22,19 +29,6 @@
       padding-right: 10px;
       margin-right: 10px;
       border-right: 1px dotted #666;
-    }
-  }
-}
-
-.topHeader {
-  .list {
-    display: flex;
-    align-items: center;
-    margin-bottom: 30px;
-    .txt {
-      display: inline-block;
-      vertical-align: middle;
-      margin: 0 15px;
     }
   }
 }

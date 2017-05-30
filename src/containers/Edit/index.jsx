@@ -1,22 +1,27 @@
 import React, { Component, PropTypes } from 'react';
+import { browserHistory } from 'react-router';
 import { TextField, RaisedButton } from 'material-ui';
 import md from 'markdown-it';
 import toMarkdown from 'to-markdown';
-import { pull, last } from 'lodash';
+import _ from 'lodash';
 
-import { Archive, Category } from '../../actions';
-import { validation } from '../../utils';
 import EditArticle from './EditArticle';
 import EditSide from './EditSide';
+import { CommentList } from '../../components';
 import { Loading, Categories, CategoryFrom } from '../../parts';
+import { Archive, Category } from '../../actions';
+import { request, validation } from '../../utils';
 import style from '../../style';
-import './Index.scss';
+import './index.scss';
 
 const tabMark = 'markdown';
 const tabHtml = 'html';
 
 export default class Edit extends Component {
   static propTypes = {
+    user: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+    }).isRequired,
     params: PropTypes.shape({
       id: PropTypes.string,
     }),
@@ -34,6 +39,8 @@ export default class Edit extends Component {
         title: '',
         content: '',
         htmlContent: '',
+        created: new Date(),
+        updated: new Date(),
       },
       categories: [],
       categoryLists: [],
@@ -41,54 +48,43 @@ export default class Edit extends Component {
       titleError: false,
       catNameError: '',
       catSlugErrror: '',
+      selectionStart: 0,
     };
 
     this.handleTitle = this.handleTitle.bind(this);
     this.sendArticle = this.sendArticle.bind(this);
-    this.handleContent = this.handleContent.bind(this);
+    this.manegeContent = this.manegeContent.bind(this);
     this.handleAddCat = this.handleAddCat.bind(this);
     this.handleRemoveCat = this.handleRemoveCat.bind(this);
     this.handleAddCatList = this.handleAddCatList.bind(this);
+    this.handleContent = this.handleContent.bind(this);
+    this.handleUploadImage = this.handleUploadImage.bind(this);
   }
 
   componentDidMount() {
     new Promise((resolve, reject) => {
-      this.getCategories().then((obj) => {
+      Category.get().then((obj) => {
         this.setState({
           categoryLists: obj,
           loading: false,
         });
-      }).catch((err) => {
-        reject(err);
-      });
-    });
-    const article = new Promise((resolve, reject) => {
-      this.getArticle().then((obj) => {
-        this.setState({
-          article: obj,
-        });
-      }).catch((err) => {
-        reject(err);
-      });
-    });
-    const res = (this.props.params.id !== '') ? article : false;
-    return res;
-  }
-
-  getArticle() {
-    return new Promise((resolve, reject) => {
-      Archive.getSigleArticle(`${this.props.params.id}`).then((obj) => {
-        resolve(obj);
-      }).catch((err) => {
-        reject(err);
-      });
-    });
-  }
-
-  getCategories() {
-    return new Promise((resolve, reject) => {
-      Category.get().then((obj) => {
-        resolve(obj);
+        return obj;
+      }).then((categoryLists) => {
+        if (typeof this.props.params.id !== 'undefined') {
+          Archive.getSigleArticle(this.props.params.id).then((obj) => {
+            const categoryIds = _.map(obj.categories, 'id');
+            _.forEach(categoryIds, (value) => {
+              categoryLists = _.reject(categoryLists, { id: value });
+            });
+            this.setState({
+              article: obj,
+              categories: obj.categories,
+              categoryLists: categoryLists,
+            });
+          }).catch((err) => {
+            reject(err);
+          });
+        }
       }).catch((err) => {
         reject(err);
       });
@@ -98,34 +94,111 @@ export default class Edit extends Component {
   handleTitle(event) {
     const val = event.target.value;
     const valid = validation.validTitle(val);
+    const { article } = this.state;
+    article.title = val;
     this.setState({
-      article: {
-        title: val,
-      },
+      article: article,
       titleError: valid,
     });
   }
 
-  handleContent(content, type) {
-    const newContent = (type === 'markdown') ? content : toMarkdown(content);
+  handleContent(event, type) {
+    const content = event.target.value;
+    const selectionStart = event.target.selectionStart;
+    const newContent = (type === 'html') ? toMarkdown(content) : content;
     const htmlContent = (type === 'markdown') ? md().render(content) : content;
+    this.manegeContent(newContent, htmlContent, selectionStart);
+  }
+
+  handleUploadImage(file, type) {
+    const { article, selectionStart } = this.state;
+    return new Promise((resolve, reject) => {
+      this.uploadImage(file).then((imagePath) => {
+        let content = (type === 'markdown') ? article.content : article.htmlContent;
+        const addStr = (type === 'markdown') ? `\n![](${imagePath})\n` : `\n<p><img src="${imagePath}" ></p>\n`;
+        content = this.insertStr(content, selectionStart, addStr);
+        const newContent = (type === 'markdown') ? content : toMarkdown(content);
+        const htmlContent = (type === 'markdown') ? md().render(content) : content;
+        resolve(this.manegeContent(newContent, htmlContent, selectionStart));
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+
+  uploadImage(file) {
+    return new Promise((resolve, reject) => {
+      request.UPLOAD('post/upload', file).then((obj) => {
+        resolve(obj.path);
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+
+  insertStr(str, index, insert) {
+    return str.slice(0, index) + insert + str.slice(index, str.length);
+  }
+
+  manegeContent(newContent, htmlContent, selectionStart) {
+    const { article } = this.state;
     this.setState({
+      selectionStart: selectionStart,
       article: {
+        title: article.title,
         content: newContent,
         htmlContent: htmlContent,
       },
     });
   }
 
-  sendArticle(content, status) {
-    console.log(content);
-    console.log(status);
+  sendArticle(wpFlg) {
+    const { article, categories } = this.state;
+    const categoryIds = _.map(categories, 'id');
+    _.forEach(categoryIds, (value) => {
+      _.filter(categoryIds, { id: value });
+    });
+    const params = {
+      user_id: this.props.user.id,
+      title: article.title,
+      content: article.content,
+      wp_flg: wpFlg,
+      categories: categories,
+    };
+
+    new Promise((resolve, reject) => {
+      this.saveArticle(params).then((obj) => {
+        browserHistory.push(`/article/${obj.id}`);
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+
+  saveArticle(params) {
+    const id = this.props.params.id;
+    if (typeof id === 'undefined') {
+      return new Promise((resolve, reject) => {
+        Archive.postArticle(params).then((obj) => {
+          resolve(obj);
+        }).catch((err) => {
+          reject(err);
+        });
+      });
+    } else {
+      return new Promise((resolve, reject) => {
+        Archive.putArticle(id, params).then((obj) => {
+          resolve(obj);
+        }).catch((err) => {
+          reject(err);
+        });
+      });
+    }
   }
 
   handleAddCatList(categoryNew) {
     const {
       categories,
-      categoryLists,
     } = this.state;
     const catValid = validation.validEmpty(categoryNew.name, 'カテゴリ');
     const slugValid = validation.validNonJpanese(categoryNew.slug, 'スラッグ');
@@ -136,36 +209,47 @@ export default class Edit extends Component {
         catSlugErrror: slugValid,
       });
     } else {
-      const lastCat = last(categoryLists);
-      categories[categories.length] = {
-        id: lastCat.id,
-        name: categoryNew.name,
-        slug: categoryNew.slug,
-      };
-      this.setState({
-        categories: categories,
-        catNameError: catValid,
-        catSlugErrror: slugValid,
+      new Promise((resolve, reject) => {
+        this.postCategory(categoryNew).then((obj) => {
+          categories[categories.length] = obj;
+          this.setState({
+            categories: categories,
+            catNameError: catValid,
+            catSlugErrror: slugValid,
+          });
+        }).catch((err) => {
+          reject(err);
+        });
       });
     }
   }
 
-  handleAddCat(event) {
-    const id = event.currentTarget.getAttribute('data-id');
+  postCategory(params) {
+    return new Promise((resolve, reject) => {
+      Category.post(params).then((obj) => {
+        resolve(obj);
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+
+  handleAddCat(e) {
+    const id = e.currentTarget.getAttribute('data-id');
     const { categories, categoryLists } = this.state;
     categories[categories.length] = categoryLists[id];
     this.setState({
       categories: categories,
-      categoryLists: pull(categoryLists, categoryLists[id]),
+      categoryLists: _.pull(categoryLists, categoryLists[id]),
     });
   }
 
-  handleRemoveCat(event) {
-    const id = event.currentTarget.getAttribute('data-id');
+  handleRemoveCat(e) {
+    const id = e.currentTarget.getAttribute('data-id');
     const { categories, categoryLists } = this.state;
     categoryLists[categoryLists.length] = categories[id];
     this.setState({
-      categories: pull(categories, categories[id]),
+      categories: _.pull(categories, categories[id]),
       categoryLists: categoryLists,
     });
   }
@@ -199,6 +283,7 @@ export default class Edit extends Component {
               tabMark={tabMark}
               tabHtml={tabHtml}
               handleContent={this.handleContent}
+              handleUploadImage={this.handleUploadImage}
             />
             <h3>category lists</h3>
             <Categories
@@ -225,14 +310,17 @@ export default class Edit extends Component {
           <RaisedButton
             label='SAVE'
             styleName='btn'
+            onClick={() => { this.sendArticle(false); }}
             primary
           />
           <RaisedButton
             label='SAVE AS WIP'
             styleName='btn'
+            onClick={() => { this.sendArticle(true); }}
             secondary
           />
         </div>
+        <CommentList comments={article.comments} />
       </div>
     );
   }

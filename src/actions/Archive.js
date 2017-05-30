@@ -1,11 +1,10 @@
-import { request } from '../utils';
+import { request, apiUrl } from '../utils';
 import { Archive, Single } from '../model';
-import config from '../config';
 
 export default class {
-  static get(url) {
+  static getList(url) {
     return new Promise((resolve, reject) => {
-      request.GET(config.apiUrl + url).then((arr) => {
+      request.GET(apiUrl('v1', url)).then((arr) => {
         resolve(arr.map((obj) => {
           return new Archive(obj);
         }));
@@ -15,10 +14,41 @@ export default class {
     });
   }
 
-
-  static getSigleArticle(url) {
+  static getSigleArticle(id) {
     return new Promise((resolve, reject) => {
-      request.GET(`${config.apiUrl}post/aricle/${url}`).then((obj) => {
+      request.GET(apiUrl('v1', `post/${id}`)).then((obj) => {
+        resolve(new Single(obj));
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+
+  static serachArticle(params) {
+    return new Promise((resolve, reject) => {
+      request.POST(apiUrl('v1', 'post/search'), params).then((arr) => {
+        resolve(arr.map((obj) => {
+          return new Archive(obj);
+        }));
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+
+  static postArticle(params) {
+    return new Promise((resolve, reject) => {
+      request.POST(apiUrl('v1', 'post'), params).then((obj) => {
+        resolve(new Single(obj));
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+
+  static putArticle(id, params) {
+    return new Promise((resolve, reject) => {
+      request.PUT(apiUrl('v1', `post/${id}`), params).then((obj) => {
         resolve(new Single(obj));
       }).catch((err) => {
         reject(err);

@@ -1,10 +1,14 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component, PropTypes, cloneElement } from 'react';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import { MuiThemeProvider } from 'material-ui/styles';
 
-import theme from '../../theme';
-// import Login from './Login';
+import { Loading } from '../../parts';
+import LoginComponent from './LoginComponent';
+
 import Header from './Header';
+import { User } from '../../actions';
+import theme from '../../theme';
+import { cookie } from '../../utils';
 import './Index.scss';
 
 export default class App extends Component {
@@ -15,44 +19,106 @@ export default class App extends Component {
   constructor() {
     super();
     this.state = {
-      fbid: null,
-      accessToken: null,
+      isLogin: false,
+      isLoading: true,
       user: {
-        name: null,
-        picture: null,
+        id: null,
+        name: '',
+        email: '',
+        image: '',
       },
     };
 
-    this.handleFbLogin = this.handleFbLogin.bind(this);
+    this.sendUserInfo = this.sendUserInfo.bind(this);
+  }
+
+  componentWillMount() {
+    const token = cookie.read('token');
+    if (typeof token === 'undefined') {
+      this.setState({
+        isLoading: false,
+      });
+    }
   }
 
   componentDidMount() {
     injectTapEventPlugin();
+    const token = cookie.read('token');
+    if (typeof token !== 'undefined') {
+      new Promise(() => {
+        this.getUserInfo().then((obj) => {
+          this.setState({
+            user: obj,
+            isLoading: false,
+            isLogin: true,
+          });
+        }).catch(() => {
+          this.setState({
+            isLoading: false,
+          });
+        });
+      });
+    }
   }
 
-  handleFbLogin(response) {
+  getUserInfo() {
+    return new Promise((resolve, reject) => {
+      User.get('user').then((obj) => {
+        resolve(obj);
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+
+  sendUserInfo(param) {
+    if (!param) cookie.delite('token');
     this.setState({
-      isLoggedIn: true,
-      fbid: response.id,
-      accessToken: response.accessToken,
-      user: {
-        name: response.name,
-        picture: response.picture.data.url,
-      },
+      isLogin: param,
+    });
+    new Promise(() => {
+      this.getUserInfo().then((obj) => {
+        this.setState({
+          user: obj,
+          isLoading: false,
+          isLogin: true,
+        });
+      }).catch(() => {
+        cookie.delite('token');
+        this.setState({
+          isLoading: false,
+        });
+      });
     });
   }
 
   render() {
     const {
       user,
+      isLogin,
+      isLoading,
     } = this.state;
+
+    const children = cloneElement(
+      this.props.children,
+      {
+        user: user,
+        sendUserInfo: this.sendUserInfo,
+      },
+    );
+
+    const render = (isLoading) ? <Loading /> :
+      (isLogin) ? children : <LoginComponent sendUserInfo={this.sendUserInfo} user={user} />;
 
     return (
       <MuiThemeProvider muiTheme={theme}>
         <div styleName='container'>
-          <Header user={user} />
+          <Header
+            sendUserInfo={this.sendUserInfo}
+            user={user}
+          />
           <div styleName='content'>
-            {this.props.children}
+            {render}
           </div>
         </div>
       </MuiThemeProvider>

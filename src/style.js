@@ -14,6 +14,12 @@ export default {
   },
   blue: blue,
   pink: pink,
+  show: {
+    display: 'block',
+  },
+  hide: {
+    display: 'none',
+  },
   icon: {
     width: '1.5em',
     height: '1.5em',
@@ -45,5 +51,12 @@ export default {
   titleField: {
     width: '100%',
     marginBottom: '30px',
+  },
+  paper: {
+    height: '100%',
+    width: '100%',
+    padding: 20,
+    textAlign: 'center',
+    display: 'inline-block',
   },
 };
