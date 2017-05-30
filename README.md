@@ -1,3 +1,9 @@
+[![Build Status](https://travis-ci.org/YasushiKobayashi/react-cms.svg?branch=master)](https://travis-ci.org/YasushiKobayashi/react-cms)
+[![CircleCI](https://circleci.com/gh/YasushiKobayashi/react-cms.svg?style=svg)](https://circleci.com/gh/YasushiKobayashi/react-cms)
+
+### api repo
+https://github.com/YasushiKobayashi/go-api
+
 ### set update
 ```javascript
 yarn
