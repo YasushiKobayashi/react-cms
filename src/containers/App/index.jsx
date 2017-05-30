@@ -101,7 +101,10 @@ export default class App extends Component {
 
     const children = cloneElement(
       this.props.children,
-      { user: user },
+      {
+        user: user,
+        sendUserInfo: this.sendUserInfo,
+      },
     );
 
     const render = (isLoading) ? <Loading /> :

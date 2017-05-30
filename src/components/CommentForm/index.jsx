@@ -84,7 +84,7 @@ export default class CommentForm extends Component {
 
   uploadImage(file) {
     return new Promise((resolve, reject) => {
-      request.UPLOAD('upload', file).then((obj) => {
+      request.UPLOAD('post/upload', file).then((obj) => {
         resolve(obj.path);
       }).catch((err) => {
         reject(err);
@@ -145,7 +145,6 @@ export default class CommentForm extends Component {
         />
         <DropZone
           isDropZone={isDropZone}
-          tabValue={tabValue}
           handleDragExit={this.handleDragExit}
           handleUploadImage={this.handleUploadImage}
         />

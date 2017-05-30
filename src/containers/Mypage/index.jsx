@@ -3,12 +3,14 @@ import React, { Component, PropTypes } from 'react';
 
 import { Archive } from '../../actions';
 import { ContentList, Login } from '../../components';
-import { Loading } from '../../parts';
+import { DropZone, Loading } from '../../parts';
+import { request } from '../../utils';
 import './index.scss';
 
 export default class Mypage extends Component {
   static propTypes = {
     user: PropTypes.shape().isRequired,
+    sendUserInfo: PropTypes.func.isRequired,
   };
 
   constructor() {
@@ -16,7 +18,12 @@ export default class Mypage extends Component {
     this.state = {
       archives: null,
       loading: true,
+      isDropZone: false,
     };
+
+    this.handleDragOver = this.handleDragOver.bind(this);
+    this.handleDragExit = this.handleDragExit.bind(this);
+    this.handleUploadImage = this.handleUploadImage.bind(this);
   }
 
   componentDidMount() {
@@ -38,9 +45,41 @@ export default class Mypage extends Component {
 
   }
 
+  handleUploadImage(file) {
+    return new Promise((resolve, reject) => {
+      this.uploadImage(file).then(() => {
+        resolve(this.props.sendUserInfo(true));
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+
+  uploadImage(file) {
+    return new Promise((resolve, reject) => {
+      request.UPLOAD('user/upload', file).then((obj) => {
+        resolve(obj);
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+
+  handleDragOver() {
+    this.setState({
+      isDropZone: true,
+    });
+  }
+
+  handleDragExit() {
+    this.setState({
+      isDropZone: false,
+    });
+  }
+
   render() {
     const { user } = this.props;
-    const { archives, loading } = this.state;
+    const { archives, loading, isDropZone } = this.state;
     if (loading) return <Loading />;
 
     return (
@@ -53,8 +92,13 @@ export default class Mypage extends Component {
               sendUserInfo={this.sendUserInfo}
             />
           </div>
-          <div styleName='image'>
+          <div styleName='image' onDragOver={this.handleDragOver} handleDragExit={this.handleDragExit} >
             <img src={user.image} alt={user.name} />
+            <DropZone
+              isDropZone={isDropZone}
+              handleDragExit={this.handleDragExit}
+              handleUploadImage={this.handleUploadImage}
+            />
           </div>
         </div>
         <h2>Contents list</h2>
