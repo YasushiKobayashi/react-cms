@@ -104,7 +104,8 @@ export default class Edit extends Component {
   handleContent(event, type) {
     const content = event.target.value;
     const selectionStart = event.target.selectionStart;
-    let newContent, htmlContent;
+    let newContent;
+    let htmlContent;
     if (type === 'markdown') {
       newContent = content;
       htmlContent = convertMdtoHtml(content);
@@ -131,7 +132,7 @@ export default class Edit extends Component {
         const addStr = (type === 'markdown') ? `\n![](${imagePath})\n` : `\n<p><img src="${imagePath}" ></p>\n`;
         content = this.insertStr(content, selectionStart, addStr);
         const newContent = (type === 'markdown') ? content : toMarkdown(content);
-        const htmlContent = (type === 'markdown') ? md().render(content) : content;
+        const htmlContent = (type === 'markdown') ? convertMdtoHtml(content) : content;
         resolve(this.manegeContent(newContent, htmlContent, selectionStart));
       }).catch((err) => {
         reject(err);
