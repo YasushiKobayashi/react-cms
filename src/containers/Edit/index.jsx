@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { browserHistory } from 'react-router';
 import { TextField, RaisedButton } from 'material-ui';
-import md from 'markdown-it';
 import toMarkdown from 'to-markdown';
 import _ from 'lodash';
 
@@ -10,7 +9,7 @@ import EditSide from './EditSide';
 import { CommentList } from '../../components';
 import { Loading, Categories, CategoryFrom } from '../../parts';
 import { Archive, Category } from '../../actions';
-import { request, validation } from '../../utils';
+import { request, validation, convertMdtoHtml } from '../../utils';
 import style from '../../style';
 import './index.scss';
 
@@ -105,9 +104,23 @@ export default class Edit extends Component {
   handleContent(event, type) {
     const content = event.target.value;
     const selectionStart = event.target.selectionStart;
-    const newContent = (type === 'html') ? toMarkdown(content) : content;
-    const htmlContent = (type === 'markdown') ? md().render(content) : content;
+    let newContent, htmlContent;
+    if (type === 'markdown') {
+      newContent = content;
+      htmlContent = convertMdtoHtml(content);
+    } else {
+      newContent = toMarkdown(content);
+      htmlContent = content;
+    }
     this.manegeContent(newContent, htmlContent, selectionStart);
+  }
+
+  handleContentUrl(val) {
+    console.log(val);
+    const valArr = val.split(/\s+/);
+    const str = valArr.join('');
+    console.log(str);
+    return val;
   }
 
   handleUploadImage(file, type) {

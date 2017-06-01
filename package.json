@@ -16,7 +16,7 @@
     "ES6"
   ],
   "scripts": {
-    "server": "npm run build && forever start -c node server.bundle.js",
+    "server": "NODE_ENV=production npm run build && forever start -c node server.bundle.js",
     "build": "NODE_ENV=production npm run build:client && npm run build:server",
     "build:client": "webpack --config webpack.production.config.babel.js --progress --profile --colors",
     "build:server": "webpack --config webpack.server.config.babel.js --progress --profile --colors",
@@ -33,7 +33,6 @@
     "forever": "^0.15.3",
     "js-cookie": "^2.1.4",
     "lodash": "^4.17.4",
-    "markdown-it": "^8.3.1",
     "material-ui": "^0.17.4",
     "moment": "^2.17.1",
     "node-libcurl": "^1.1.0",
@@ -48,6 +47,7 @@
     "react-tap-event-plugin": "^2.0.1",
     "redux": "^3.6.0",
     "redux-thunk": "^2.2.0",
+    "showdown": "^1.7.0",
     "superagent": "^3.5.0",
     "to-markdown": "^3.0.4",
     "validator": "^7.0.0"

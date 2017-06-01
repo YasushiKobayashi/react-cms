@@ -1,11 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import Highlight from 'react-highlight';
 import Edit from 'material-ui/svg-icons/image/edit';
-import md from 'markdown-it';
 import moment from 'moment';
 import _ from 'lodash';
 
 import { CommentForm } from '../../components';
+import { convertMdtoHtml } from '../../utils';
 import { CommentAction } from '../../actions';
 import style from '../../style';
 import './index.scss';
@@ -97,7 +97,7 @@ export default class CommentList extends Component {
 
       const content = comment.edit ?
         <CommentForm sendComment={this.sendComment} comment={comment} /> :
-        <Highlight innerHTML>{md().render(comment.content)}</Highlight>;
+        <Highlight innerHTML>{convertMdtoHtml(comment.content)}</Highlight>;
 
       return (
         <div

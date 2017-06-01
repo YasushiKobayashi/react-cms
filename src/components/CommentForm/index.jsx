@@ -1,12 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import Highlight from 'react-highlight';
-import md from 'markdown-it';
 import { RaisedButton } from 'material-ui';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import CommentIcon from 'material-ui/svg-icons/communication/comment';
 
 import { DropZone } from '../../parts';
-import { request } from '../../utils';
+import { request, convertMdtoHtml } from '../../utils';
 import style from '../../style';
 import './index.scss';
 
@@ -130,7 +129,7 @@ export default class CommentForm extends Component {
           </Tab>
           <Tab label={tabPrev} value={tabPrev}>
             <Highlight styleName='content' innerHTML>
-              {md().render(content)}
+              {convertMdtoHtml(content)}
             </Highlight>
           </Tab>
         </Tabs>
