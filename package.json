@@ -23,7 +23,9 @@
     "start": "NODE_ENV=develop webpack-dashboard -- webpack-dev-server --progress --profile --colors",
     "dev": "NODE_ENV=develop npm run build:client && npm run build:server && node server.bundle.js",
     "test": "NODE_ENV=test mocha --compilers js:babel-register --recursive $(find src/test/mocha -name '*.spec.js')",
-    "lint": "eslint --ext js --ext jsx src && sass-lint -c .sass-lint.yml -q -v"
+    "lint": "npm run lint:js && npm run lint:sass",
+    "lint:js": "eslint --ext js --ext jsx src",
+    "lint:sass": "sass-lint -c .sass-lint.yml -q -v"
   },
   "betterScripts": {},
   "dependencies": {
