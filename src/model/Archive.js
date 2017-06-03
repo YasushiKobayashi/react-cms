@@ -10,7 +10,7 @@ export default class Archive {
     this.updated = new Date(obj.updated);
     this.excerpt = obj.content.substr(0, 280);
     this.content = obj.content;
-    this.WpFlg = obj.wp_flg;
+    this.wpFlg = obj.wp_flg;
     this.commentsCount = _.size(obj.comments);
     this.user = new User(obj.user);
   }

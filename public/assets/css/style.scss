@@ -46,3 +46,16 @@ img {
   max-width: 100%;
   height: auto;
 }
+
+table, th, td {
+  box-sizing: border-box;
+  border: 1px solid #666;
+  border-spacing: 0;
+}
+
+blockquote {
+  background-color: #f3f3f3;
+  padding: 10px;
+  margin: 10px;
+  position: relative;
+}

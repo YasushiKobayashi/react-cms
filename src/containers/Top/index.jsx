@@ -109,13 +109,11 @@ export default class Top extends Component {
 
 
   handleSort(event, index, value) {
-    const { archives } = this.state;
+    let { archives } = this.state;
     if (value === 'updated') {
-      _.sortBy(archives, 'dateObj');
-    } else if (value === 'updated') {
-      _.sortBy(archives, 'dateObj');
+      archives = _.sortBy(archives, (archive) => { return -archive.updated; });
     } else {
-      _.sortBy(archives, 'dateObj');
+      archives = _.sortBy(archives, (archive) => { return -archive.created; });
     }
     this.setState({
       archives: archives,

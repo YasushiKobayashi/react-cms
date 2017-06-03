@@ -1,6 +1,9 @@
 files:
-  include: 'public/assets/css/*.scss'
-  ignore: 'public/assets/css/plugin/*.scss'
+  include:
+    - './**/*.scss'
+  ignore:
+    - 'public/assets/css/plugin/*.scss'
+    - './node_modules/**/*.scss'
 options:
   formatter: stylish
   merge-default-rules: false
@@ -9,7 +12,7 @@ rules:
     - 0
     - convention: zero
   brace-style:
-    - 1
+    - 2
     - allow-single-line: true
   clean-import-paths:
     - 0
@@ -18,74 +21,61 @@ rules:
   empty-line-between-blocks:
     - 0
     - ignore-single-line-rulesets: true
-  extends-before-declarations: 1
-  extends-before-mixins: 1
+  extends-before-declarations: 2
+  extends-before-mixins: 2
   final-newline:
     - 0
     - include: true
-  force-attribute-nesting: 1
+  force-attribute-nesting: 2
   force-element-nesting: 0
   force-pseudo-nesting: 0
   function-name-format:
-    - 1
+    - 2
     - allow-leading-underscore: true
       convention: hyphenatedlowercase
-  # hex-length:
-  #   - 1
-  #   - style: long
-  # hex-notation:
-  #   - 1
-  #   - style: lowercase
+
+
   indentation:
-    - 1
+    - 2
     - size: 2
   leading-zero:
     - 0
     - include: false
   mixin-name-format:
-    - 1
+    - 2
     - allow-leading-underscore: true
       convention: hyphenatedlowercase
-  mixins-before-declarations: 1
+  mixins-before-declarations: 2
   nesting-depth:
-    - 1
+    - 2
     - max-depth: 3
   no-color-literals: 0
   no-css-comments: 0
-  no-debug: 1
-  no-duplicate-properties: 1
-  no-empty-rulesets: 1
+  no-debug: 2
+  no-duplicate-properties: 2
+  no-empty-rulesets: 2
   no-extends: 0
   no-ids: 0
-  # @todo
-  no-important: 0
-  no-invalid-hex: 1
+
+  no-important: 2
+  no-invalid-hex: 2
   no-mergeable-selectors: 0
-  # @todo
-  # no-misspelled-properties:
-  #   - 1
-  #   - extra-properties: []
-  # @todo
-  # no-qualifying-elements:
-  #   - 1
-  #   - allow-element-with-attribute: false
-  #     allow-element-with-class: false
-  #     allow-element-with-id: false
+
   no-trailing-zero: 0
   no-transition-all: 0
-  no-url-protocols: 1
+  no-url-protocols: 2
   no-vendor-prefixes:
     - 0
     - additional-identifiers: []
       excluded-identifiers: []
-  placeholder-in-extend: 1
+  placeholder-in-extend: 2
   placeholder-name-format:
-    - 1
+    - 2
     - allow-leading-underscore: true
       convention: hyphenatedlowercase
   property-sort-order: 0
   quotes:
-    - 1
+    - 2
     - style: single
   shorthand-values:
     - 0
@@ -95,23 +85,23 @@ rules:
         - 3
   single-line-per-selector: 0
   space-after-bang:
-    - 1
+    - 2
     - include: false
   space-after-colon:
-    - 1
+    - 2
     - include: true
   space-after-comma:
-    - 1
+    - 2
     - include: true
   space-before-bang:
-    - 1
+    - 2
     - include: true
   space-before-brace:
-    - 1
+    - 2
     - include: true
   space-before-colon: 1
   space-between-parens:
-    - 1
+    - 2
     - include: false
   trailing-semicolon: 1
   url-quotes: 0
@@ -119,7 +109,7 @@ rules:
     - 0
     - properties: []
   variable-name-format:
-    - 1
-    - allow-leading-underscore: true
-      convention: hyphenatedlowercase
+    - 2
+    - allow-leading-underscore: false
+      convention: camelcase
   zero-unit: 0

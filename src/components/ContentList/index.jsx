@@ -31,7 +31,7 @@ export default class ContentList extends Component {
       const url = `/edit/${archive.id}`;
       const articleUrl = `/article/${archive.id}`;
 
-      const wipStyle = archive.WpFlg ? null : style.hide;
+      const wipStyle = archive.wpFlg ? null : style.hide;
       return (
         <dl styleName='content' key={archive.id}>
           <dt>
