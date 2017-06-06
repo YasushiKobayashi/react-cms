@@ -8,6 +8,7 @@
     "transform-runtime",
     "transform-decorators-legacy",
     "transform-class-properties",
+    "transform-flow-strip-types",
     "transform-react-jsx",
     "transform-flow-strip-types",
     [

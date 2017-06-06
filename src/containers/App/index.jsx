@@ -1,17 +1,18 @@
 import React, { Component, PropTypes, cloneElement } from 'react';
+import { connect } from 'react-redux';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import { MuiThemeProvider } from 'material-ui/styles';
 
+import { cookie } from '../../utils';
 import { Loading } from '../../parts';
 import LoginComponent from './LoginComponent';
 
 import Header from './Header';
 import { User } from '../../actions';
 import theme from '../../theme';
-import { cookie } from '../../utils';
-import './Index.scss';
+import './index.scss';
 
-export default class App extends Component {
+class App extends Component {
   static propTypes = {
     children: PropTypes.element.isRequired,
   };
@@ -99,6 +100,8 @@ export default class App extends Component {
       isLoading,
     } = this.state;
 
+    console.log(this.props.app);
+
     const children = cloneElement(
       this.props.children,
       {
@@ -125,3 +128,13 @@ export default class App extends Component {
     );
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    app: state.app,
+  };
+}
+
+export default connect(
+  mapStateToProps,
+)(App);
