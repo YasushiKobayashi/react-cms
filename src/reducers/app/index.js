@@ -1,4 +1,4 @@
-import { appType } from '../../actionTypes';
+import * as actionTypes from '../../actionTypes';
 
 
 const initialState = {
@@ -13,7 +13,22 @@ const initialState = {
 };
 
 export default function app(state = initialState, action) {
-  console.log(action.type);
-  console.log(appType);
-  return state;
+  switch (action.type) {
+    case actionTypes.LOADED:
+      return {
+        ...state,
+        isLoading: action.isLoading,
+        user: action.user,
+        isLogin: true,
+      };
+    case actionTypes.NOT_LOGIN:
+      return {
+        ...state,
+        isLoading: action.isLoading,
+        isLogin: false,
+        user: initialState.user,
+      };
+    default:
+      return state;
+  }
 }

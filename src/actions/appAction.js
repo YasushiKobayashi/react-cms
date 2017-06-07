@@ -1,13 +1,44 @@
-import { appType } from '../actionTypes';
+import * as actionTypes from '../actionTypes';
+import { User } from '../api';
+import { cookie } from '../utils';
 
-export function isLoading() {
-  return {
-    type: appType.LOADING,
+
+export function isLogin() {
+  return async (dispatch) => {
+    try {
+      const token = cookie.read('token');
+      if (typeof token === 'undefined') {
+        throw new Error('not login');
+      }
+      const user = await User.get('user');
+      dispatch({
+        type: actionTypes.LOADED,
+        isLoading: false,
+        isLogin: true,
+        user,
+      });
+    } catch (e) {
+      dispatch({
+        type: actionTypes.NOT_LOGIN,
+        isLoading: false,
+      });
+    }
   };
 }
 
-export function isLogin() {
+export function login() {
+  console.log('hoge');
+}
+
+
+export function logout() {
+  cookie.delite('token');
   return {
-    type: appType.NOT_LOGIN,
+    type: actionTypes.NOT_LOGIN,
   };
+}
+
+export function updateUser(user) {
+  console.log('hoge');
+  console.log(user);
 }
