@@ -8,6 +8,7 @@ import Sort from 'material-ui/svg-icons/content/sort';
 
 import * as actions from '../../actions/topAction';
 import type { Article } from '../../types/Article';
+// import { params } from '../../utils';
 
 import { ContentList } from '../../components';
 import { Loading } from '../../parts';
@@ -28,6 +29,7 @@ class Top extends Component {
     isLoading: Boolean,
     serach: String,
     sorted: String,
+    selectedCat: String,
   };
 
   constructor() {
@@ -36,11 +38,14 @@ class Top extends Component {
       isLoading: false,
       serach: '',
       sorted: 'created',
+      selectedCat: '未選択',
     };
 
     this.sendSearch = this.sendSearch.bind(this);
     this.handleSerach = this.handleSerach.bind(this);
     this.handleSort = this.handleSort.bind(this);
+    this.handleSelectedCat = this.handleSelectedCat.bind(this);
+    this.handleSelectedCategory = this.handleSelectedCategory.bind(this);
   }
 
   componentWillMount() {
@@ -52,6 +57,27 @@ class Top extends Component {
     this.setState({
       isLoading: isLoading,
     });
+
+    // @TODO カテゴリパラメータ
+    // const getParam = params.decode();
+    // if (getParam.category) {
+    //   this.handleSelectedCategory(getParam.category);
+    // }
+  }
+
+  handleSelectedCat(event, index, value) {
+    this.handleSelectedCategory(value);
+  }
+
+  handleSelectedCategory(val) {
+    this.setState({
+      selectedCat: val,
+    });
+  }
+
+  updateContent() {
+    const { selectedCat } = this.state;
+    this.props.actions.getArticlesFromCat(selectedCat);
   }
 
   handleSerach(e) {
@@ -62,15 +88,15 @@ class Top extends Component {
   }
 
   sendSearch() {
-
+    const param = { word: this.state.serach };
+    this.props.actions.serachArticles(param);
   }
 
-  handleSort(e) {
-    console.log(e);
-    const val = e.target.value;
+  handleSort(event, index, value) {
     this.setState({
-      sorted: val,
+      sorted: value,
     });
+    this.props.actions.sorrtArticles(value);
   }
 
   render() {
@@ -121,6 +147,7 @@ class Top extends Component {
                 style={style.selectField}
                 autoWidth
               >
+                <MenuItem value={'未選択'} primaryText='未選択' />
                 {cat}
               </SelectField>
             </span>

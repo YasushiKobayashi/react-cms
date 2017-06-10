@@ -4,9 +4,9 @@ import Highlight from 'react-highlight';
 import Edit from 'material-ui/svg-icons/image/edit';
 import { CommentList, CommentForm } from '../../components';
 import { Loading } from '../../parts';
-import { Archive, CommentAction } from '../../actions';
 
 import style from '../../style';
+import { Archive, CommentAction } from '../../api';
 import './index.scss';
 
 export default class Article extends Component {

@@ -23,6 +23,8 @@ export const NOT_LOGIN = 'NOT_LOGIN';
 export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
 
-export const ALL_ARTICLE = 'ALL_ARTICLE';
 export const ARTICLE = 'ARTICLE';
+
+export const ALL_ARTICLE = 'ALL_ARTICLE';
 export const SORT = 'SORT';
+export const SEARCH = 'SEARCH';

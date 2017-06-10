@@ -25,7 +25,6 @@ export default function top(state = initialState, action) {
     case actionTypes.typeError(actionTypes.ALL_ARTICLE):
       return {
         ...state,
-        archives: action.archives,
         isLoading: false,
       };
     default:

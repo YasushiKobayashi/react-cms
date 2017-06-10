@@ -5,6 +5,10 @@ export const loadContent = () => {
   return createAction(actionTypes.typeReqest(actionTypes.ALL_ARTICLE));
 };
 
-export const sortContent = (payload) => {
+export const sorrtArticles = (payload) => {
   return createAction(actionTypes.typeReqest(actionTypes.SORT), payload);
+};
+
+export const serachArticles = (payload) => {
+  return createAction(actionTypes.typeReqest(actionTypes.SEARCH), payload);
 };

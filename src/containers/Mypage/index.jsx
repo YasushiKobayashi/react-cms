@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 
 
-import { Archive } from '../../actions';
+import { Archive } from '../../api';
 import { ContentList, Login } from '../../components';
 import { DropZone, Loading } from '../../parts';
 import { request } from '../../utils';

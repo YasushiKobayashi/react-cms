@@ -11,6 +11,7 @@ export default function* rootSaga() {
     takeEvery(actionTypes.LOGIN, app.login),
 
     takeEvery(actionTypes.typeReqest(actionTypes.ALL_ARTICLE), top.loadAll),
-    takeEvery(actionTypes.typeReqest(actionTypes.SORT), top.sortContent),
+    takeEvery(actionTypes.typeReqest(actionTypes.SORT), top.sorrtArticles),
+    takeEvery(actionTypes.typeReqest(actionTypes.SEARCH), top.serachArticles),
   ]);
 }

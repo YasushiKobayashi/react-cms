@@ -6,7 +6,7 @@ import _ from 'lodash';
 
 import { CommentForm } from '../../components';
 import { convertMdtoHtml } from '../../utils';
-import { CommentAction } from '../../actions';
+import { CommentAction } from '../../api';
 import style from '../../style';
 import './index.scss';
 

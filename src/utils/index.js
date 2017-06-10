@@ -6,3 +6,4 @@ export cookie from './cookie';
 export staticImage from './staticImage';
 export convertMdtoHtml from './convertMdtoHtml';
 export createAction from './createAction';
+export params from './params';

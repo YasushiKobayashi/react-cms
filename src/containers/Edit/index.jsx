@@ -4,11 +4,12 @@ import { TextField, RaisedButton } from 'material-ui';
 import toMarkdown from 'to-markdown';
 import _ from 'lodash';
 
+import { Archive, Category } from '../../api';
+
 import EditArticle from './EditArticle';
 import EditSide from './EditSide';
 import { CommentList } from '../../components';
 import { Loading, Categories, CategoryFrom } from '../../parts';
-import { Archive, Category } from '../../actions';
 import { request, validation, convertMdtoHtml } from '../../utils';
 import style from '../../style';
 import './index.scss';

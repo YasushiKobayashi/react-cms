@@ -2,9 +2,22 @@ import { request, apiUrl } from '../utils';
 import { Archive, Single } from '../model';
 
 export default class {
-  static getList(url) {
+  static getAllArticle(url) {
     return new Promise((resolve, reject) => {
       request.GET(apiUrl('v1', url)).then((arr) => {
+        resolve(arr.map((obj) => {
+          return new Archive(obj);
+        }));
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+
+  static serachArticles(payload) {
+    const params = payload.payload;
+    return new Promise((resolve, reject) => {
+      request.POST(apiUrl('v1', 'post/search'), params).then((arr) => {
         resolve(arr.map((obj) => {
           return new Archive(obj);
         }));
@@ -18,18 +31,6 @@ export default class {
     return new Promise((resolve, reject) => {
       request.GET(apiUrl('v1', `post/${id}`)).then((obj) => {
         resolve(new Single(obj));
-      }).catch((err) => {
-        reject(err);
-      });
-    });
-  }
-
-  static serachArticle(params) {
-    return new Promise((resolve, reject) => {
-      request.POST(apiUrl('v1', 'post/search'), params).then((arr) => {
-        resolve(arr.map((obj) => {
-          return new Archive(obj);
-        }));
       }).catch((err) => {
         reject(err);
       });
