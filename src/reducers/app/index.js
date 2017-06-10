@@ -14,17 +14,17 @@ const initialState = {
 
 export default function app(state = initialState, action) {
   switch (action.type) {
-    case actionTypes.LOADED:
+    case actionTypes.LOGINED:
       return {
         ...state,
-        isLoading: action.isLoading,
-        user: action.user,
+        isLoading: false,
         isLogin: true,
+        user: action.user,
       };
-    case actionTypes.NOT_LOGIN:
+    case actionTypes.LOGOUT:
       return {
         ...state,
-        isLoading: action.isLoading,
+        isLoading: false,
         isLogin: false,
         user: initialState.user,
       };

@@ -1,23 +1,23 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { Paper, TextField, RaisedButton } from 'material-ui';
 import _ from 'lodash';
 
+import { validation } from '../../utils';
+import type { User } from '../../types/User';
+
 import style from '../../style';
-import { request, validation, apiUrl, cookie } from '../../utils';
-import { User } from '../../actions';
 import './index.scss';
 
 export default class Login extends Component {
-  static propTypes = {
-    sendUserInfo: PropTypes.func.isRequired,
-    type: PropTypes.string.isRequired,
-    user: PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      email: PropTypes.string.isRequired,
-      image: PropTypes.string.isRequired,
-    }).isRequired,
-  }
+  props: {
+    user: String,
+    type: User,
+    sendUserInfo: Function,
+  };
 
+  state: {
+    user: User,
+  };
 
   constructor() {
     super();
@@ -36,18 +36,14 @@ export default class Login extends Component {
 
     this.handleRegister = this.handleRegister.bind(this);
     this.handlePost = this.handlePost.bind(this);
-    this.handlePut = this.handlePut.bind(this);
     this.handelValid = this.handelValid.bind(this);
   }
 
   componentWillMount() {
     const { user } = this.props;
+    user.password = this.state.user.password;
     this.setState({
-      user: {
-        name: user.name,
-        email: user.email,
-        password: user.password,
-      },
+      user: user,
     });
   }
 
@@ -69,52 +65,16 @@ export default class Login extends Component {
   }
 
   handlePost() {
-    const { type, sendUserInfo } = this.props;
     const { user } = this.state;
-    const url = type === 'SIGN UP' ? 'register' : 'login';
+    const { type, sendUserInfo } = this.props;
+    const urlType = (type !== 'SIGN IN') ? 'register' : 'login';
     if (this.handelValid(type)) {
-      return new Promise((resolve, reject) => {
-        request.POST(apiUrl('v1', url), user).then((obj) => {
-          return obj.token;
-        }).then((token) => {
-          cookie.write('token', token);
-          return new Promise((resolve, reject) => {
-            User.get('user').then(() => {
-              sendUserInfo(true);
-            }).catch((err) => {
-              reject(err);
-            });
-          });
-        }).catch((err) => {
-          reject(err);
-        });
-      });
+      user.urlType = urlType;
+      sendUserInfo(user);
     }
   }
 
-  handlePut() {
-    // console.log('handlePut');
-    // const { user } = this.state;
-    // return new Promise((resolve, reject) => {
-    //   request.PUT(apiUrl('v1', 'user'), user).then((obj) => {
-    //     return obj.token;
-    //   }).then((token) => {
-    //     cookie.write('token', token);
-    //     return new Promise((resolve, reject) => {
-    //       User.get('user').then(() => {
-    //         sendUserInfo(true);
-    //       }).catch((err) => {
-    //         reject(err);
-    //       });
-    //     });
-    //   }).catch((err) => {
-    //     reject(err);
-    //   });
-    // });
-  }
-
   handelValid(type) {
-    console.log(type);
     const { user, userError } = this.state;
     if (type !== 'SIGN IN') {
       userError.name = validation.validEmpty(user.name, '名前');
@@ -148,8 +108,6 @@ export default class Login extends Component {
       style={style.titleField}
     />) : false;
 
-    const send = type === 'Update' ? this.handlePut : this.handlePost;
-
     return (
       <div styleName='conteiner'>
         <Paper style={style.paper} zDepth={1} >
@@ -173,7 +131,7 @@ export default class Login extends Component {
           <RaisedButton
             styleName='btn'
             label={type}
-            onClick={send}
+            onClick={this.handlePost}
             primary
           />
         </Paper>

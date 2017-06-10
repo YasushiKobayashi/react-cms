@@ -1,18 +1,24 @@
 import React from 'react';
-import { render } from 'react-dom';
 import { Provider } from 'react-redux';
+import { render } from 'react-dom';
 import {
   Router,
   browserHistory,
 } from 'react-router';
+// import { syncHistoryWithStore } from 'react-router-redux';
 
 import configureStore from './store/configureStore';
+import rootSaga from './sagas';
 import routes from './routes';
 
 const store = configureStore(window.APP_STATE);
+store.runSaga(rootSaga);
+
+// const history = syncHistoryWithStore(browserHistory, store);
+
 
 render(
-  <Provider store={store}>
+  <Provider store={store} >
     <Router routes={routes} history={browserHistory} />
   </Provider>,
   document.getElementById('app'),

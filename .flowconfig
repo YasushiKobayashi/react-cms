@@ -4,5 +4,9 @@
 [include]
 
 [libs]
+declares
 
 [options]
+module.system.node.resolve_dirname=src
+esproposal.class_static_fields=enable
+munge_underscores=true
