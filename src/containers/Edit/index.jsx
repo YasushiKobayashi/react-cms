@@ -1,10 +1,13 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { browserHistory } from 'react-router';
 import { TextField, RaisedButton } from 'material-ui';
 import toMarkdown from 'to-markdown';
 import _ from 'lodash';
 
-import { Archive, Category } from '../../api';
+import * as actions from '../../actions/articleAction';
+import type { ArticleType } from '../../types/Article';
 
 import EditArticle from './EditArticle';
 import EditSide from './EditSide';
@@ -17,21 +20,17 @@ import './index.scss';
 const tabMark = 'markdown';
 const tabHtml = 'html';
 
-export default class Edit extends Component {
-  static propTypes = {
-    user: PropTypes.shape({
-      id: PropTypes.number.isRequired,
-    }).isRequired,
-    params: PropTypes.shape({
-      id: PropTypes.string,
-    }),
-  };
-  static defaultProps = {
+class Edit extends Component {
+  props: {
     params: {
-      id: '',
+      id?: number,
     },
-  }
-
+    actions: Array<Function>,
+    article: {
+      article?: ArticleType,
+      isLoading: boolean,
+    },
+  };
   constructor() {
     super();
     this.state = {
@@ -44,8 +43,7 @@ export default class Edit extends Component {
       },
       categories: [],
       categoryLists: [],
-      loading: true,
-      titleError: false,
+      titleError: '',
       catNameError: '',
       catSlugErrror: '',
       selectionStart: 0,
@@ -174,7 +172,6 @@ export default class Edit extends Component {
       _.filter(categoryIds, { id: value });
     });
     const params = {
-      user_id: this.props.user.id,
       title: article.title,
       content: article.content,
       wp_flg: wpFlg,
@@ -340,3 +337,15 @@ export default class Edit extends Component {
     );
   }
 }
+
+const mapState = (state) => {
+  return {
+    article: state.article,
+  };
+};
+const mapDispatch = (dispatch) => {
+  return {
+    actions: bindActionCreators(actions, dispatch),
+  };
+};
+export default connect(mapState, mapDispatch)(Edit);

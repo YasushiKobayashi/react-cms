@@ -1,4 +1,4 @@
 export Archive from './Archive';
 export Category from './Category';
-export CommentAction from './CommentAction';
+export CommentApi from './CommentApi';
 export User from './User';

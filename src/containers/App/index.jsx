@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import { MuiThemeProvider } from 'material-ui/styles';
 
-import * as actions from '../../actions/appAction';
+import * as actions from '../../actions/userAction';
 import type { User } from '../../types/User';
 
 import { Loading } from '../../parts';
@@ -17,40 +17,20 @@ import './index.scss';
 class App extends Component {
   props: {
     children: Array<Component>,
+    actions: Array<Function>,
     app: {
       user: User,
+      isLoading: boolean,
+      isLogin: boolean,
     },
-    actions: Array<Function>,
   };
-
-  state: {
-    isLoading: boolean,
-    isLogin: boolean,
-  };
-
-  constructor() {
-    super();
-    this.state = {
-      isLoading: true,
-      isLogin: false,
-    };
-  }
 
   componentWillMount() {
     injectTapEventPlugin();
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { isLoading, isLogin } = nextProps.app;
-    this.setState({
-      isLoading: isLoading,
-      isLogin: isLogin,
-    });
-  }
-
   render() {
-    const { isLoading, isLogin } = this.state;
-    const { user } = this.props.app;
+    const { isLoading, isLogin, user } = this.props.app;
 
     const {
       login,

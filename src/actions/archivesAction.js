@@ -1,11 +1,11 @@
 import * as actionTypes from '../actionTypes';
 import { createAction } from '../utils';
 
-export const loadContent = () => {
-  return createAction(actionTypes.typeReqest(actionTypes.ALL_ARTICLE));
+export const loadAllContent = () => {
+  return createAction(actionTypes.typeReqest(actionTypes.ALL_ARCHIVES));
 };
 
-export const sorrtArticles = (payload) => {
+export const sortArticles = (payload) => {
   return createAction(actionTypes.typeReqest(actionTypes.SORT), payload);
 };
 

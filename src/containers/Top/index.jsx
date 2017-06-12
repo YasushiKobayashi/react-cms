@@ -6,9 +6,8 @@ import SearchedFor from 'material-ui/svg-icons/action/youtube-searched-for';
 import ViewList from 'material-ui/svg-icons/action/view-list';
 import Sort from 'material-ui/svg-icons/content/sort';
 
-import * as actions from '../../actions/topAction';
+import * as actions from '../../actions/archivesAction';
 import type { Article } from '../../types/Article';
-// import { params } from '../../utils';
 
 import { ContentList } from '../../components';
 import { Loading } from '../../parts';
@@ -18,15 +17,15 @@ import './index.scss';
 
 class Top extends Component {
   props: {
+    actions: Array<Function>,
     top: {
       archives: Array<Article>,
       categories: Array,
+      isLoading: boolean,
     },
-    actions: Array<Function>,
   };
 
   state: {
-    isLoading: Boolean,
     serach: String,
     sorted: String,
     selectedCat: String,
@@ -35,7 +34,6 @@ class Top extends Component {
   constructor() {
     super();
     this.state = {
-      isLoading: false,
       serach: '',
       sorted: 'created',
       selectedCat: '未選択',
@@ -49,14 +47,7 @@ class Top extends Component {
   }
 
   componentWillMount() {
-    this.props.actions.loadContent();
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { isLoading } = nextProps.top;
-    this.setState({
-      isLoading: isLoading,
-    });
+    this.props.actions.loadAllContent();
 
     // @TODO カテゴリパラメータ
     // const getParam = params.decode();
@@ -96,17 +87,16 @@ class Top extends Component {
     this.setState({
       sorted: value,
     });
-    this.props.actions.sorrtArticles(value);
+    this.props.actions.sortArticles(value);
   }
 
   render() {
     const {
-      isLoading,
       serach,
       selectedCat,
       sorted,
     } = this.state;
-    const { categories, archives } = this.props.top;
+    const { categories, archives, isLoading } = this.props.top;
 
     if (isLoading) return <Loading />;
 

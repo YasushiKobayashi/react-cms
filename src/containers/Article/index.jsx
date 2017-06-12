@@ -1,70 +1,53 @@
-import React, { Component, PropTypes } from 'react';
-import { Link } from 'react-router';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import Highlight from 'react-highlight';
-import Edit from 'material-ui/svg-icons/image/edit';
+
+import * as actions from '../../actions/articleAction';
+import type { User } from '../../types/User';
+import type { ArticleType } from '../../types/Article';
+
 import { CommentList, CommentForm } from '../../components';
 import { Loading } from '../../parts';
-
-import style from '../../style';
-import { Archive, CommentAction } from '../../api';
 import './index.scss';
 
-export default class Article extends Component {
-  static propTypes = {
-    user: PropTypes.shape({
-      id: PropTypes.number.isRequired,
-    }).isRequired,
-    params: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-    }).isRequired,
+class Article extends Component {
+  props: {
+    params: {
+      id: number,
+    },
+    actions: Array<Function>,
+    user: User,
+    article: {
+      article: ArticleType,
+      isLoading: boolean,
+    },
   };
-
   constructor() {
     super();
-    this.state = {
-      article: null,
-      loading: true,
-    };
-
-    this.sendComment = this.sendComment.bind(this);
+    this.createComment = this.createComment.bind(this);
+    this.editComment = this.editComment.bind(this);
   }
 
-  componentDidMount() {
-    return new Promise((resolve, reject) => {
-      Archive.getSigleArticle(this.props.params.id).then((obj) => {
-        this.setState({
-          article: obj,
-          loading: false,
-        });
-      }).catch((err) => {
-        reject(err);
-      });
-    });
+  componentWillMount() {
+    this.props.actions.getArticle(this.props.params.id);
   }
 
-  sendComment(e) {
-    const content = e.currentTarget.getAttribute('data-content');
+  createComment(e) {
     const post = {
       post_id: parseInt(this.props.params.id, 10),
-      content: content,
+      content: e.currentTarget.getAttribute('data-content'),
     };
-    const { article } = this.state;
-    return new Promise((resolve, reject) => {
-      CommentAction.postComment(post).then((obj) => {
-        article.comments[article.comments.length] = obj;
-        this.setState({
-          article: article,
-        });
-      }).catch((err) => {
-        reject(err);
-      });
-    });
+    this.props.actions.createComment(post);
   }
 
+  editComment(post) {
+    this.props.actions.editComment(post);
+  }
 
   render() {
-    const { article, loading } = this.state;
-    if (loading) return <Loading />;
+    const { article, isLoading } = this.props.article;
+    if (isLoading) return <Loading />;
 
     const cat = article.categories.map((category) => {
       return (
@@ -94,9 +77,24 @@ export default class Article extends Component {
             {article.htmlContent}
           </Highlight>
         </div>
-        <CommentList comments={article.comments} user={this.props.user} />
-        <CommentForm sendComment={this.sendComment} />
+        <CommentList
+          comments={article.comments} user={this.props.user}
+          editComment={this.editComment}
+        />
+        <CommentForm sendComment={this.createComment} />
       </div>
     );
   }
 }
+
+const mapState = (state) => {
+  return {
+    article: state.article,
+  };
+};
+const mapDispatch = (dispatch) => {
+  return {
+    actions: bindActionCreators(actions, dispatch),
+  };
+};
+export default connect(mapState, mapDispatch)(Article);

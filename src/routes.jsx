@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route } from 'react-router';
+import { Route, IndexRoute } from 'react-router';
 
 import {
   App,
@@ -10,12 +10,12 @@ import {
 } from './containers';
 
 module.exports = (
-  <Route component={App}>
-    <Route path='/' component={Top} />
-    <Route path='/mypage' component={Mypage} />
-    <Route path='/edit' component={Edit}>
-      <Route path='/edit/:id' />
+  <Route path="/" component={App}>
+    <IndexRoute component={Top} />
+    <Route path='mypage' component={Mypage} />
+    <Route path='edit' component={Edit}>
+      <Route path=':id' />
     </Route>
-    <Route path='/article/:id' component={Article} />
+    <Route path='article/:id' component={Article} />
   </Route>
 );

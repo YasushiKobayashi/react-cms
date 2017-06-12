@@ -23,7 +23,6 @@ export function* isLogin() {
       user: user,
     });
   } catch (e) {
-    console.log('notLoginnotLogin');
     yield fork(notLogin);
   }
 }

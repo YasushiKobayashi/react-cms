@@ -1,32 +1,23 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import Highlight from 'react-highlight';
 import Edit from 'material-ui/svg-icons/image/edit';
 import moment from 'moment';
 import _ from 'lodash';
 
-import { CommentForm } from '../../components';
+import type { User } from '../../types/User';
+import type { Comment } from '../../types/Comment';
 import { convertMdtoHtml } from '../../utils';
-import { CommentAction } from '../../api';
+
+import { CommentForm } from '../../components';
 import style from '../../style';
 import './index.scss';
 
 export default class CommentList extends Component {
-  static propTypes = {
-    user: PropTypes.shape({
-      id: PropTypes.number.isRequired,
-    }).isRequired,
-    comments: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number,
-      created: PropTypes.date,
-      updated: PropTypes.date,
-      content: PropTypes.string,
-      user: PropTypes.shape({
-        id: PropTypes.number,
-        name: PropTypes.string,
-        image: PropTypes.string,
-      }),
-    })),
-  }
+  props: {
+    comments: Array<Comment>,
+    user: User,
+    editComment: Function,
+  };
   static defaultProps = {
     comments: [],
   }
@@ -46,9 +37,15 @@ export default class CommentList extends Component {
     });
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      comments: nextProps.comments,
+    });
+  }
+
   editMode(e) {
     const id = e.currentTarget.getAttribute('data-id');
-    const { comments } = this.state;
+    const { comments } = this.props;
     const commentsId = _.findIndex(comments, { id: parseInt(id, 10) });
     comments[commentsId].edit = (!comments[commentsId].edit);
     this.setState({
@@ -59,24 +56,11 @@ export default class CommentList extends Component {
   sendComment(e) {
     const id = e.currentTarget.getAttribute('data-id');
     const content = e.currentTarget.getAttribute('data-content');
-    const { comments } = this.state;
-    const commentsId = _.findIndex(comments, { id: parseInt(id, 10) });
-
-    const param = {
+    const post = {
+      id: id,
       content: content,
     };
-    return new Promise((resolve, reject) => {
-      CommentAction.putComment(id, param).then((obj) => {
-        comments[commentsId].content = obj.content;
-        comments[commentsId].updated = obj.updated;
-        comments[commentsId].edit = false;
-        this.setState({
-          comments: comments,
-        });
-      }).catch((err) => {
-        reject(err);
-      });
-    });
+    this.props.editComment(post);
   }
 
   render() {

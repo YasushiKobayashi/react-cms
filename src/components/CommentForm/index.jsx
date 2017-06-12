@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import Highlight from 'react-highlight';
 import { RaisedButton } from 'material-ui';
 import { Tabs, Tab } from 'material-ui/Tabs';
@@ -13,12 +13,11 @@ const tabComment = 'comment';
 const tabPrev = 'preveiw';
 
 export default class CommentForm extends Component {
-  static propTypes = {
-    sendComment: PropTypes.func.isRequired,
-    comment: PropTypes.shape({
-      id: PropTypes.number,
-      content: PropTypes.string,
-    }),
+  props: {
+    sendComment: Function,
+    comment?: {
+      content: String,
+    },
   };
   static defaultProps = {
     comment: {
@@ -92,15 +91,11 @@ export default class CommentForm extends Component {
   }
 
   handleDragOver() {
-    this.setState({
-      isDropZone: true,
-    });
+    this.setState({ isDropZone: true });
   }
 
   handleDragExit() {
-    this.setState({
-      isDropZone: false,
-    });
+    this.setState({ isDropZone: false });
   }
 
   render() {
