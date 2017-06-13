@@ -1,9 +1,12 @@
 import React, { Component, PropTypes } from 'react';
+import { Link } from 'react-router';
 import Highlight from 'react-highlight';
-
 import { CommentList, CommentForm } from '../../components';
 import { Loading } from '../../parts';
 import { Archive, CommentAction } from '../../actions';
+import Edit from 'material-ui/svg-icons/image/edit';
+
+import style from '../../style';
 import './index.scss';
 
 export default class Article extends Component {
@@ -74,9 +77,17 @@ export default class Article extends Component {
       );
     });
 
+    const url = `/edit/${article.id}`;
+    const iconStyle = Object.assign(style.icon, style.grayTxt, style.topIcon);
+
     return (
       <div styleName='container'>
-        <h1>{article.title}</h1>
+        <div styleName='articleTitle'>
+          <h1>{article.title}</h1>
+          <Link to={url}>
+            <Edit style={iconStyle} hoverColor={style.blue} />
+          </Link>
+        </div>
         {cat}
         <div styleName='content'>
           <Highlight innerHTML>
