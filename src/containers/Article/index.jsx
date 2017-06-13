@@ -1,10 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import Highlight from 'react-highlight';
+import Edit from 'material-ui/svg-icons/image/edit';
 import { CommentList, CommentForm } from '../../components';
 import { Loading } from '../../parts';
 import { Archive, CommentAction } from '../../actions';
-import Edit from 'material-ui/svg-icons/image/edit';
 
 import style from '../../style';
 import './index.scss';
