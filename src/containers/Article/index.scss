@@ -1,6 +1,14 @@
 @import '../../common';
 
 .container {
+  .articleTitle {
+    h1 {
+      display: inline-block;
+      max-width: 85%;
+      margin-right: 20px;
+      vertical-align: middle;
+    }
+  }
   max-width: 800px;
   margin: 0 auto;
   .cat {
