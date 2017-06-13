@@ -13,6 +13,9 @@ export default function* rootSaga() {
     fork(user.isLogin),
     takeEvery(actionTypes.LOGIN, user.login),
 
+    takeEvery(actionTypes.typeReqest(actionTypes.USER_ARTICLE), user.getUserArticle),
+    takeEvery(actionTypes.typeReqest(actionTypes.GET_USER), user.isLogin),
+
     takeEvery(actionTypes.typeReqest(actionTypes.ALL_ARCHIVES), archives.loadAll),
     takeEvery(actionTypes.typeReqest(actionTypes.SORT), archives.sortArticles),
     takeEvery(actionTypes.typeReqest(actionTypes.SEARCH), archives.serachArticles),

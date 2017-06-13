@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { Link } from 'react-router';
 import Highlight from 'react-highlight';
+import Edit from 'material-ui/svg-icons/image/edit';
 
 import * as actions from '../../actions/articleAction';
 import type { User } from '../../types/User';
@@ -9,6 +11,8 @@ import type { ArticleType } from '../../types/Article';
 
 import { CommentList, CommentForm } from '../../components';
 import { Loading } from '../../parts';
+
+import style from '../../style';
 import './index.scss';
 
 class Article extends Component {

@@ -24,6 +24,9 @@ export const NOT_LOGIN = 'NOT_LOGIN';
 export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
 
+export const USER_ARTICLE = 'USER_ARTICLE';
+export const GET_USER = 'GET_USER';
+
 // archive
 export const ALL_ARCHIVES = 'ALL_ARCHIVES';
 export const SORT = 'SORT';

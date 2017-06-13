@@ -5,6 +5,7 @@ export default class {
   static getAllArticle(url) {
     return new Promise((resolve, reject) => {
       request.GET(apiUrl('v1', url)).then((arr) => {
+        console.log(arr);
         resolve(arr.map((obj) => {
           return new Archive(obj);
         }));

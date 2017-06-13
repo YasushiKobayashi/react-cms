@@ -31,11 +31,6 @@ export default function edit(state = initialState, action) {
         article: action.article,
         isLoading: false,
       };
-    case actionTypes.typeValidError(actionTypes.SET_ARTICLE):
-      return {
-        ...state,
-        valid: action.valid,
-      };
     case actionTypes.typeLoaded(actionTypes.SET_CATEGORY):
       return {
         ...state,
@@ -48,6 +43,11 @@ export default function edit(state = initialState, action) {
         ...state,
         categoryLists: action.categoryLists,
         isLoading: false,
+      };
+    case actionTypes.typeValidError(actionTypes.SET_ARTICLE):
+      return {
+        ...state,
+        valid: action.valid,
       };
     case actionTypes.typeLoaded(actionTypes.CREATE_CATEGORY):
       return {

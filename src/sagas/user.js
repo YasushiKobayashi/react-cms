@@ -1,7 +1,7 @@
-import { call, put, fork } from 'redux-saga/effects';
+import { call, put, fork, cancel } from 'redux-saga/effects';
 
 import { request, apiUrl, cookie } from '../utils';
-import { User } from '../api';
+import { User, Archive } from '../api';
 import * as actionTypes from '../actions/actionTypes';
 
 function* notLogin() {
@@ -15,6 +15,7 @@ export function* isLogin() {
   const token = cookie.read('token');
   if (typeof token === 'undefined') {
     yield fork(notLogin);
+    yield cancel();
   }
   try {
     const user = yield call(User.get, 'user');
@@ -48,6 +49,7 @@ export function* login(payload) {
       user: user,
     });
   } catch (e) {
+    console.log(e);
     yield fork(notLogin);
   }
 }
@@ -61,6 +63,22 @@ export function* update(payload) {
       user: user,
     });
   } catch (e) {
+    console.log(e);
     yield fork(notLogin);
+  }
+}
+
+export function* getUserArticle() {
+  try {
+    const archives = yield call(Archive.getAllArticle('post/user'));
+    yield put({
+      type: actionTypes.typeLoaded(actionTypes.USER_ARTICLE),
+      archives: archives,
+    });
+  } catch (e) {
+    console.log(e);
+    yield put({
+      type: actionTypes.typeError(actionTypes.USER_ARTICLE),
+    });
   }
 }

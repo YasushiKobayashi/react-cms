@@ -41,7 +41,6 @@ class App extends Component {
       this.props.children,
       {
         user: user,
-        sendUserInfo: this.sendUserInfo,
       },
     );
 

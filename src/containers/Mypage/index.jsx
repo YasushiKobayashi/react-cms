@@ -1,86 +1,67 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
+import * as actions from '../../actions/userAction';
+import type { User } from '../../types/User';
+import type { Article } from '../../types/Article';
+import { request } from '../../utils';
 
-import { Archive } from '../../api';
 import { ContentList, Login } from '../../components';
 import { DropZone, Loading } from '../../parts';
-import { request } from '../../utils';
 import './index.scss';
 
-export default class Mypage extends Component {
-  static propTypes = {
-    user: PropTypes.shape().isRequired,
-    sendUserInfo: PropTypes.func.isRequired,
+class Mypage extends Component {
+  props: {
+    actions: Array<Function>,
+    user: User,
+    mypage: {
+      archives: Array<Article>;
+      isLoading: boolean,
+    },
   };
 
   constructor() {
     super();
     this.state = {
-      archives: null,
-      loading: true,
       isDropZone: false,
     };
 
-    this.handleDragOver = this.handleDragOver.bind(this);
-    this.handleDragExit = this.handleDragExit.bind(this);
+    this.handleDrag = this.handleDrag.bind(this);
     this.handleUploadImage = this.handleUploadImage.bind(this);
+    this.updateUserInfo = this.updateUserInfo.bind(this);
   }
 
-  componentDidMount() {
-    return new Promise((resolve, reject) => {
-      Archive.getList('post/user').then((obj) => {
-        return obj;
-      }).then((obj) => {
-        this.setState({
-          archives: obj,
-          loading: false,
-        });
-      }).catch((err) => {
-        reject(err);
-      });
-    });
+  componentWillMount() {
+    this.props.actions.getUserArticle();
   }
 
-  sendUserInfo() {
+  updateUserInfo() {
 
   }
 
   handleUploadImage(file) {
-    return new Promise((resolve, reject) => {
-      this.uploadImage(file).then(() => {
-        resolve(this.props.sendUserInfo(true));
-      }).catch((err) => {
-        reject(err);
-      });
-    });
+    (async () => {
+      try {
+        await request.UPLOAD('user/upload', file);
+        this.props.actions.getUserInfo();
+      } catch (e) {
+        console.log(e);
+      }
+    })();
   }
 
-  uploadImage(file) {
-    return new Promise((resolve, reject) => {
-      request.UPLOAD('user/upload', file).then((obj) => {
-        resolve(obj);
-      }).catch((err) => {
-        reject(err);
-      });
-    });
-  }
-
-  handleDragOver() {
+  handleDrag() {
     this.setState({
-      isDropZone: true,
-    });
-  }
-
-  handleDragExit() {
-    this.setState({
-      isDropZone: false,
+      isDropZone: !this.state.isDropZone,
     });
   }
 
   render() {
     const { user } = this.props;
-    const { archives, loading, isDropZone } = this.state;
-    if (loading) return <Loading />;
+    const { archives, isLoading } = this.props.mypage;
+    const { isDropZone } = this.state;
+    if (isLoading) return <Loading />;
 
     return (
       <div styleName='content'>
@@ -89,14 +70,14 @@ export default class Mypage extends Component {
             <Login
               type='Update'
               user={user}
-              sendUserInfo={this.sendUserInfo}
+              updateUserInfo={this.updateUserInfo}
             />
           </div>
-          <div styleName='image' onDragOver={this.handleDragOver} handleDragExit={this.handleDragExit} >
+          <div styleName='image' onDragOver={this.handleDrag} onDragLeave={this.handleDrag} >
             <img src={user.image} alt={user.name} />
             <DropZone
               isDropZone={isDropZone}
-              handleDragExit={this.handleDragExit}
+              handleDragExit={this.handleDrag}
               handleUploadImage={this.handleUploadImage}
             />
           </div>
@@ -107,3 +88,16 @@ export default class Mypage extends Component {
     );
   }
 }
+
+const mapState = (state) => {
+  console.log(state.mypage);
+  return {
+    mypage: state.mypage,
+  };
+};
+const mapDispatch = (dispatch) => {
+  return {
+    actions: bindActionCreators(actions, dispatch),
+  };
+};
+export default connect(mapState, mapDispatch)(Mypage);
