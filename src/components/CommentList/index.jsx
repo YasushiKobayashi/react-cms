@@ -6,7 +6,6 @@ import _ from 'lodash';
 
 import type { User } from '../../types/User';
 import type { Comment } from '../../types/Comment';
-import { convertMdtoHtml } from '../../utils';
 
 import { CommentForm } from '../../components';
 import style from '../../style';
@@ -81,7 +80,7 @@ export default class CommentList extends Component {
 
       const content = comment.edit ?
         <CommentForm sendComment={this.sendComment} comment={comment} /> :
-        <Highlight innerHTML>{convertMdtoHtml(comment.content)}</Highlight>;
+        <Highlight innerHTML>{comment.htmlContent}</Highlight>;
 
       return (
         <div

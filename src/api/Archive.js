@@ -10,6 +10,7 @@ export default class {
         }));
       }).catch((err) => {
         reject(err);
+        throw new Error(err);
       });
     });
   }
@@ -23,6 +24,7 @@ export default class {
         }));
       }).catch((err) => {
         reject(err);
+        throw new Error(err);
       });
     });
   }
@@ -33,6 +35,7 @@ export default class {
         resolve(new Single(obj));
       }).catch((err) => {
         reject(err);
+        throw new Error(err);
       });
     });
   }
@@ -43,6 +46,7 @@ export default class {
         resolve(new Single(obj));
       }).catch((err) => {
         reject(err);
+        throw new Error(err);
       });
     });
   }
@@ -53,6 +57,7 @@ export default class {
         resolve(new Single(obj));
       }).catch((err) => {
         reject(err);
+        throw new Error(err);
       });
     });
   }

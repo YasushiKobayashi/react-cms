@@ -61,7 +61,7 @@ export default class {
   }
 
   /**
-   * 日本語使用禁止のバリデーション
+   * 半角英数字ハイフン、アンスコのみ許容するバリデーション
    * @TODO 重複チェック
    * @param  {string} text バリデーションを行なう値
    * @param  {string} name バリデーションを行なう項目
@@ -70,7 +70,7 @@ export default class {
   static validNonJpanese(text, name) {
     let res = this.validEmpty(text, name);
     if (!res) {
-      if (text.match(/[^A-Za-z0-9]+/)) {
+      if (text.match(/[^a-zA-Z0-9-_]+/)) {
         res = `${name}は半角英数字のみです。`;
       }
     }

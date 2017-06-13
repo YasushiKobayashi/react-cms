@@ -1,4 +1,4 @@
-import * as actionTypes from '../../actionTypes';
+import * as actionTypes from '../../actions/actionTypes';
 
 
 const initialState = {
@@ -26,11 +26,13 @@ export default function top(state = initialState, action) {
     case actionTypes.typeError(actionTypes.FILTER_ARTICLE):
       return {
         ...state,
+        errorMessage: action.errorMessage,
         isLoading: false,
       };
     case actionTypes.typeError(actionTypes.ALL_ARTICLE):
       return {
         ...state,
+        errorMessage: action.errorMessage,
         isLoading: false,
       };
     default:

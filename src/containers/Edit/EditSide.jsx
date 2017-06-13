@@ -1,32 +1,27 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import Highlight from 'react-highlight';
 import { TextField } from 'material-ui';
 import moment from 'moment';
+
+import type { ArticleType } from '../../types/Article';
+import type { Category } from '../../types/Category';
 
 import { Categories } from '../../parts';
 import style from '../../style';
 import './EditSide.scss';
 
 export default class EditSide extends Component {
-  static propTypes = {
-    handleRemoveCat: PropTypes.func.isRequired,
-    article: PropTypes.shape({
-      content: PropTypes.string.isRequired,
-      htmlContent: PropTypes.string.isRequired,
-      created: PropTypes.object.isRequired,
-      updated: PropTypes.object.isRequired,
-    }).isRequired,
-    categories: PropTypes.arrayOf(PropTypes.shape({
-      name: PropTypes.string,
-      slug: PropTypes.string,
-    })).isRequired,
-  }
+  props: {
+    handleCat: Function,
+    article: ArticleType,
+    categories: Array<Category>,
+  };
 
   render() {
     const {
       article,
       categories,
-      handleRemoveCat,
+      handleCat,
     } = this.props;
 
     const created = moment(article.created).format('YYYY/MM/DD');
@@ -49,7 +44,7 @@ export default class EditSide extends Component {
         <div styleName='wrapper'>
           <Categories
             categories={categories}
-            handleCat={handleRemoveCat}
+            handleCat={handleCat}
             type='selected'
           />
         </div>

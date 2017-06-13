@@ -2,7 +2,7 @@ import { call, fork, put, select } from 'redux-saga/effects';
 import _ from 'lodash';
 
 import { Archive, Category } from '../api';
-import * as actionTypes from '../actionTypes';
+import * as actionTypes from '../actions/actionTypes';
 import selectors from './selectors';
 
 function* getErr(type, message) {

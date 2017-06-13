@@ -5,7 +5,7 @@ import { Tabs, Tab } from 'material-ui/Tabs';
 import CommentIcon from 'material-ui/svg-icons/communication/comment';
 
 import { DropZone } from '../../parts';
-import { request, convertMdtoHtml } from '../../utils';
+import { request, editContent } from '../../utils';
 import style from '../../style';
 import './index.scss';
 
@@ -37,8 +37,7 @@ export default class CommentForm extends Component {
 
     this.handleTab = this.handleTab.bind(this);
     this.handleComment = this.handleComment.bind(this);
-    this.handleDragOver = this.handleDragOver.bind(this);
-    this.handleDragExit = this.handleDragExit.bind(this);
+    this.handleDrag = this.handleDrag.bind(this);
     this.handleUploadImage = this.handleUploadImage.bind(this);
   }
 
@@ -63,39 +62,24 @@ export default class CommentForm extends Component {
 
   handleUploadImage(file) {
     const { content, selectionStart } = this.state;
-    return new Promise((resolve, reject) => {
-      this.uploadImage(file).then((imagePath) => {
-        const addStr = `\n![](${imagePath})\n`;
-        const newContent = this.insertStr(content, selectionStart, addStr);
+    (async () => {
+      try {
+        const imagePath = await request.UPLOAD('post/upload', file);
+        const addStr = `\n![](${imagePath.path})\n`;
+        const newContent = editContent.insertStr(content, selectionStart, addStr);
         this.setState({
           content: newContent,
         });
-      }).catch((err) => {
-        reject(err);
-      });
+      } catch (e) {
+        console.log(e);
+      }
+    })();
+  }
+
+  handleDrag() {
+    this.setState({
+      isDropZone: !this.state.isDropZone,
     });
-  }
-
-  insertStr(str, index, insert) {
-    return str.slice(0, index) + insert + str.slice(index, str.length);
-  }
-
-  uploadImage(file) {
-    return new Promise((resolve, reject) => {
-      request.UPLOAD('post/upload', file).then((obj) => {
-        resolve(obj.path);
-      }).catch((err) => {
-        reject(err);
-      });
-    });
-  }
-
-  handleDragOver() {
-    this.setState({ isDropZone: true });
-  }
-
-  handleDragExit() {
-    this.setState({ isDropZone: false });
   }
 
   render() {
@@ -119,12 +103,12 @@ export default class CommentForm extends Component {
             <textarea
               value={content}
               onChange={this.handleComment}
-              onDragOver={this.handleDragOver}
+              onDragOver={this.handleDrag}
             />
           </Tab>
           <Tab label={tabPrev} value={tabPrev}>
             <Highlight styleName='content' innerHTML>
-              {convertMdtoHtml(content)}
+              {editContent.toHtml(content)}
             </Highlight>
           </Tab>
         </Tabs>
@@ -139,7 +123,7 @@ export default class CommentForm extends Component {
         />
         <DropZone
           isDropZone={isDropZone}
-          handleDragExit={this.handleDragExit}
+          handleDragExit={this.handleDrag}
           handleUploadImage={this.handleUploadImage}
         />
       </div>

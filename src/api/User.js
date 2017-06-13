@@ -19,6 +19,7 @@ export default class {
         resolve(new User(obj));
       }).catch((err) => {
         reject(err);
+        throw new Error(err);
       });
     });
   }

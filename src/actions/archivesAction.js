@@ -1,4 +1,4 @@
-import * as actionTypes from '../actionTypes';
+import * as actionTypes from './actionTypes';
 import { createAction } from '../utils';
 
 export const loadAllContent = () => {

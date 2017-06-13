@@ -2,7 +2,7 @@ import { call, put, fork } from 'redux-saga/effects';
 
 import { request, apiUrl, cookie } from '../utils';
 import { User } from '../api';
-import * as actionTypes from '../actionTypes';
+import * as actionTypes from '../actions/actionTypes';
 
 function* notLogin() {
   yield put({

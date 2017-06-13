@@ -1,4 +1,4 @@
-import * as actionTypes from '../../actionTypes';
+import * as actionTypes from '../../actions/actionTypes';
 
 
 const initialState = {
@@ -18,6 +18,12 @@ export default function article(state = initialState, action) {
       return {
         ...state,
         article: action.article,
+        isLoading: false,
+      };
+    case actionTypes.typeError(actionTypes.SET_ARTICLE):
+      return {
+        ...state,
+        errorMessage: action.errorMessage,
         isLoading: false,
       };
     default:

@@ -1,4 +1,4 @@
-import * as actionTypes from '../actionTypes';
+import * as actionTypes from './actionTypes';
 import { cookie, createAction } from '../utils';
 
 export const login = (payload) => createAction(actionTypes.LOGIN, payload);

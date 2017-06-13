@@ -5,7 +5,7 @@ import Delete from 'material-ui/svg-icons/action/delete';
 
 import style from '../../style';
 
-export default class Base extends Component {
+export default class Categories extends Component {
   static propTypes = {
     categories: PropTypes.arrayOf(PropTypes.shape({
       name: PropTypes.string.isRequired,

@@ -2,7 +2,7 @@ import { call, fork, put, select } from 'redux-saga/effects';
 import _ from 'lodash';
 
 import { Archive, CommentApi } from '../api';
-import * as actionTypes from '../actionTypes';
+import * as actionTypes from '../actions/actionTypes';
 import selectors from './selectors';
 
 function* getErr(type, message) {
@@ -25,6 +25,15 @@ export function* getArticle(payload) {
     yield fork(getErr, actionTypes.SET_ARTICLE, '記事の取得に失敗しました。<br/>再度お試しください。');
   }
 }
+
+export function* editArticle(payload) {
+  const article = payload.payload;
+  yield put({
+    type: actionTypes.typeLoaded(actionTypes.SET_ARTICLE),
+    article: article,
+  });
+}
+
 
 export function* createComment(payload) {
   const post = payload.payload;
@@ -64,6 +73,6 @@ export function* editComment(payload) {
     });
   } catch (e) {
     console.log(e);
-    yield fork(getErr, actionTypes.SET_ARTICLE, 'コメントの作成に失敗しました。<br/>再度お試しください。');
+    yield fork(getErr, actionTypes.SET_ARTICLE, 'コメントの編集に失敗しました。<br/>再度お試しください。');
   }
 }

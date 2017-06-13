@@ -8,6 +8,7 @@ export default class {
         resolve(new Comment(obj));
       }).catch((err) => {
         reject(err);
+        throw new Error(err);
       });
     });
   }
@@ -18,6 +19,7 @@ export default class {
         resolve(new Comment(obj));
       }).catch((err) => {
         reject(err);
+        throw new Error(err);
       });
     });
   }
