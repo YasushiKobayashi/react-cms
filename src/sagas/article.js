@@ -1,6 +1,5 @@
 import { call, fork, put, select } from 'redux-saga/effects';
 import { browserHistory } from 'react-router';
-import _ from 'lodash';
 
 import { Archive } from '../api';
 import * as actionTypes from '../actions/actionTypes';
