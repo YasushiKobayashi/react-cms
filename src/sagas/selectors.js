@@ -25,8 +25,18 @@ export default class {
    * @param  {obj} state [sagaで管理しているstate]
    * @return {obj}       [articleのarticleのstateを返す]
    */
-  static getArticle(state) {
+  static getArticleFromArticle(state) {
     return state.article.article;
+  }
+
+  /**
+   * [sagaのselect用のメソッド]
+   * [articleのarticleのtateを返す]
+   * @param  {obj} state [sagaで管理しているstate]
+   * @return {obj}       [articleのarticleのstateを返す]
+   */
+  static getArticleFromEdit(state) {
+    return state.edit.article;
   }
 
   /**

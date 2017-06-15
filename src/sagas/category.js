@@ -6,6 +6,11 @@ import * as actionTypes from '../actions/actionTypes';
 import selectors from './selectors';
 import { validation } from '../utils';
 
+/**
+ * [エラー時の処理]
+ * @param  {[type]}    message [description]
+ * @return {Generator}         [description]
+ */
 function* getErr(message) {
   yield put({
     type: actionTypes.typeError(actionTypes.SET_ARTICLE),
@@ -27,6 +32,14 @@ function* editCategory(categoryNew) {
   });
 }
 
+function* validCategory() {
+  const categoryNew = yield select(selectors.getNewCetegoryFromEdit);
+  const valid = yield select(selectors.getValidFromEdit);
+  valid.catNameError = validation.validEmpty(categoryNew.name, 'カテゴリ');
+  valid.catSlugErrror = validation.validNonJpanese(categoryNew.slug, 'スラッグ');
+  yield fork(validErr, valid);
+}
+
 export function* getCategories() {
   try {
     const categoryLists = yield call(Category.get);
@@ -42,36 +55,35 @@ export function* getCategories() {
 
 export function* addCategories(payload) {
   const id = payload.payload;
-  const categories = yield select(selectors.getCategoriesFromEdit);
   const categoryLists = yield select(selectors.getCategoryListsFromEdit);
-  categories[categories.length] = categoryLists[id];
+  const article = yield select(selectors.getArticleFromEdit);
+  article.categories[article.categories.length] = categoryLists[id];
   yield put({
-    type: actionTypes.typeLoaded(actionTypes.SET_CATEGORY_LIST),
-    categories: categories,
+    type: actionTypes.typeLoaded(actionTypes.SET_CATEGORY),
+    article: article,
     categoryLists: _.pull(categoryLists, categoryLists[id]),
   });
 }
 
 export function* removeCategories(payload) {
   const id = payload.payload;
-  const categories = yield select(selectors.getCategoriesFromEdit);
+  const article = yield select(selectors.getArticleFromEdit);
   const categoryLists = yield select(selectors.getCategoryListsFromEdit);
-  categoryLists[categoryLists.length] = categories[id];
+  categoryLists[categoryLists.length] = article.categories[id];
   yield put({
     type: actionTypes.typeLoaded(actionTypes.SET_CATEGORY_LIST),
-    categories: _.pull(categories, categories[id]),
+    article: article,
+    categories: _.pull(article.categories, article.categories[id]),
     categoryLists: categoryLists,
   });
 }
 
 export function* editCatName(payload) {
   const categoryNew = yield select(selectors.getNewCetegoryFromEdit);
-  console.log(categoryNew);
   categoryNew.name = payload.payload;
   yield fork(editCategory, categoryNew);
 
   const valid = yield select(selectors.getValidFromEdit);
-  console.log(valid);
   valid.catNameError = validation.validEmpty(categoryNew.name, 'カテゴリ');
   yield fork(validErr, valid);
 }
@@ -86,24 +98,26 @@ export function* editCatSlug(payload) {
   yield fork(validErr, valid);
 }
 
+/**
+ * [カテゴリの新規作成を行なう]
+ * @return {Generator} [description]
+ */
 export function* createCategory() {
   try {
-    const categoryNew = yield select(selectors.getNewCetegoryFromEdit);
+    yield fork(validCategory);
     const valid = yield select(selectors.getValidFromEdit);
-    valid.catNameError = validation.validEmpty(categoryNew.name, 'カテゴリ');
-    valid.catSlugErrror = validation.validNonJpanese(categoryNew.slug, 'スラッグ');
     if (valid.catNameError || valid.catSlugErrror) {
-      yield fork(validErr, valid);
       yield cancel();
     }
 
+    const categoryNew = yield select(selectors.getNewCetegoryFromEdit);
     const category = yield call(Category.post, categoryNew);
-    const categories = yield select(selectors.getCategoriesFromEdit);
-    console.log(categories);
-    categories[categories.length] = category;
+    const article = yield select(selectors.getArticleFromEdit);
+
+    article.categories[article.categories.length] = category;
     yield put({
       type: actionTypes.typeLoaded(actionTypes.CREATE_CATEGORY),
-      categories: categories,
+      article: article,
     });
   } catch (e) {
     console.log(e);

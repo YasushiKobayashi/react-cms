@@ -1,6 +1,5 @@
 import * as actionTypes from '../../actions/actionTypes';
 
-
 const initialState = {
   article: {
     title: '',
@@ -8,6 +7,7 @@ const initialState = {
     htmlContent: '',
     created: new Date(),
     updated: new Date(),
+    categories: [],
   },
   valid: {
     titleError: '',
@@ -19,7 +19,6 @@ const initialState = {
     slug: '',
   },
   categoryLists: [],
-  categories: [],
   isLoading: true,
 };
 
@@ -35,7 +34,7 @@ export default function edit(state = initialState, action) {
       return {
         ...state,
         categoryLists: action.categoryLists,
-        categories: action.categories,
+        article: action.article,
         isLoading: false,
       };
     case actionTypes.typeLoaded(actionTypes.SET_CATEGORY_LIST):
@@ -49,11 +48,6 @@ export default function edit(state = initialState, action) {
         ...state,
         valid: action.valid,
       };
-    case actionTypes.typeLoaded(actionTypes.CREATE_CATEGORY):
-      return {
-        ...state,
-        categories: action.categories,
-      };
     case actionTypes.typeLoaded(actionTypes.EDIT_CATEGORY):
       return {
         ...state,
@@ -65,6 +59,8 @@ export default function edit(state = initialState, action) {
         errorMessage: action.errorMessage,
         isLoading: false,
       };
+    case actionTypes.INIT_ARTICLE:
+      return initialState;
     default:
       return state;
   }

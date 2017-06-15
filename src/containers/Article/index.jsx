@@ -65,12 +65,17 @@ class Article extends Component {
     });
 
     const url = `/edit/${article.id}`;
+    console.log(article);
     const iconStyle = Object.assign(style.icon, style.grayTxt, style.topIcon);
+    const wipStyle = article.wpFlg ? null : style.hide;
 
     return (
       <div styleName='container'>
         <div styleName='articleTitle'>
-          <h1>{article.title}</h1>
+          <h1>
+            <span styleName='wip' style={wipStyle} >WIP</span>
+            {article.title}
+          </h1>
           <Link to={url}>
             <Edit style={iconStyle} hoverColor={style.blue} />
           </Link>

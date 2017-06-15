@@ -1,14 +1,24 @@
 import { call, fork, put, select } from 'redux-saga/effects';
+import { browserHistory } from 'react-router';
 import _ from 'lodash';
 
-import { Archive, CommentApi } from '../api';
+import { Archive } from '../api';
 import * as actionTypes from '../actions/actionTypes';
 import selectors from './selectors';
+
+import { validation } from '../utils';
 
 function* getErr(type, message) {
   yield put({
     type: actionTypes.typeError(type),
     errorMessage: message,
+  });
+}
+
+function* validErr(valid) {
+  yield put({
+    type: actionTypes.typeValidError(actionTypes.SET_ARTICLE),
+    valid: valid,
   });
 }
 
@@ -25,54 +35,40 @@ export function* getArticle(payload) {
     yield fork(getErr, actionTypes.SET_ARTICLE, '記事の取得に失敗しました。<br/>再度お試しください。');
   }
 }
-
 export function* editArticle(payload) {
   const article = payload.payload;
+  const valid = yield select(selectors.getValidFromEdit);
+  valid.titleError = validation.validTitle(article.title);
+
+  yield fork(validErr, valid);
   yield put({
     type: actionTypes.typeLoaded(actionTypes.SET_ARTICLE),
     article: article,
   });
 }
 
-
-export function* createComment(payload) {
-  const post = payload.payload;
+export function* createArticle(payload) {
+  const flag = payload.payload;
   try {
-    const commnet = yield call(CommentApi.post, post);
-    const article = yield select(selectors.getArticle);
-    article.comments[article.comments.length] = commnet;
-    yield put({
-      type: actionTypes.typeLoaded(actionTypes.SET_ARTICLE),
-      article: article,
-    });
+    const post = yield select(selectors.getArticleFromEdit);
+    post.wp_flg = flag;
+    const article = yield call(Archive.postArticle, post);
+    browserHistory.push(`/article/${article.id}`);
   } catch (e) {
     console.log(e);
-    yield fork(getErr, actionTypes.SET_ARTICLE, 'コメントの作成に失敗しました。<br/>再度お試しください。');
+    yield fork(getErr, actionTypes.SET_ARTICLE, '記事の取得に失敗しました。<br/>再度お試しください。');
   }
 }
 
-
-export function* editComment(payload) {
-  console.log(payload.payload);
-  const id = payload.payload.id;
-  const post = {
-    content: payload.payload.content,
-  };
+export function* putArticle(payload) {
+  const { id, flag } = payload.payload;
   try {
-    const commnet = yield call(CommentApi.put, id, post);
-    const article = yield select(selectors.getArticle);
-
-    const commentsId = _.findIndex(article.comments, { id: parseInt(id, 10) });
-    article.comments[commentsId].content = commnet.content;
-    article.comments[commentsId].updated = commnet.updated;
-    article.comments[commentsId].edit = false;
-
-    yield put({
-      type: actionTypes.typeLoaded(actionTypes.SET_ARTICLE),
-      article: article,
-    });
+    const post = yield select(selectors.getArticleFromEdit);
+    post.wp_flg = flag;
+    const article = yield call(Archive.putArticle, id, post);
+    browserHistory.push(`/article/${article.id}`);
   } catch (e) {
     console.log(e);
-    yield fork(getErr, actionTypes.SET_ARTICLE, 'コメントの編集に失敗しました。<br/>再度お試しください。');
+    yield fork(getErr, actionTypes.SET_ARTICLE, '記事の取得に失敗しました。<br/>再度お試しください。');
   }
 }

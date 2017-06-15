@@ -5,7 +5,6 @@ export default class {
   static getAllArticle(url) {
     return new Promise((resolve, reject) => {
       request.GET(apiUrl('v1', url)).then((arr) => {
-        console.log(arr);
         resolve(arr.map((obj) => {
           return new Archive(obj);
         }));
@@ -44,6 +43,9 @@ export default class {
   static postArticle(params) {
     return new Promise((resolve, reject) => {
       request.POST(apiUrl('v1', 'post'), params).then((obj) => {
+        console.log('postArticle');
+        console.log(obj);
+        console.log('postArticle');
         resolve(new Single(obj));
       }).catch((err) => {
         reject(err);

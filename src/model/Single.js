@@ -11,6 +11,7 @@ export default class Single {
     this.updated = new Date(obj.updated);
     this.content = obj.content;
     this.htmlContent = editContent.toHtml(obj.content);
+    this.wpFlg = obj.wp_flg;
     this.commentsCount = _.size(obj.comments);
     this.comments = (obj.comments !== null) ?
       obj.comments.map((commnet) => {

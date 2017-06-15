@@ -8,6 +8,11 @@
       margin-right: 20px;
       vertical-align: middle;
     }
+    .wip {
+      @extend %box;
+      color: #fff;
+      background-color: $bgGray;
+    }
   }
   max-width: 800px;
   margin: 0 auto;

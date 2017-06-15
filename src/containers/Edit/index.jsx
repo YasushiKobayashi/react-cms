@@ -28,7 +28,6 @@ class Edit extends Component {
     actions: Array<Function>,
     edit: {
       article?: ArticleType,
-      categories?: Array<Category>,
       categoryLists?: Array<Category>,
       isLoading: boolean,
       valid: Array<String>,
@@ -45,11 +44,13 @@ class Edit extends Component {
     this.handleContent = this.handleContent.bind(this);
     this.handleUploadImage = this.handleUploadImage.bind(this);
     this.manegeContent = this.manegeContent.bind(this);
+    this.sendArticle = this.sendArticle.bind(this);
     this.handleAddCat = this.handleAddCat.bind(this);
     this.handleRemoveCat = this.handleRemoveCat.bind(this);
   }
 
   componentWillMount() {
+    this.props.actions.initArticle();
     this.props.actions.getCategories();
     if (typeof this.props.params.id !== 'undefined') {
       this.props.actions.getArticle(this.props.params.id);
@@ -69,6 +70,17 @@ class Edit extends Component {
     this.manegeContent(e.target.value, type);
   }
 
+  manegeContent(newContent, type) {
+    const { article } = this.props.edit;
+    if (type === 'markdown') {
+      article.content = newContent;
+      article.htmlContent = editContent.toHtml(newContent);
+    } else {
+      article.content = editContent.toMarkdown(newContent);
+      article.htmlContent = newContent;
+    }
+    this.props.actions.editArticle(article);
+  }
   handleUploadImage(file, type) {
     const { selectionStart } = this.state;
     const { article } = this.props.edit;
@@ -88,16 +100,16 @@ class Edit extends Component {
     })();
   }
 
-  manegeContent(newContent, type) {
-    const { article } = this.props.edit;
-    if (type === 'markdown') {
-      article.content = newContent;
-      article.htmlContent = editContent.toHtml(newContent);
+  sendArticle(flag) {
+    if (typeof this.props.params.id === 'undefined') {
+      this.props.actions.createArticle(flag);
     } else {
-      article.content = editContent.toMarkdown(newContent);
-      article.htmlContent = newContent;
+      const post = {
+        flag: flag,
+        id: this.props.params.id,
+      };
+      this.props.actions.putArticle(post);
     }
-    this.props.actions.editArticle(article);
   }
 
   handleAddCat(e) {
@@ -114,7 +126,6 @@ class Edit extends Component {
     const {
       article,
       isLoading,
-      categories,
       categoryLists,
       categoryNew,
       valid,
@@ -163,7 +174,7 @@ class Edit extends Component {
           <div styleName='content'>
             <EditSide
               article={article}
-              categories={categories}
+              categories={article.categories}
               handleCat={this.handleRemoveCat}
             />
           </div>

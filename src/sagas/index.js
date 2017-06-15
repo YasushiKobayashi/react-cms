@@ -5,7 +5,7 @@ import * as user from './user';
 import * as article from './article';
 import * as archives from './archives';
 import * as category from './category';
-import * as edit from './edit';
+import * as comment from './comment';
 
 
 export default function* rootSaga() {
@@ -21,10 +21,12 @@ export default function* rootSaga() {
     takeEvery(actionTypes.typeReqest(actionTypes.SEARCH), archives.serachArticles),
 
     takeEvery(actionTypes.typeReqest(actionTypes.GET_ARTICLE), article.getArticle),
-    takeEvery(actionTypes.typeReqest(actionTypes.CREATE_COMMENT), article.createComment),
-    takeEvery(actionTypes.typeReqest(actionTypes.EDIT_COMMENT), article.editComment),
+    takeEvery(actionTypes.typeReqest(actionTypes.EDIT_ARTICLE), article.editArticle),
+    takeEvery(actionTypes.typeReqest(actionTypes.CREATE_ARTICLE), article.createArticle),
+    takeEvery(actionTypes.typeReqest(actionTypes.PUT_ARTICLE), article.putArticle),
 
-    takeEvery(actionTypes.typeReqest(actionTypes.EDIT_ARTICLE), edit.editArticle),
+    takeEvery(actionTypes.typeReqest(actionTypes.CREATE_COMMENT), comment.createComment),
+    takeEvery(actionTypes.typeReqest(actionTypes.EDIT_COMMENT), comment.editComment),
 
     takeEvery(actionTypes.typeReqest(actionTypes.GET_CATEGORIES), category.getCategories),
     takeEvery(actionTypes.typeReqest(actionTypes.EDIT_CAT_NAME), category.editCatName),

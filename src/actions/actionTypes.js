@@ -34,11 +34,13 @@ export const SEARCH = 'SEARCH';
 export const FILTER_ARTICLE = 'FILTER_ARTICLE';
 
 // article
+export const INIT_ARTICLE = 'INIT_ARTICLE';
 export const SET_ARTICLE = 'SET_ARTICLE';
 
 export const GET_ARTICLE = 'GET_ARTICLE';
 export const CREATE_ARTICLE = 'CREATE_ARTICLE';
 export const EDIT_ARTICLE = 'EDIT_ARTICLE';
+export const PUT_ARTICLE = 'PUT_ARTICLE';
 
 // category
 export const SET_CATEGORY = 'SET_CATEGORY';
