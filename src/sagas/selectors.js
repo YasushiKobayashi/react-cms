@@ -31,9 +31,9 @@ export default class {
 
   /**
    * [sagaのselect用のメソッド]
-   * [articleのarticleのtateを返す]
+   * [editのarticleのtateを返す]
    * @param  {obj} state [sagaで管理しているstate]
-   * @return {obj}       [articleのarticleのstateを返す]
+   * @return {obj}       [editのarticleのstateを返す]
    */
   static getArticleFromEdit(state) {
     return state.edit.article;

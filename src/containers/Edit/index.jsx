@@ -26,6 +26,7 @@ class Edit extends Component {
     },
     user: User,
     actions: Array<Function>,
+    location: Array<>,
     edit: {
       article?: ArticleType,
       categoryLists?: Array<Category>,
@@ -54,6 +55,13 @@ class Edit extends Component {
     this.props.actions.getCategories();
     if (typeof this.props.params.id !== 'undefined') {
       this.props.actions.getArticle(this.props.params.id);
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.location.pathname !== nextProps.location.pathname) {
+      this.props.actions.initArticle();
+      this.props.actions.getCategories();
     }
   }
 

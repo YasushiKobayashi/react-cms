@@ -2,7 +2,7 @@ import * as actionTypes from './actionTypes';
 import { createAction } from '../utils';
 
 export const initArticle = (payload) => {
-  return createAction(actionTypes.typeReqest(actionTypes.INIT_ARTICLE), payload);
+  return createAction(actionTypes.INIT_ARTICLE, payload);
 };
 
 export const getArticle = (payload) => {

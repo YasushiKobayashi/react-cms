@@ -65,7 +65,6 @@ class Article extends Component {
     });
 
     const url = `/edit/${article.id}`;
-    console.log(article);
     const iconStyle = Object.assign(style.icon, style.grayTxt, style.topIcon);
     const wipStyle = article.wpFlg ? null : style.hide;
 
