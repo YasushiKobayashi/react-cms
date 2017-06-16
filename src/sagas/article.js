@@ -34,6 +34,7 @@ export function* getArticle(payload) {
     yield fork(getErr, actionTypes.SET_ARTICLE, '記事の取得に失敗しました。<br/>再度お試しください。');
   }
 }
+
 export function* editArticle(payload) {
   const article = payload.payload;
   const valid = yield select(selectors.getValidFromEdit);

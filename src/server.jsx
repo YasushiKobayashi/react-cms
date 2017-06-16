@@ -27,7 +27,7 @@ const renderPage = (appHtml, title) => {
       <link rel="apple-touch-icon-precomposed" href="/assets/img/apple-touch-icon-precomposed.png" />
     </head>
     <body>
-      <div id=app>${appHtml}</div>
+      <div id=app></div>
       <script src="/bundle.js"></script>
     </body>
     <html>
@@ -44,8 +44,7 @@ app.get('*', (req, res) => {
       res.redirect(redirect.pathname + redirect.search);
     } else if (props) {
       const title = `${config.siteTitle}`;
-      const appHtml = renderToString(<RouterContext {...props} />);
-      res.send(renderPage(appHtml, title));
+      res.send(renderPage(title));
     } else {
       const title = `404 NOT FOUND | ${config.siteTitle}`;
       const appHtml = renderToString(<NotFound />);
