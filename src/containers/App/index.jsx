@@ -1,120 +1,57 @@
-import React, { Component, PropTypes, cloneElement } from 'react';
+import React, { Component, cloneElement } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import { MuiThemeProvider } from 'material-ui/styles';
 
+import * as actions from '../../actions/userAction';
+import type { User } from '../../types/User';
+
 import { Loading } from '../../parts';
 import LoginComponent from './LoginComponent';
-
 import Header from './Header';
-import { User } from '../../actions';
-import theme from '../../theme';
-import { cookie } from '../../utils';
-import './Index.scss';
 
-export default class App extends Component {
-  static propTypes = {
-    children: PropTypes.element.isRequired,
+import theme from '../../theme';
+import './index.scss';
+
+class App extends Component {
+  props: {
+    children: Array<Component>,
+    actions: Array<Function>,
+    app: {
+      user: User,
+      isLoading: boolean,
+      isLogin: boolean,
+    },
   };
 
-  constructor() {
-    super();
-    this.state = {
-      isLogin: false,
-      isLoading: true,
-      user: {
-        id: null,
-        name: '',
-        email: '',
-        image: '',
-      },
-    };
-
-    this.sendUserInfo = this.sendUserInfo.bind(this);
-  }
-
   componentWillMount() {
-    const token = cookie.read('token');
-    if (typeof token === 'undefined') {
-      this.setState({
-        isLoading: false,
-      });
-    }
-  }
-
-  componentDidMount() {
     injectTapEventPlugin();
-    const token = cookie.read('token');
-    if (typeof token !== 'undefined') {
-      new Promise(() => {
-        this.getUserInfo().then((obj) => {
-          this.setState({
-            user: obj,
-            isLoading: false,
-            isLogin: true,
-          });
-        }).catch(() => {
-          this.setState({
-            isLoading: false,
-          });
-        });
-      });
-    }
-  }
-
-  getUserInfo() {
-    return new Promise((resolve, reject) => {
-      User.get('user').then((obj) => {
-        resolve(obj);
-      }).catch((err) => {
-        reject(err);
-      });
-    });
-  }
-
-  sendUserInfo(param) {
-    if (!param) cookie.delite('token');
-    this.setState({
-      isLogin: param,
-    });
-    new Promise(() => {
-      this.getUserInfo().then((obj) => {
-        this.setState({
-          user: obj,
-          isLoading: false,
-          isLogin: true,
-        });
-      }).catch(() => {
-        cookie.delite('token');
-        this.setState({
-          isLoading: false,
-        });
-      });
-    });
   }
 
   render() {
+    const { isLoading, isLogin, user } = this.props.app;
+
     const {
-      user,
-      isLogin,
-      isLoading,
-    } = this.state;
+      login,
+      logout,
+    } = this.props.actions;
 
     const children = cloneElement(
       this.props.children,
       {
         user: user,
-        sendUserInfo: this.sendUserInfo,
       },
     );
 
     const render = (isLoading) ? <Loading /> :
-      (isLogin) ? children : <LoginComponent sendUserInfo={this.sendUserInfo} user={user} />;
+      (isLogin) ? children : <LoginComponent login={login} user={user} />;
 
     return (
       <MuiThemeProvider muiTheme={theme}>
         <div styleName='container'>
           <Header
-            sendUserInfo={this.sendUserInfo}
+            logout={logout}
             user={user}
           />
           <div styleName='content'>
@@ -125,3 +62,15 @@ export default class App extends Component {
     );
   }
 }
+
+const mapState = (state) => {
+  return {
+    app: state.app,
+  };
+};
+const mapDispatch = (dispatch) => {
+  return {
+    actions: bindActionCreators(actions, dispatch),
+  };
+};
+export default connect(mapState, mapDispatch)(App);

@@ -1,284 +1,149 @@
-import React, { Component, PropTypes } from 'react';
-import { browserHistory } from 'react-router';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { TextField, RaisedButton } from 'material-ui';
-import toMarkdown from 'to-markdown';
-import _ from 'lodash';
+
+import * as actions from '../../actions/articleAction';
+import type { ArticleType } from '../../types/Article';
+import type { Category } from '../../types/Category';
+import type { User } from '../../types/User';
+import { editContent, request } from '../../utils';
 
 import EditArticle from './EditArticle';
 import EditSide from './EditSide';
-import { CommentList } from '../../components';
-import { Loading, Categories, CategoryFrom } from '../../parts';
-import { Archive, Category } from '../../actions';
-import { request, validation, convertMdtoHtml } from '../../utils';
+import { CommentList, CategoryFrom } from '../../components';
+import { Loading, Categories } from '../../parts';
 import style from '../../style';
 import './index.scss';
 
 const tabMark = 'markdown';
 const tabHtml = 'html';
 
-export default class Edit extends Component {
-  static propTypes = {
-    user: PropTypes.shape({
-      id: PropTypes.number.isRequired,
-    }).isRequired,
-    params: PropTypes.shape({
-      id: PropTypes.string,
-    }),
-  };
-  static defaultProps = {
+class Edit extends Component {
+  props: {
     params: {
-      id: '',
+      id?: number,
     },
-  }
-
+    user: User,
+    actions: Array<Function>,
+    location: Array<>,
+    edit: {
+      article?: ArticleType,
+      categoryLists?: Array<Category>,
+      isLoading: boolean,
+      valid: Array<String>,
+      categoryNew: Array<>;
+    },
+  };
   constructor() {
     super();
     this.state = {
-      article: {
-        title: '',
-        content: '',
-        htmlContent: '',
-        created: new Date(),
-        updated: new Date(),
-      },
-      categories: [],
-      categoryLists: [],
-      loading: true,
-      titleError: false,
-      catNameError: '',
-      catSlugErrror: '',
       selectionStart: 0,
     };
 
     this.handleTitle = this.handleTitle.bind(this);
-    this.sendArticle = this.sendArticle.bind(this);
-    this.manegeContent = this.manegeContent.bind(this);
-    this.handleAddCat = this.handleAddCat.bind(this);
-    this.handleRemoveCat = this.handleRemoveCat.bind(this);
-    this.handleAddCatList = this.handleAddCatList.bind(this);
     this.handleContent = this.handleContent.bind(this);
     this.handleUploadImage = this.handleUploadImage.bind(this);
+    this.manegeContent = this.manegeContent.bind(this);
+    this.sendArticle = this.sendArticle.bind(this);
+    this.handleAddCat = this.handleAddCat.bind(this);
+    this.handleRemoveCat = this.handleRemoveCat.bind(this);
   }
 
-  componentDidMount() {
-    new Promise((resolve, reject) => {
-      Category.get().then((obj) => {
-        this.setState({
-          categoryLists: obj,
-          loading: false,
-        });
-        return obj;
-      }).then((categoryLists) => {
-        if (typeof this.props.params.id !== 'undefined') {
-          Archive.getSigleArticle(this.props.params.id).then((obj) => {
-            const categoryIds = _.map(obj.categories, 'id');
-            _.forEach(categoryIds, (value) => {
-              categoryLists = _.reject(categoryLists, { id: value });
-            });
-            this.setState({
-              article: obj,
-              categories: obj.categories,
-              categoryLists: categoryLists,
-            });
-          }).catch((err) => {
-            reject(err);
-          });
-        }
-      }).catch((err) => {
-        reject(err);
-      });
-    });
+  componentWillMount() {
+    this.props.actions.initArticle();
+    this.props.actions.getCategories();
+    if (typeof this.props.params.id !== 'undefined') {
+      this.props.actions.getArticle(this.props.params.id);
+    }
   }
 
-  handleTitle(event) {
-    const val = event.target.value;
-    const valid = validation.validTitle(val);
-    const { article } = this.state;
-    article.title = val;
+  componentWillReceiveProps(nextProps) {
+    if (this.props.location.pathname !== nextProps.location.pathname) {
+      this.props.actions.initArticle();
+      this.props.actions.getCategories();
+    }
+  }
+
+  handleTitle(e) {
+    const { article } = this.props.edit;
+    article.title = e.target.value;
+    this.props.actions.editArticle(article);
+  }
+
+  handleContent(e, type) {
     this.setState({
-      article: article,
-      titleError: valid,
+      selectionStart: e.target.selectionStart,
     });
+    this.manegeContent(e.target.value, type);
   }
 
-  handleContent(event, type) {
-    const content = event.target.value;
-    const selectionStart = event.target.selectionStart;
-    let newContent;
-    let htmlContent;
+  manegeContent(newContent, type) {
+    const { article } = this.props.edit;
     if (type === 'markdown') {
-      newContent = content;
-      htmlContent = convertMdtoHtml(content);
+      article.content = newContent;
+      article.htmlContent = editContent.toHtml(newContent);
     } else {
-      newContent = toMarkdown(content);
-      htmlContent = content;
+      article.content = editContent.toMarkdown(newContent);
+      article.htmlContent = newContent;
     }
-    this.manegeContent(newContent, htmlContent, selectionStart);
+    this.props.actions.editArticle(article);
   }
-
-  handleContentUrl(val) {
-    console.log(val);
-    const valArr = val.split(/\s+/);
-    const str = valArr.join('');
-    console.log(str);
-    return val;
-  }
-
   handleUploadImage(file, type) {
-    const { article, selectionStart } = this.state;
-    return new Promise((resolve, reject) => {
-      this.uploadImage(file).then((imagePath) => {
+    const { selectionStart } = this.state;
+    const { article } = this.props.edit;
+    (async () => {
+      try {
+        const upload = await request.UPLOAD('post/upload', file);
+        const imagePath = upload.path;
+        const addStr = (type === 'markdown') ? `\n![](${imagePath})\n` :
+          `\n<p><img src="${imagePath}" ></p>\n`;
+
         let content = (type === 'markdown') ? article.content : article.htmlContent;
-        const addStr = (type === 'markdown') ? `\n![](${imagePath})\n` : `\n<p><img src="${imagePath}" ></p>\n`;
-        content = this.insertStr(content, selectionStart, addStr);
-        const newContent = (type === 'markdown') ? content : toMarkdown(content);
-        const htmlContent = (type === 'markdown') ? convertMdtoHtml(content) : content;
-        resolve(this.manegeContent(newContent, htmlContent, selectionStart));
-      }).catch((err) => {
-        reject(err);
-      });
-    });
+        content = editContent.insertStr(content, selectionStart, addStr);
+        this.manegeContent(content, type);
+      } catch (e) {
+        console.log(e);
+      }
+    })();
   }
 
-  uploadImage(file) {
-    return new Promise((resolve, reject) => {
-      request.UPLOAD('post/upload', file).then((obj) => {
-        resolve(obj.path);
-      }).catch((err) => {
-        reject(err);
-      });
-    });
-  }
-
-  insertStr(str, index, insert) {
-    return str.slice(0, index) + insert + str.slice(index, str.length);
-  }
-
-  manegeContent(newContent, htmlContent, selectionStart) {
-    const { article } = this.state;
-    this.setState({
-      selectionStart: selectionStart,
-      article: {
-        title: article.title,
-        content: newContent,
-        htmlContent: htmlContent,
-      },
-    });
-  }
-
-  sendArticle(wpFlg) {
-    const { article, categories } = this.state;
-    const categoryIds = _.map(categories, 'id');
-    _.forEach(categoryIds, (value) => {
-      _.filter(categoryIds, { id: value });
-    });
-    const params = {
-      user_id: this.props.user.id,
-      title: article.title,
-      content: article.content,
-      wp_flg: wpFlg,
-      categories: categories,
-    };
-
-    new Promise((resolve, reject) => {
-      this.saveArticle(params).then((obj) => {
-        browserHistory.push(`/article/${obj.id}`);
-      }).catch((err) => {
-        reject(err);
-      });
-    });
-  }
-
-  saveArticle(params) {
-    const id = this.props.params.id;
-    if (typeof id === 'undefined') {
-      return new Promise((resolve, reject) => {
-        Archive.postArticle(params).then((obj) => {
-          resolve(obj);
-        }).catch((err) => {
-          reject(err);
-        });
-      });
+  sendArticle(flag) {
+    if (typeof this.props.params.id === 'undefined') {
+      this.props.actions.createArticle(flag);
     } else {
-      return new Promise((resolve, reject) => {
-        Archive.putArticle(id, params).then((obj) => {
-          resolve(obj);
-        }).catch((err) => {
-          reject(err);
-        });
-      });
+      const post = {
+        flag: flag,
+        id: this.props.params.id,
+      };
+      this.props.actions.putArticle(post);
     }
-  }
-
-  handleAddCatList(categoryNew) {
-    const {
-      categories,
-    } = this.state;
-    const catValid = validation.validEmpty(categoryNew.name, 'カテゴリ');
-    const slugValid = validation.validNonJpanese(categoryNew.slug, 'スラッグ');
-
-    if (catValid || slugValid) {
-      this.setState({
-        catNameError: catValid,
-        catSlugErrror: slugValid,
-      });
-    } else {
-      new Promise((resolve, reject) => {
-        this.postCategory(categoryNew).then((obj) => {
-          categories[categories.length] = obj;
-          this.setState({
-            categories: categories,
-            catNameError: catValid,
-            catSlugErrror: slugValid,
-          });
-        }).catch((err) => {
-          reject(err);
-        });
-      });
-    }
-  }
-
-  postCategory(params) {
-    return new Promise((resolve, reject) => {
-      Category.post(params).then((obj) => {
-        resolve(obj);
-      }).catch((err) => {
-        reject(err);
-      });
-    });
   }
 
   handleAddCat(e) {
     const id = e.currentTarget.getAttribute('data-id');
-    const { categories, categoryLists } = this.state;
-    categories[categories.length] = categoryLists[id];
-    this.setState({
-      categories: categories,
-      categoryLists: _.pull(categoryLists, categoryLists[id]),
-    });
+    this.props.actions.addCategories(id);
   }
 
   handleRemoveCat(e) {
     const id = e.currentTarget.getAttribute('data-id');
-    const { categories, categoryLists } = this.state;
-    categoryLists[categoryLists.length] = categories[id];
-    this.setState({
-      categories: _.pull(categories, categories[id]),
-      categoryLists: categoryLists,
-    });
+    this.props.actions.removeCategories(id);
   }
 
   render() {
     const {
       article,
-      loading,
-      titleError,
-      categories,
+      isLoading,
       categoryLists,
-      catNameError,
-      catSlugErrror,
-    } = this.state;
-    if (loading) return <Loading />;
+      categoryNew,
+      valid,
+    } = this.props.edit;
+    const {
+      editCatName,
+      editCatSlug,
+      createCategory,
+    } = this.props.actions;
+    if (isLoading) return <Loading />;
 
     return (
       <div>
@@ -288,7 +153,7 @@ export default class Edit extends Component {
               floatingLabelText='title'
               value={article.title}
               onChange={this.handleTitle}
-              errorText={titleError}
+              errorText={valid.titleError}
               style={style.titleField}
             />
             <EditArticle
@@ -307,16 +172,18 @@ export default class Edit extends Component {
             />
             <h3>category add</h3>
             <CategoryFrom
-              handleAddCatList={this.handleAddCatList}
-              catNameError={catNameError}
-              catSlugErrror={catSlugErrror}
+              createCategory={createCategory}
+              editCatName={editCatName}
+              editCatSlug={editCatSlug}
+              categoryNew={categoryNew}
+              valid={valid}
             />
           </div>
           <div styleName='content'>
             <EditSide
               article={article}
-              categories={categories}
-              handleRemoveCat={this.handleRemoveCat}
+              categories={article.categories}
+              handleCat={this.handleRemoveCat}
             />
           </div>
         </div>
@@ -334,8 +201,20 @@ export default class Edit extends Component {
             secondary
           />
         </div>
-        <CommentList comments={article.comments} />
+        <CommentList comments={article.comments} user={this.props.user} />
       </div>
     );
   }
 }
+
+const mapState = (state) => {
+  return {
+    edit: state.edit,
+  };
+};
+const mapDispatch = (dispatch) => {
+  return {
+    actions: bindActionCreators(actions, dispatch),
+  };
+};
+export default connect(mapState, mapDispatch)(Edit);

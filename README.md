@@ -4,7 +4,7 @@
 ### api repo
 https://github.com/YasushiKobayashi/go-api
 
-### set update
+### set up
 ```javascript
 yarn
 cd src && cp config.sample.js config.js
@@ -21,9 +21,15 @@ npm run lint
 npm run test
 ```
 
-### when don,t have node.js
-```shell
-yarn install
+### install node js
+```bash
+brew install nodenv yarn
+nodenv install 6.7.0
+nodenv rehash
+nodenv global 6.7.0
+echo 'export PATH="$HOME/.nodenv/bin:$PATH"' >> ~/.bash_profile
+echo 'eval "$(nodenv init -)"' >> ~/.bash_profile
+source ~/.bash_profile
 ```
 
 

@@ -13,6 +13,7 @@ dependencies:
 test:
   override:
     - npm run lint
+    - npm run flow
     - npm run test
     - npm run build
     - exit 0

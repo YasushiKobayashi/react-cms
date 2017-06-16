@@ -3,6 +3,7 @@ import path from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import DashboardPlugin from 'webpack-dashboard/plugin';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
+import FlowStatusWebpackPlugin from 'flow-status-webpack-plugin';
 
 import loaders from './webpack.loaders';
 import cssloaders from './webpack.cssloaders';
@@ -44,6 +45,10 @@ module.exports = [
       new webpack.NoEmitOnErrorsPlugin(),
       new webpack.HotModuleReplacementPlugin(),
       new DashboardPlugin(),
+      new FlowStatusWebpackPlugin({
+        binaryPath: './node_modules/.bin/flow',
+        failOnError: true,
+      }),
       new HtmlWebpackPlugin({
         template: './index.html',
         files: {

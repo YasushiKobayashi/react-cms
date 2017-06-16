@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { Link, browserHistory } from 'react-router';
 import clipboard from 'clipboard-js';
 import IconButton from 'material-ui/IconButton';
@@ -14,16 +14,14 @@ import {
   MenuItem,
 } from 'material-ui';
 
+import type { User } from '../../types/User';
 import config from '../../config';
 import './Header.scss';
 
 export default class Header extends Component {
-  static propTypes = {
-    sendUserInfo: PropTypes.func.isRequired,
-    user: PropTypes.shape({
-      name: PropTypes.string,
-      picture: PropTypes.string,
-    }).isRequired,
+  props: {
+    user: User,
+    logout: Function,
   };
 
   constructor() {
@@ -96,7 +94,7 @@ export default class Header extends Component {
   }
 
   render() {
-    const { user, sendUserInfo } = this.props;
+    const { user, logout } = this.props;
     const {
       siteTitle,
       mainMenu,
@@ -151,7 +149,7 @@ export default class Header extends Component {
             />
             <MenuItem
               primaryText='Logout' leftIcon={<Exit />}
-              onClick={() => { sendUserInfo(false); }}
+              onClick={logout}
             />
           </Menu>
         </Popover>

@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { Tabs, Tab } from 'material-ui/Tabs';
 
 import { DropZone } from '../../parts';
@@ -6,14 +6,14 @@ import { DropZone } from '../../parts';
 import './EditArticle.scss';
 
 export default class EditArticle extends Component {
-  static propTypes = {
-    content: PropTypes.string.isRequired,
-    htmlContent: PropTypes.string.isRequired,
-    tabMark: PropTypes.string.isRequired,
-    tabHtml: PropTypes.string.isRequired,
-    handleContent: PropTypes.func.isRequired,
-    handleUploadImage: PropTypes.func.isRequired,
-  }
+  props: {
+    content: String,
+    htmlContent: String,
+    tabMark: String,
+    tabHtml: String,
+    handleContent: Function,
+    handleUploadImage: Function,
+  };
 
   constructor() {
     super();
@@ -23,8 +23,7 @@ export default class EditArticle extends Component {
     };
 
     this.handleTab = this.handleTab.bind(this);
-    this.handleDragOver = this.handleDragOver.bind(this);
-    this.handleDragExit = this.handleDragExit.bind(this);
+    this.handleDrag = this.handleDrag.bind(this);
   }
 
   componentWillMount() {
@@ -39,15 +38,9 @@ export default class EditArticle extends Component {
     });
   }
 
-  handleDragOver() {
+  handleDrag() {
     this.setState({
-      isDropZone: true,
-    });
-  }
-
-  handleDragExit() {
-    this.setState({
-      isDropZone: false,
+      isDropZone: !this.state.isDropZone,
     });
   }
 
@@ -73,21 +66,21 @@ export default class EditArticle extends Component {
             <textarea
               value={content}
               onChange={(event) => { handleContent(event, tabMark); }}
-              onDragOver={this.handleDragOver}
+              onDragOver={this.handleDrag}
             />
           </Tab>
           <Tab label={tabHtml} value={tabHtml}>
             <textarea
               value={htmlContent}
               onChange={(event) => { handleContent(event, tabHtml); }}
-              onDragOver={this.handleDragOver}
+              onDragOver={this.handleDrag}
             />
           </Tab>
         </Tabs>
         <DropZone
           isDropZone={isDropZone}
           tabValue={tabValue}
-          handleDragExit={this.handleDragExit}
+          handleDragExit={this.handleDrag}
           handleUploadImage={handleUploadImage}
         />
       </div>

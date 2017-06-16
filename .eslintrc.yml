@@ -19,6 +19,11 @@
 
   plugins:
     - react
+    - import
+    - jsx-a11y
+    - flowtype
+    - flowtype-errors
+    - flow-vars
 
   rules:
     valid-jsdoc: 2
@@ -36,6 +41,7 @@
     consistent-return: 0
     no-return-assign: 0
     no-nested-ternary: 0
+    arrow-parens: 0
 
     jsx-filename-extension: 0
     jsx-quotes: 0
@@ -47,6 +53,7 @@
     react/no-string-refs: 0
     react/prefer-stateless-function: 0
     react/jsx-wrap-multilines: 0
+    react/sort-comp: 0
 
     jsx-a11y/no-static-element-interactions: 0
     jsx-a11y/img-redundant-alt: 1

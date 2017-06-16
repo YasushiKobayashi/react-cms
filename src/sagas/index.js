@@ -1,0 +1,39 @@
+import { takeEvery, fork, all } from 'redux-saga/effects';
+
+import * as actionTypes from '../actions/actionTypes';
+import * as user from './user';
+import * as article from './article';
+import * as archives from './archives';
+import * as category from './category';
+import * as comment from './comment';
+
+
+export default function* rootSaga() {
+  yield all([
+    fork(user.isLogin),
+    takeEvery(actionTypes.LOGIN, user.login),
+
+    takeEvery(actionTypes.typeReqest(actionTypes.USER_ARTICLE), user.getUserArticle),
+    takeEvery(actionTypes.typeReqest(actionTypes.GET_USER), user.isLogin),
+
+    takeEvery(actionTypes.typeReqest(actionTypes.ALL_ARCHIVES), archives.loadAll),
+    takeEvery(actionTypes.typeReqest(actionTypes.SORT), archives.sortArticles),
+    takeEvery(actionTypes.typeReqest(actionTypes.SEARCH), archives.serachArticles),
+
+    takeEvery(actionTypes.typeReqest(actionTypes.GET_ARTICLE), article.getArticle),
+    takeEvery(actionTypes.typeReqest(actionTypes.EDIT_ARTICLE), article.editArticle),
+    takeEvery(actionTypes.typeReqest(actionTypes.CREATE_ARTICLE), article.createArticle),
+    takeEvery(actionTypes.typeReqest(actionTypes.PUT_ARTICLE), article.putArticle),
+
+    takeEvery(actionTypes.typeReqest(actionTypes.CREATE_COMMENT), comment.createComment),
+    takeEvery(actionTypes.typeReqest(actionTypes.EDIT_COMMENT), comment.editComment),
+
+    takeEvery(actionTypes.typeReqest(actionTypes.GET_CATEGORIES), category.getCategories),
+    takeEvery(actionTypes.typeReqest(actionTypes.EDIT_CAT_NAME), category.editCatName),
+    takeEvery(actionTypes.typeReqest(actionTypes.EDIT_CAT_SLUG), category.editCatSlug),
+    takeEvery(actionTypes.typeReqest(actionTypes.CREATE_CATEGORY), category.createCategory),
+
+    takeEvery(actionTypes.typeReqest(actionTypes.ADD_CATEGORIES), category.addCategories),
+    takeEvery(actionTypes.typeReqest(actionTypes.REMOVE_CATEGORIES), category.removeCategories),
+  ]);
+}

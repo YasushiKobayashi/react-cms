@@ -1,35 +1,32 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+
+import type { User } from '../../types/User';
 
 import { Login } from '../../components';
 import './LoginComponent.scss';
 
 export default class LoginComponent extends Component {
-  static propTypes = {
-    sendUserInfo: PropTypes.func.isRequired,
-    user: PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      email: PropTypes.string.isRequired,
-      image: PropTypes.string.isRequired,
-    }).isRequired,
-  }
+  props: {
+    user: User,
+    login: Function,
+  };
 
   render() {
-    const { user, sendUserInfo } = this.props;
+    const { user, login } = this.props;
 
     return (
       <div styleName='conteiner'>
         <div styleName='content'>
           <Login
             type='SIGN UP'
-            sendUserInfo={sendUserInfo}
+            sendUserInfo={login}
             user={user}
           />
-
         </div>
         <div styleName='content'>
           <Login
             type='SIGN IN'
-            sendUserInfo={sendUserInfo}
+            sendUserInfo={login}
             user={user}
           />
         </div>
