@@ -43,11 +43,7 @@ const handleLogin = (async (payload) => {
 export function* login(payload) {
   try {
     yield call(handleLogin, payload);
-    const user = yield call(User.get('user'));
-    yield put({
-      type: actionTypes.LOGINED,
-      user: user,
-    });
+    yield fork(isLogin);
   } catch (e) {
     console.log(e);
     yield fork(notLogin);

@@ -1,7 +1,7 @@
 import express from 'express';
 // import curl from 'node-libcurl';
 import React from 'react';
-import { match, RouterContext } from 'react-router';
+import { match } from 'react-router';
 import { renderToString } from 'react-dom/server';
 
 import routes from './routes';
