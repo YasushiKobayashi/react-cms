@@ -1,8 +1,9 @@
-import { call, put, fork, cancel } from 'redux-saga/effects';
+import { call, put, fork, cancel, select } from 'redux-saga/effects';
 
-import { request, apiUrl, cookie } from '../utils';
 import { User, Archive } from '../api';
 import * as actionTypes from '../actions/actionTypes';
+import selectors from './selectors';
+import { request, apiUrl, cookie } from '../utils';
 
 function* notLogin() {
   yield put({
@@ -15,6 +16,10 @@ export function* isLogin() {
   const token = cookie.read('token');
   if (typeof token === 'undefined') {
     yield fork(notLogin);
+    yield cancel();
+  }
+  const user = yield select(selectors.getUser);
+  if (user.id) {
     yield cancel();
   }
   try {

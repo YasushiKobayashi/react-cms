@@ -7,10 +7,11 @@ export default class {
   /**
    * GET用のメソッド
    * @param {string} url [GETのURL]
+   * @param {string} token [jwtのtokenSSRで使用する]
    * @return {object} [GETの返り値]
    */
-  static GET(url) {
-    const token = cookie.read('token');
+  static GET(url, token = null) {
+    if (!token) token = cookie.read('token');
     return new Promise((resolve, reject) => {
       request.get(url)
       .set('Authorization', `Bearer ${token}`)
