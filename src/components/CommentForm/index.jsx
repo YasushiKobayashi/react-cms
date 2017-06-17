@@ -5,6 +5,7 @@ import { RaisedButton } from 'material-ui';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import CommentIcon from 'material-ui/svg-icons/communication/comment';
 
+import type { CommentType } from '../../types/CommentType';
 import { request, editContent } from '../../utils';
 
 
@@ -18,10 +19,7 @@ const tabPrev = 'preveiw';
 export default class CommentForm extends Component {
   props: {
     sendComment: Function;
-    comment: {
-      id: number;
-      content: string;
-    },
+    comment: CommentType;
   };
   static defaultProps = {
     comment: {
