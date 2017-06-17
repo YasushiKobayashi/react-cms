@@ -1,3 +1,4 @@
+/* @flow */
 import React, { Component } from 'react';
 import { Link, browserHistory } from 'react-router';
 import clipboard from 'clipboard-js';
@@ -14,15 +15,32 @@ import {
   MenuItem,
 } from 'material-ui';
 
-import type { User } from '../../types/User';
+import type { UserType } from '../../types/UserType';
 import config from '../../config';
 import './Header.scss';
 
 export default class Header extends Component {
   props: {
-    user: User,
-    logout: Function,
+    user: UserType;
+    logout: Function;
   };
+  state: {
+    siteTitle: string;
+    mainMenu: {
+      open: boolean;
+      anchorEl: any;
+    },
+    subMenu: {
+      open: boolean;
+      anchorEl: any;
+    },
+  };
+  setState: Function;
+  handleMainMenu: Function;
+  handleSubMenu: Function;
+  closeMainMenu: Function;
+  closeSubMenu: Function;
+  linkTo: Function;
 
   constructor() {
     super();
@@ -44,7 +62,7 @@ export default class Header extends Component {
     this.linkTo = this.linkTo.bind(this);
   }
 
-  handleMainMenu(event, type) {
+  handleMainMenu(event: any, type: boolean) {
     this.setState({
       mainMenu: {
         open: type,
@@ -53,7 +71,7 @@ export default class Header extends Component {
     });
   }
 
-  handleSubMenu(event, type) {
+  handleSubMenu(event: any, type: boolean) {
     this.setState({
       subMenu: {
         open: type,
@@ -79,7 +97,7 @@ export default class Header extends Component {
   }
 
 
-  linkTo(e) {
+  linkTo(e: any) {
     e.preventDefault();
     const url = e.currentTarget.getAttribute('data-url');
     browserHistory.push(`/${url}`);

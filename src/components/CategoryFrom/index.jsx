@@ -1,17 +1,24 @@
+/* @flow */
 import React, { Component } from 'react';
 import { TextField, RaisedButton } from 'material-ui';
+
+import type { CategoryType } from '../../types/CategoryType';
+import type { ValidType } from '../../types/ValidType';
+
 
 import style from '../../style';
 import './index.scss';
 
 export default class CategoryFrom extends Component {
   props: {
-    categoryNew: Array<String>,
-    valid: Array<String>,
+    categoryNew: CategoryType,
+    valid: ValidType,
     editCatName: Function,
     editCatSlug: Function,
     createCategory: Function,
-  }
+  };
+  handleCatName: Function;
+  handleCatSlug: Function;
 
   constructor() {
     super();
@@ -19,11 +26,11 @@ export default class CategoryFrom extends Component {
     this.handleCatSlug = this.handleCatSlug.bind(this);
   }
 
-  handleCatName(e) {
+  handleCatName(e: any) {
     this.props.editCatName(e.target.value);
   }
 
-  handleCatSlug(e) {
+  handleCatSlug(e: any) {
     this.props.editCatSlug(e.target.value);
   }
 

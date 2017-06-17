@@ -1,10 +1,11 @@
+/* @flow */
 import React, { Component } from 'react';
 import Highlight from 'react-highlight';
 import { TextField } from 'material-ui';
 import moment from 'moment';
 
-import type { ArticleType } from '../../types/Article';
-import type { Category } from '../../types/Category';
+import type { ArticleType } from '../../types/ArticleType';
+import type { CategoryType } from '../../types/CategoryType';
 
 import { Categories } from '../../parts';
 import style from '../../style';
@@ -14,7 +15,7 @@ export default class EditSide extends Component {
   props: {
     handleCat: Function,
     article: ArticleType,
-    categories: Array<Category>,
+    categories: Array<CategoryType>,
   };
 
   render() {

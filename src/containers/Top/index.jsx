@@ -1,3 +1,4 @@
+/* @flow */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -7,7 +8,8 @@ import ViewList from 'material-ui/svg-icons/action/view-list';
 import Sort from 'material-ui/svg-icons/content/sort';
 
 import * as actions from '../../actions/archivesAction';
-import type { Article } from '../../types/Article';
+import type { ArticleType } from '../../types/ArticleType';
+import type { CategoryType } from '../../types/CategoryType';
 
 import { ContentList } from '../../components';
 import { Loading } from '../../parts';
@@ -17,19 +19,30 @@ import './index.scss';
 
 class Top extends Component {
   props: {
-    actions: Array<Function>,
+    actions: {
+      loadAllContent: Function,
+      getArticlesFromCat: Function,
+      serachArticles: Function,
+      sortArticles: Function,
+    },
     top: {
-      archives: Array<Article>,
-      categories: Array,
+      archives: Array<ArticleType>,
+      categories: Array<CategoryType>,
       isLoading: boolean,
     },
   };
 
   state: {
-    serach: String,
-    sorted: String,
-    selectedCat: String,
+    serach: string,
+    sorted: string,
+    selectedCat: string,
   };
+  setState: Function;
+  sendSearch: Function;
+  handleSerach: Function;
+  handleSort: Function;
+  handleSelectedCat: Function;
+  handleSelectedCategory: Function;
 
   constructor() {
     super();

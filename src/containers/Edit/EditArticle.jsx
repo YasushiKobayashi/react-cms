@@ -1,3 +1,4 @@
+/* @flow */
 import React, { Component } from 'react';
 import { Tabs, Tab } from 'material-ui/Tabs';
 
@@ -7,18 +8,25 @@ import './EditArticle.scss';
 
 export default class EditArticle extends Component {
   props: {
-    content: String,
-    htmlContent: String,
-    tabMark: String,
-    tabHtml: String,
+    content: string,
+    htmlContent: string,
+    tabMark: string,
+    tabHtml: string,
     handleContent: Function,
     handleUploadImage: Function,
   };
+  state: {
+    tabValue: string,
+    isDropZone: boolean,
+  };
+  setState: Function;
+  handleTab: Function;
+  handleDrag: Function;
 
   constructor() {
     super();
     this.state = {
-      tabValue: null,
+      tabValue: '',
       isDropZone: false,
     };
 
@@ -32,7 +40,7 @@ export default class EditArticle extends Component {
     });
   }
 
-  handleTab(value) {
+  handleTab(value: String) {
     this.setState({
       tabValue: value,
     });

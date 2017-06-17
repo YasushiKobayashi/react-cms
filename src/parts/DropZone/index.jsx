@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+/* @flow */
+import React, { Component } from 'react';
 import Dropzone from 'react-dropzone';
 import PinDrop from 'material-ui/svg-icons/maps/pin-drop';
 
@@ -6,12 +7,15 @@ import style from '../../style';
 import './index.scss';
 
 export default class DropZone extends Component {
-  static propTypes = {
-    isDropZone: PropTypes.bool.isRequired,
-    handleUploadImage: PropTypes.func.isRequired,
-    handleDragExit: PropTypes.func.isRequired,
-    tabValue: PropTypes.string,
-  }
+  props: {
+    isDropZone: boolean;
+    tabValue: string;
+    handleUploadImage: Function,
+    handleDragExit: Function,
+  };
+  state: {
+    isDropZone: boolean;
+  };
   static defaultProps = {
     tabValue: '',
   }
@@ -28,7 +32,7 @@ export default class DropZone extends Component {
     });
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: any) {
     this.setState({
       isDropZone: nextProps.isDropZone,
     });
