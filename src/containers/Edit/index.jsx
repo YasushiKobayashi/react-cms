@@ -1,12 +1,15 @@
+/* @flow */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { TextField, RaisedButton } from 'material-ui';
 
 import * as actions from '../../actions/articleAction';
-import type { ArticleType } from '../../types/Article';
-import type { Category } from '../../types/Category';
-import type { User } from '../../types/User';
+import type { ArticleType } from '../../types/ArticleType';
+import type { CategoryType } from '../../types/CategoryType';
+import type { UserType } from '../../types/UserType';
+import type { ValidType } from '../../types/ValidType';
+
 import { editContent, request } from '../../utils';
 
 import EditArticle from './EditArticle';
@@ -22,19 +25,43 @@ const tabHtml = 'html';
 class Edit extends Component {
   props: {
     params: {
-      id?: number,
+      id?: number;
     },
-    user: User,
-    actions: Array<Function>,
-    location: Array<>,
+    user: UserType;
+    location: any;
+    actions: {
+      initArticle: Function;
+      getCategories: Function;
+      getArticle: Function;
+      editCatSlug: Function;
+      editCatName: Function;
+      createCategory: Function;
+      removeCategories: Function;
+      addCategories: Function;
+      editArticle: Function;
+      createArticle: Function;
+      putArticle: Function;
+    },
     edit: {
-      article?: ArticleType,
-      categoryLists?: Array<Category>,
-      isLoading: boolean,
-      valid: Array<String>,
-      categoryNew: Array<>;
+      article: ArticleType;
+      categoryLists: Array<CategoryType>;
+      isLoading: boolean;
+      categoryNew: CategoryType;
+      valid: ValidType;
     },
   };
+  state: {
+    selectionStart: number;
+  };
+  setState: Function;
+  handleTitle: Function;
+  handleContent: Function;
+  handleUploadImage: Function;
+  manegeContent: Function;
+  sendArticle: Function;
+  handleAddCat: Function;
+  handleRemoveCat: Function;
+
   constructor() {
     super();
     this.state = {

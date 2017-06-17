@@ -1,13 +1,14 @@
+/* @flow */
 import React, { Component } from 'react';
 
-import type { User } from '../../types/User';
+import type { UserType } from '../../types/UserType';
 
 import { Login } from '../../components';
 import './LoginComponent.scss';
 
 export default class LoginComponent extends Component {
   props: {
-    user: User,
+    user: UserType,
     login: Function,
   };
 

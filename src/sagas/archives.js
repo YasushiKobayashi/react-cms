@@ -26,10 +26,22 @@ export function* loadAll() {
   }
 }
 
+export function* loadAllFromCategory(payload) {
+  try {
+    const selectedCat = payload.payload;
+    const archives = yield call(Archive.getAllArticle, `post/category/${selectedCat}`);
+    yield put({
+      type: actionTypes.typeLoaded(actionTypes.FILTER_ARTICLE),
+      archives: archives,
+    });
+  } catch (e) {
+    yield fork(getErr, actionTypes.ALL_ARCHIVES, '記事の取得に失敗しました。<br/>再度お試しください。');
+  }
+}
 
 export function* sortArticles(payload) {
   const sort = payload.payload;
-  let archives = yield select(selectors.getArchives);
+  let archives = yield select(selectors.getArchivesFromTop);
   if (sort === 'updated') {
     archives = _.sortBy(archives, (archive) => -archive.updated);
   } else {

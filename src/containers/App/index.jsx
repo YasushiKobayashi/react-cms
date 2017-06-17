@@ -1,3 +1,4 @@
+/* @flow */
 import React, { Component, cloneElement } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -5,7 +6,7 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import { MuiThemeProvider } from 'material-ui/styles';
 
 import * as actions from '../../actions/userAction';
-import type { User } from '../../types/User';
+import type { UserType } from '../../types/UserType';
 
 import { Loading } from '../../parts';
 import LoginComponent from './LoginComponent';
@@ -16,15 +17,19 @@ import './index.scss';
 
 class App extends Component {
   props: {
-    children: Array<Component>,
-    actions: Array<Function>,
+    /* eslint-disable no-undef, no-console */
+    children: React$Element<*>,
+    /* eslint-disable no-undef, no-console */
+    actions: {
+      login: Function;
+      logout: Function;
+    },
     app: {
-      user: User,
-      isLoading: boolean,
-      isLogin: boolean,
+      user: UserType;
+      isLoading: boolean;
+      isLogin: boolean;
     },
   };
-
   componentWillMount() {
     injectTapEventPlugin();
   }

@@ -1,3 +1,4 @@
+/* @flow */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -7,7 +8,8 @@ import ViewList from 'material-ui/svg-icons/action/view-list';
 import Sort from 'material-ui/svg-icons/content/sort';
 
 import * as actions from '../../actions/archivesAction';
-import type { Article } from '../../types/Article';
+import type { ArticleType } from '../../types/ArticleType';
+import type { CategoryType } from '../../types/CategoryType';
 
 import { ContentList } from '../../components';
 import { Loading } from '../../parts';
@@ -17,19 +19,30 @@ import './index.scss';
 
 class Top extends Component {
   props: {
-    actions: Array<Function>,
+    actions: {
+      loadAllContent: Function,
+      getArticlesFromCat: Function,
+      serachArticles: Function,
+      sortArticles: Function,
+      loadAllFromCategory: Function,
+    },
     top: {
-      archives: Array<Article>,
-      categories: Array,
+      archives: Array<ArticleType>,
+      categories: Array<CategoryType>,
       isLoading: boolean,
     },
   };
 
   state: {
-    serach: String,
-    sorted: String,
-    selectedCat: String,
+    serach: string,
+    sorted: string,
+    selectedCat: string,
   };
+  setState: Function;
+  sendSearch: Function;
+  handleSerach: Function;
+  handleSort: Function;
+  handleSelectedCat: Function;
 
   constructor() {
     super();
@@ -43,7 +56,6 @@ class Top extends Component {
     this.handleSerach = this.handleSerach.bind(this);
     this.handleSort = this.handleSort.bind(this);
     this.handleSelectedCat = this.handleSelectedCat.bind(this);
-    this.handleSelectedCategory = this.handleSelectedCategory.bind(this);
   }
 
   componentWillMount() {
@@ -57,13 +69,10 @@ class Top extends Component {
   }
 
   handleSelectedCat(event, index, value) {
-    this.handleSelectedCategory(value);
-  }
-
-  handleSelectedCategory(val) {
     this.setState({
-      selectedCat: val,
+      selectedCat: value,
     });
+    this.props.actions.loadAllFromCategory(value);
   }
 
   updateContent() {
@@ -78,7 +87,11 @@ class Top extends Component {
     });
   }
 
-  sendSearch() {
+  sendSearch(e) {
+    const ENTER = 13;
+    if (e.keyCode !== ENTER) {
+      return false;
+    }
     const param = { word: this.state.serach };
     this.props.actions.serachArticles(param);
   }
@@ -125,6 +138,7 @@ class Top extends Component {
             <TextField
               floatingLabelText='search'
               onChange={this.handleSerach}
+              onKeyDown={this.sendSearch}
               value={serach}
               style={style.titleField}
             />

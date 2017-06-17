@@ -1,11 +1,15 @@
+/* @flow */
 import React, { Component } from 'react';
 import Highlight from 'react-highlight';
 import { RaisedButton } from 'material-ui';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import CommentIcon from 'material-ui/svg-icons/communication/comment';
 
-import { DropZone } from '../../parts';
+import type { CommentType } from '../../types/CommentType';
 import { request, editContent } from '../../utils';
+
+
+import { DropZone } from '../../parts';
 import style from '../../style';
 import './index.scss';
 
@@ -14,10 +18,8 @@ const tabPrev = 'preveiw';
 
 export default class CommentForm extends Component {
   props: {
-    sendComment: Function,
-    comment?: {
-      content: String,
-    },
+    sendComment: Function;
+    comment: CommentType;
   };
   static defaultProps = {
     comment: {
@@ -25,6 +27,18 @@ export default class CommentForm extends Component {
       content: '',
     },
   }
+
+  state: {
+    content: string,
+    tabValue: string,
+    isDropZone: boolean,
+    selectionStart: number,
+  }
+  setState: Function;
+  handleTab: Function;
+  handleComment: Function;
+  handleDrag: Function;
+  handleUploadImage: Function;
 
   constructor() {
     super();
@@ -47,20 +61,20 @@ export default class CommentForm extends Component {
     });
   }
 
-  handleTab(value) {
+  handleTab(value: string) {
     this.setState({
       tabValue: value,
     });
   }
 
-  handleComment(event) {
+  handleComment(event: any) {
     this.setState({
       content: event.target.value,
       selectionStart: event.target.selectionStart,
     });
   }
 
-  handleUploadImage(file) {
+  handleUploadImage(file: any) {
     const { content, selectionStart } = this.state;
     (async () => {
       try {

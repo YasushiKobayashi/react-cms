@@ -1,19 +1,19 @@
-import React, { Component, PropTypes } from 'react';
+/* @flow */
+import React, { Component } from 'react';
 import { Chip } from 'material-ui';
 import CheckCircle from 'material-ui/svg-icons/action/check-circle';
 import Delete from 'material-ui/svg-icons/action/delete';
 
+import type { CategoryType } from '../../types/CategoryType';
+
 import style from '../../style';
 
 export default class Categories extends Component {
-  static propTypes = {
-    categories: PropTypes.arrayOf(PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      slug: PropTypes.string.isRequired,
-    })).isRequired,
-    type: PropTypes.string.isRequired,
-    handleCat: PropTypes.func.isRequired,
-  }
+  props: {
+    categories: Array<CategoryType>;
+    type: string;
+    handleCat: Function;
+  };
 
   render() {
     const {
@@ -23,6 +23,7 @@ export default class Categories extends Component {
     } = this.props;
 
     const icon = (type === 'selected') ? <Delete style={style.icon} /> : <CheckCircle style={style.icon} />;
+
     const cat = categories.map((category, number) => {
       return (
         <Chip

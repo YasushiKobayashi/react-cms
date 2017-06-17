@@ -1,10 +1,11 @@
+/* @flow */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import * as actions from '../../actions/userAction';
-import type { User } from '../../types/User';
-import type { Article } from '../../types/Article';
+import type { UserType } from '../../types/UserType';
+import type { ArticleType } from '../../types/ArticleType';
 import { request } from '../../utils';
 
 import { ContentList, Login } from '../../components';
@@ -14,12 +15,23 @@ import './index.scss';
 class Mypage extends Component {
   props: {
     actions: Array<Function>,
-    user: User,
+    user: UserType,
+    actions: {
+      getUserArticle: Function,
+      getUserInfo: Function,
+    },
     mypage: {
-      archives: Array<Article>;
+      archives: Array<ArticleType>;
       isLoading: boolean,
     },
   };
+  state: {
+    isDropZone: boolean;
+  }
+  setState: Function;
+  handleDrag: Function;
+  handleUploadImage: Function;
+  updateUserInfo: Function;
 
   constructor() {
     super();
@@ -40,7 +52,7 @@ class Mypage extends Component {
 
   }
 
-  handleUploadImage(file) {
+  handleUploadImage(file: any) {
     (async () => {
       try {
         await request.UPLOAD('user/upload', file);

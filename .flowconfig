@@ -1,5 +1,6 @@
 [ignore]
-.*/node_modules/.*
+.*/node_modules/*
+bundle.js
 
 [include]
 
@@ -7,6 +8,5 @@
 declares
 
 [options]
-module.system.node.resolve_dirname=src
+esproposal.class_instance_fields=enable
 esproposal.class_static_fields=enable
-munge_underscores=true

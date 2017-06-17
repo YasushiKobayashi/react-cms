@@ -1,3 +1,4 @@
+/* @flow */
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import ModeComment from 'material-ui/svg-icons/editor/mode-comment';

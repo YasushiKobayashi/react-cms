@@ -5,6 +5,7 @@ export default class User {
     this.id = obj.id;
     this.name = obj.name;
     this.email = obj.email;
+    this.password = '';
     this.image = (obj.image) ? obj.image : staticImage('no-image.png');
   }
 }

@@ -1,23 +1,29 @@
+/* @flow */
 import React, { Component } from 'react';
 import { Paper, TextField, RaisedButton } from 'material-ui';
 import _ from 'lodash';
 
+import type { UserType } from '../../types/UserType';
+import type { UserValidType } from '../../types/ValidType';
 import { validation } from '../../utils';
-import type { User } from '../../types/User';
 
 import style from '../../style';
 import './index.scss';
 
 export default class Login extends Component {
   props: {
-    user: String,
-    type: User,
-    sendUserInfo: Function,
+    user: String;
+    type: UserType;
+    sendUserInfo: Function;
   };
-
   state: {
-    user: User,
+    user: UserType;
+    userError: UserValidType;
   };
+  setState: Function;
+  handleRegister: Function;
+  handlePost: Function;
+  handelValid: Function;
 
   constructor() {
     super();
@@ -40,14 +46,12 @@ export default class Login extends Component {
   }
 
   componentWillMount() {
-    const { user } = this.props;
-    user.password = this.state.user.password;
     this.setState({
-      user: user,
+      user: this.props.user,
     });
   }
 
-  handleRegister(event, type) {
+  handleRegister(event: any, type: string) {
     const { user, userError } = this.state;
     const val = event.target.value;
     user[type] = val;
@@ -68,13 +72,14 @@ export default class Login extends Component {
     const { user } = this.state;
     const { type, sendUserInfo } = this.props;
     const urlType = (type !== 'SIGN IN') ? 'register' : 'login';
+    console.log(urlType);
     if (this.handelValid(type)) {
-      user.urlType = urlType;
+      // user.urlType = urlType;
       sendUserInfo(user);
     }
   }
 
-  handelValid(type) {
+  handelValid(type: string) {
     const { user, userError } = this.state;
     if (type !== 'SIGN IN') {
       userError.name = validation.validEmpty(user.name, '名前');

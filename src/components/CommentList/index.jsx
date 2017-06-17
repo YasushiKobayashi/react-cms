@@ -1,11 +1,12 @@
+/* @flow */
 import React, { Component } from 'react';
 import Highlight from 'react-highlight';
 import Edit from 'material-ui/svg-icons/image/edit';
 import moment from 'moment';
 import _ from 'lodash';
 
-import type { User } from '../../types/User';
-import type { Comment } from '../../types/Comment';
+import type { UserType } from '../../types/UserType';
+import type { CommentType } from '../../types/CommentType';
 
 import { CommentForm } from '../../components';
 import style from '../../style';
@@ -13,13 +14,20 @@ import './index.scss';
 
 export default class CommentList extends Component {
   props: {
-    comments: Array<Comment>,
-    user: User,
-    editComment: Function,
+    comments: Array<CommentType>;
+    user: UserType;
+    editComment: Function;
   };
+  setState: Function;
+  editMode: Function;
+  sendComment: Function;
   static defaultProps = {
     comments: [],
   }
+  state: {
+    comments: Array<CommentType>;
+  };
+
   constructor() {
     super();
     this.state = {
@@ -36,13 +44,13 @@ export default class CommentList extends Component {
     });
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: any) {
     this.setState({
       comments: nextProps.comments,
     });
   }
 
-  editMode(e) {
+  editMode(e: any) {
     const id = e.currentTarget.getAttribute('data-id');
     const { comments } = this.props;
     const commentsId = _.findIndex(comments, { id: parseInt(id, 10) });
@@ -52,7 +60,7 @@ export default class CommentList extends Component {
     });
   }
 
-  sendComment(e) {
+  sendComment(e: any) {
     const id = e.currentTarget.getAttribute('data-id');
     const content = e.currentTarget.getAttribute('data-content');
     const post = {
