@@ -16,9 +16,9 @@ function* getErr(type, message) {
 export function* createComment(payload) {
   const post = payload.payload;
   try {
-    const commnet = yield call(CommentApi.post, post);
-    const article = yield select(selectors.getArticle);
-    article.comments[article.comments.length] = commnet;
+    const comment = yield call(CommentApi.post, post);
+    const article = yield select(selectors.getArticleFromArticle);
+    article.comments[article.comments.length] = comment;
     yield put({
       type: actionTypes.typeLoaded(actionTypes.SET_ARTICLE),
       article: article,
@@ -36,12 +36,13 @@ export function* editComment(payload) {
     content: payload.payload.content,
   };
   try {
-    const commnet = yield call(CommentApi.put, id, post);
-    const article = yield select(selectors.getArticle);
+    const comment = yield call(CommentApi.put, id, post);
+    const article = yield select(selectors.getArticleFromArticle);
 
     const commentsId = _.findIndex(article.comments, { id: parseInt(id, 10) });
-    article.comments[commentsId].content = commnet.content;
-    article.comments[commentsId].updated = commnet.updated;
+    article.comments[commentsId].content = comment.content;
+    article.comments[commentsId].htmlContent = comment.htmlContent;
+    article.comments[commentsId].updated = comment.updated;
     article.comments[commentsId].edit = false;
 
     yield put({

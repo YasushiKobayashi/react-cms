@@ -31,6 +31,7 @@ export const GET_USER = 'GET_USER';
 export const ALL_ARCHIVES = 'ALL_ARCHIVES';
 export const SORT = 'SORT';
 export const SEARCH = 'SEARCH';
+export const GET_FROM_CATEGORY = 'GET_FROM_CATEGORY';
 export const FILTER_ARTICLE = 'FILTER_ARTICLE';
 
 // article

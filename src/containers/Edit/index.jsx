@@ -37,6 +37,7 @@ class Edit extends Component {
       editCatName: Function;
       createCategory: Function;
       removeCategories: Function;
+      addCategories: Function;
       editArticle: Function;
       createArticle: Function;
       putArticle: Function;
@@ -148,7 +149,7 @@ class Edit extends Component {
 
   handleAddCat(e) {
     const id = e.currentTarget.getAttribute('data-id');
-    this.props.actions.putArticle(id);
+    this.props.actions.addCategories(id);
   }
 
   handleRemoveCat(e) {

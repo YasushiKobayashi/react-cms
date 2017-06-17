@@ -12,3 +12,7 @@ export const sortArticles = (payload) => {
 export const serachArticles = (payload) => {
   return createAction(actionTypes.typeReqest(actionTypes.SEARCH), payload);
 };
+
+export const loadAllFromCategory = (payload) => {
+  return createAction(actionTypes.typeReqest(actionTypes.GET_FROM_CATEGORY), payload);
+};

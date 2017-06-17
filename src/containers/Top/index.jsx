@@ -24,6 +24,7 @@ class Top extends Component {
       getArticlesFromCat: Function,
       serachArticles: Function,
       sortArticles: Function,
+      loadAllFromCategory: Function,
     },
     top: {
       archives: Array<ArticleType>,
@@ -42,7 +43,6 @@ class Top extends Component {
   handleSerach: Function;
   handleSort: Function;
   handleSelectedCat: Function;
-  handleSelectedCategory: Function;
 
   constructor() {
     super();
@@ -56,7 +56,6 @@ class Top extends Component {
     this.handleSerach = this.handleSerach.bind(this);
     this.handleSort = this.handleSort.bind(this);
     this.handleSelectedCat = this.handleSelectedCat.bind(this);
-    this.handleSelectedCategory = this.handleSelectedCategory.bind(this);
   }
 
   componentWillMount() {
@@ -70,13 +69,10 @@ class Top extends Component {
   }
 
   handleSelectedCat(event, index, value) {
-    this.handleSelectedCategory(value);
-  }
-
-  handleSelectedCategory(val) {
     this.setState({
-      selectedCat: val,
+      selectedCat: value,
     });
+    this.props.actions.loadAllFromCategory(value);
   }
 
   updateContent() {
@@ -91,7 +87,11 @@ class Top extends Component {
     });
   }
 
-  sendSearch() {
+  sendSearch(e) {
+    const ENTER = 13;
+    if (e.keyCode !== ENTER) {
+      return false;
+    }
     const param = { word: this.state.serach };
     this.props.actions.serachArticles(param);
   }
@@ -138,6 +138,7 @@ class Top extends Component {
             <TextField
               floatingLabelText='search'
               onChange={this.handleSerach}
+              onKeyDown={this.sendSearch}
               value={serach}
               style={style.titleField}
             />

@@ -8,4 +8,5 @@ export type CommentType = {
   htmlContent: string;
   created: Date;
   updated: Date;
+  edit?: boolean;
 };

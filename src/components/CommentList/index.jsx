@@ -53,8 +53,8 @@ export default class CommentList extends Component {
   editMode(e: any) {
     const id = e.currentTarget.getAttribute('data-id');
     const { comments } = this.props;
-    // const commentsId = _.findIndex(comments, { id: parseInt(id, 10) });
-    // comments[commentsId].edit = (!comments[commentsId].edit);
+    const commentsId = _.findIndex(comments, { id: parseInt(id, 10) });
+    comments[commentsId].edit = (!comments[commentsId].edit);
     this.setState({
       comments: comments,
     });

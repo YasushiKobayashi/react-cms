@@ -15,8 +15,18 @@ export default class {
    * @param  {obj} state [sagaで管理しているstate]
    * @return {obj}       [topのarchivessのtateを返す]
    */
-  static getArchives(state) {
+  static getArchivesFromTop(state) {
     return state.top.archives;
+  }
+
+  /**
+   * [sagaのselect用のメソッド]
+   * [topのarchivessのtateを返す]
+   * @param  {obj} state [sagaで管理しているstate]
+   * @return {obj}       [topのarchivessのtateを返す]
+   */
+  static getStateFromTop(state) {
+    return state.top;
   }
 
   /**
