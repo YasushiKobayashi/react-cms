@@ -36,9 +36,8 @@ export function* isLogin() {
   }
 }
 
-const handleLogin = (async (payload) => {
+const handleLogin = (async (payload, urlType) => {
   const param = payload.payload;
-  const urlType = param.urlType;
   try {
     const tokenObj = await request.POST(apiUrl('v1', urlType), param);
     cookie.write('token', tokenObj.token);
@@ -50,13 +49,24 @@ const handleLogin = (async (payload) => {
 
 export function* login(payload) {
   try {
-    yield call(handleLogin, payload);
+    yield call(handleLogin, payload, 'login');
     yield fork(isLogin);
   } catch (e) {
     console.log(e);
     yield fork(notLogin);
   }
 }
+
+export function* regist(payload) {
+  try {
+    yield call(handleLogin, payload, 'register');
+    yield fork(isLogin);
+  } catch (e) {
+    console.log(e);
+    yield fork(notLogin);
+  }
+}
+
 
 export function* update(payload) {
   const param = payload.payload;

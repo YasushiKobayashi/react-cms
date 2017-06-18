@@ -12,6 +12,7 @@ export default function* rootSaga() {
   yield all([
     fork(user.isLogin),
     takeEvery(actionTypes.LOGIN, user.login),
+    takeEvery(actionTypes.REGIST, user.regist),
 
     // user関連
     takeEvery(actionTypes.typeReqest(actionTypes.USER_ARTICLE), user.getUserArticle),

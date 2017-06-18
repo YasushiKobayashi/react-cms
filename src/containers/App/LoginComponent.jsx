@@ -9,18 +9,19 @@ import './LoginComponent.scss';
 export default class LoginComponent extends Component {
   props: {
     user: UserType,
+    regist: Function;
     login: Function,
   };
 
   render() {
-    const { user, login } = this.props;
+    const { user, login, regist } = this.props;
 
     return (
       <div styleName='conteiner'>
         <div styleName='content'>
           <Login
             type='SIGN UP'
-            sendUserInfo={login}
+            sendUserInfo={regist}
             user={user}
           />
         </div>

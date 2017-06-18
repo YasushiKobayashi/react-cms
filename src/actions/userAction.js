@@ -5,6 +5,10 @@ export const login = (payload) => {
   return createAction(actionTypes.LOGIN, payload);
 };
 
+export const regist = (payload) => {
+  return createAction(actionTypes.REGIST, payload);
+};
+
 export const getUserArticle = (payload) => {
   return createAction(actionTypes.typeReqest(actionTypes.USER_ARTICLE), payload);
 };
