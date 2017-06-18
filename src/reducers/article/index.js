@@ -20,12 +20,14 @@ export default function article(state = initialState, action) {
         ...state,
         article: action.article,
         isLoading: false,
+        isSSr: false,
       };
     case actionTypes.typeError(actionTypes.SET_ARTICLE):
       return {
         ...state,
         errorMessage: action.errorMessage,
         isLoading: false,
+        isSSr: false,
       };
     case actionTypes.typeSsr(actionTypes.SET_ARTICLE):
       return {

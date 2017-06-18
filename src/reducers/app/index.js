@@ -27,6 +27,7 @@ export default function app(state = initialState, action) {
         ...state,
         isLoading: false,
         isLogin: false,
+        isSSr: false,
         user: initialState.user,
       };
     case actionTypes.typeSsr(actionTypes.GET_USER):
