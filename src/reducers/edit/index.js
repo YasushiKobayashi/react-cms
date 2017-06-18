@@ -20,6 +20,7 @@ const initialState = {
   },
   categoryLists: [],
   isLoading: true,
+  isSsr: false,
 };
 
 export default function edit(state = initialState, action) {
@@ -29,6 +30,7 @@ export default function edit(state = initialState, action) {
         ...state,
         article: action.article,
         isLoading: false,
+        isSSr: false,
       };
     case actionTypes.typeLoaded(actionTypes.SET_CATEGORY):
       return {
@@ -36,12 +38,14 @@ export default function edit(state = initialState, action) {
         categoryLists: action.categoryLists,
         article: action.article,
         isLoading: false,
+        isSSr: false,
       };
     case actionTypes.typeLoaded(actionTypes.SET_CATEGORY_LIST):
       return {
         ...state,
         categoryLists: action.categoryLists,
         isLoading: false,
+        isSSr: false,
       };
     case actionTypes.typeValidError(actionTypes.SET_ARTICLE):
       return {
@@ -58,6 +62,12 @@ export default function edit(state = initialState, action) {
         ...state,
         errorMessage: action.errorMessage,
         isLoading: false,
+        isSSr: false,
+      };
+    case actionTypes.typeSsr(actionTypes.SET_ARTICLE):
+      return {
+        ...state,
+        isSSr: false,
       };
     case actionTypes.INIT_ARTICLE:
       return initialState;

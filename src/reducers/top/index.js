@@ -6,6 +6,7 @@ const initialState = {
   categories: [],
   selectedCat: [],
   isLoading: true,
+  isSsr: false,
 };
 
 export default function top(state = initialState, action) {
@@ -34,6 +35,11 @@ export default function top(state = initialState, action) {
         ...state,
         errorMessage: action.errorMessage,
         isLoading: false,
+      };
+    case actionTypes.typeSsr(actionTypes.ALL_ARCHIVES):
+      return {
+        ...state,
+        isSSr: false,
       };
     default:
       return state;

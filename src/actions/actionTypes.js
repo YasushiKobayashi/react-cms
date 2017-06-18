@@ -16,6 +16,10 @@ export const typeValidError = (type) => {
   return `${type}_${VALID_ERROR}`;
 };
 
+export const typeSsr = (type) => {
+  return `${type}_SSR`;
+};
+
 // status
 export const LOGINED = 'LOGINED';
 export const NOT_LOGIN = 'NOT_LOGIN';

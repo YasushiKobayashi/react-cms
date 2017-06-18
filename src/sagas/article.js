@@ -1,4 +1,4 @@
-import { call, fork, put, select } from 'redux-saga/effects';
+import { call, fork, put, select, cancel } from 'redux-saga/effects';
 import { browserHistory } from 'react-router';
 
 import { Archive } from '../api';
@@ -22,6 +22,14 @@ function* validErr(valid) {
 }
 
 export function* getArticle(payload) {
+  const { isSsr } = yield select(selectors.getFromArticle);
+  if (isSsr) {
+    yield put({
+      type: actionTypes.typeSsr(actionTypes.SET_ARTICLE),
+    });
+    yield cancel();
+  }
+
   const id = payload.payload;
   try {
     const article = yield call(Archive.getSigleArticle, id);

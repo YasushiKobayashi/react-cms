@@ -1,19 +1,29 @@
 export default class {
   /**
    * [sagaのselect用のメソッド]
-   * [routingのstateを返す]
+   * [userのsstateを返す]
    * @param  {obj} state [sagaで管理しているstate]
-   * @return {obj}       [routingのstateを返す]
+   * @return {obj}       [userのstateを返す]
    */
-  static getRouting(state) {
-    return state.routing.locationBeforeTransitions;
+  static getUser(state) {
+    return state.app.user;
   }
 
   /**
    * [sagaのselect用のメソッド]
-   * [topのarchivessのtateを返す]
+   * [appのsstateを返す]
    * @param  {obj} state [sagaで管理しているstate]
-   * @return {obj}       [topのarchivessのtateを返す]
+   * @return {obj}       [appのstateを返す]
+   */
+  static getFromApp(state) {
+    return state.app;
+  }
+
+  /**
+   * [sagaのselect用のメソッド]
+   * [topのarchivessのstateを返す]
+   * @param  {obj} state [sagaで管理しているstate]
+   * @return {obj}       [topのarchivessのstateを返す]
    */
   static getArchivesFromTop(state) {
     return state.top.archives;
@@ -21,9 +31,9 @@ export default class {
 
   /**
    * [sagaのselect用のメソッド]
-   * [topのarchivessのtateを返す]
+   * [topのarchivessのstateを返す]
    * @param  {obj} state [sagaで管理しているstate]
-   * @return {obj}       [topのarchivessのtateを返す]
+   * @return {obj}       [topのarchivessのstateを返す]
    */
   static getStateFromTop(state) {
     return state.top;
@@ -31,9 +41,9 @@ export default class {
 
   /**
    * [sagaのselect用のメソッド]
-   * [articleのarticleのtateを返す]
+   * [articleのarticleのstateを返す]
    * @param  {obj} state [sagaで管理しているstate]
-   * @return {obj}       [articleのarticleのstateを返す]
+   * @return {obj}       [articleのarticleのsstateを返す]
    */
   static getArticleFromArticle(state) {
     return state.article.article;
@@ -41,9 +51,19 @@ export default class {
 
   /**
    * [sagaのselect用のメソッド]
-   * [editのarticleのtateを返す]
+   * [articleのstateを返す]
    * @param  {obj} state [sagaで管理しているstate]
-   * @return {obj}       [editのarticleのstateを返す]
+   * @return {obj}       [articleのsstateを返す]
+   */
+  static getFromArticle(state) {
+    return state.article;
+  }
+
+  /**
+   * [sagaのselect用のメソッド]
+   * [editのarticleのstateを返す]
+   * @param  {obj} state [sagaで管理しているstate]
+   * @return {obj}       [editのarticleのsstateを返す]
    */
   static getArticleFromEdit(state) {
     return state.edit.article;
@@ -51,9 +71,9 @@ export default class {
 
   /**
    * [sagaのselect用のメソッド]
-   * [articleのcategoryNewのtateを返す]
+   * [articleのcategoryNewのstateを返す]
    * @param  {obj} state [sagaで管理しているstate]
-   * @return {obj}       [editのcategoryNewのstateを返す]
+   * @return {obj}       [editのcategoryNewのsstateを返す]
    */
   static getNewCetegoryFromEdit(state) {
     return state.edit.categoryNew;
@@ -61,9 +81,9 @@ export default class {
 
   /**
    * [sagaのselect用のメソッド]
-   * [articleのcategoriesのtateを返す]
+   * [articleのcategoriesのstateを返す]
    * @param  {obj} state [sagaで管理しているstate]
-   * @return {obj}       [editのcategoriesのstateを返す]
+   * @return {obj}       [editのcategoriesのsstateを返す]
    */
   static getCategoriesFromEdit(state) {
     return state.edit.categories;
@@ -71,9 +91,9 @@ export default class {
 
   /**
    * [sagaのselect用のメソッド]
-   * [articleのcategoryListsのtateを返す]
+   * [articleのcategoryListsのstateを返す]
    * @param  {obj} state [sagaで管理しているstate]
-   * @return {obj}       [editのcategoryListsのstateを返す]
+   * @return {obj}       [editのcategoryListsのsstateを返す]
    */
   static getCategoryListsFromEdit(state) {
     return state.edit.categoryLists;
@@ -81,9 +101,9 @@ export default class {
 
   /**
    * [sagaのselect用のメソッド]
-   * [articleのcategoryNewのtateを返す]
+   * [articleのcategoryNewのstateを返す]
    * @param  {obj} state [sagaで管理しているstate]
-   * @return {obj}       [editのcategoryNewのstateを返す]
+   * @return {obj}       [editのcategoryNewのsstateを返す]
    */
   static getValidFromEdit(state) {
     return state.edit.valid;

@@ -1,18 +1,26 @@
 import express from 'express';
+import cookieParser from 'cookie-parser';
 // import curl from 'node-libcurl';
 import React from 'react';
 import { match } from 'react-router';
 import { renderToString } from 'react-dom/server';
 
 import routes from './routes';
-import { NotFound, ServerError } from './ssrComponents';
+import serverContent from './serverContent';
+import { NotFound, ServerError, Loading } from './ssrComponents';
 import config from './config';
 
 const app = express();
-
+app.use(cookieParser());
 app.use(express.static('./public'));
 
-const renderPage = (appHtml, title) => {
+const safeStringify = (obj) => {
+  return JSON.stringify(obj).replace(/<\/script/g, '<\\/script').replace(/<!--/g, '<\\!--');
+};
+const renderPage = (appHtml, title, initialState) => {
+  const appState = safeStringify(initialState);
+  console.log('title');
+  console.log(title);
   return `
     <!DOCTYPE html>
     <html lang="ja">
@@ -27,7 +35,11 @@ const renderPage = (appHtml, title) => {
       <link rel="apple-touch-icon-precomposed" href="/assets/img/apple-touch-icon-precomposed.png" />
     </head>
     <body>
-      <div id=app></div>
+      <div id=app>${appHtml}</div>
+      <script>
+        var APP_STATE = ${appState};
+        var TITLE = ${title};
+      </script>
       <script src="/bundle.js"></script>
     </body>
     <html>
@@ -35,16 +47,27 @@ const renderPage = (appHtml, title) => {
 };
 
 app.get('*', (req, res) => {
-  match({ routes, location: req.url }, (err, redirect, props) => {
-    if (err) {
-      const title = `500 INTERNAL SERVER ERRPR  | ${config.siteTitle}`;
+  match({ routes, location: req.url }, (err, redirect, renderProps) => {
+    if (renderProps) {
+      (async () => {
+        try {
+          const token = req.cookies.token;
+          const fetchInfo = await serverContent(renderProps, token);
+          const appHtml = renderToString(<Loading />);
+          res.status(200).send(renderPage(appHtml, fetchInfo.title, fetchInfo.initialState));
+        } catch (e) {
+          console.log(e);
+          const title = `500 INTERNAL SERVER ERRPR | ${config.siteTitle}`;
+          const appHtml = renderToString(<ServerError />);
+          res.status(500).send(renderPage(appHtml, title));
+        }
+      })();
+    } else if (err) {
+      const title = `500 INTERNAL SERVER ERRPR | ${config.siteTitle}`;
       const appHtml = renderToString(<ServerError />);
       res.status(500).send(renderPage(appHtml, title));
     } else if (redirect) {
       res.redirect(redirect.pathname + redirect.search);
-    } else if (props) {
-      const title = `${config.siteTitle}`;
-      res.send(renderPage(title));
     } else {
       const title = `404 NOT FOUND | ${config.siteTitle}`;
       const appHtml = renderToString(<NotFound />);

@@ -2,9 +2,9 @@ import { request, apiUrl } from '../utils';
 import { Archive, Article } from '../model';
 
 export default class {
-  static getAllArticle(url) {
+  static getAllArticle(url, token = null) {
     return new Promise((resolve, reject) => {
-      request.GET(apiUrl('v1', url)).then((arr) => {
+      request.GET(apiUrl('v1', url), token).then((arr) => {
         resolve(arr.map((obj) => {
           return new Archive(obj);
         }));
@@ -29,9 +29,9 @@ export default class {
     });
   }
 
-  static getSigleArticle(id) {
+  static getSigleArticle(id, token = null) {
     return new Promise((resolve, reject) => {
-      request.GET(apiUrl('v1', `post/${id}`)).then((obj) => {
+      request.GET(apiUrl('v1', `post/${id}`), token).then((obj) => {
         resolve(new Article(obj));
       }).catch((err) => {
         reject(err);

@@ -1,4 +1,4 @@
-import { call, fork, put, select } from 'redux-saga/effects';
+import { call, fork, put, select, cancel } from 'redux-saga/effects';
 import _ from 'lodash';
 
 import { Archive, Category } from '../api';
@@ -13,6 +13,13 @@ function* getErr(type, message) {
 }
 
 export function* loadAll() {
+  const { isSsr } = yield select(selectors.getStateFromTop);
+  if (isSsr) {
+    yield put({
+      type: actionTypes.typeSsr(actionTypes.ALL_ARCHIVES),
+    });
+    yield cancel();
+  }
   try {
     const categories = yield call(Category.get);
     const archives = yield call(Archive.getAllArticle, 'post');
