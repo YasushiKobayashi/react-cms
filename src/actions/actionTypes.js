@@ -26,6 +26,7 @@ export const NOT_LOGIN = 'NOT_LOGIN';
 
 // user
 export const LOGIN = 'LOGIN';
+export const REGIST = 'REGIST';
 export const LOGOUT = 'LOGOUT';
 
 export const USER_ARTICLE = 'USER_ARTICLE';

@@ -21,6 +21,7 @@ class App extends Component {
     children: React$Element<*>,
     /* eslint-disable no-undef, no-console */
     actions: {
+      regist: Function;
       login: Function;
       logout: Function;
     },
@@ -39,6 +40,7 @@ class App extends Component {
 
     const {
       login,
+      regist,
       logout,
     } = this.props.actions;
 
@@ -50,7 +52,7 @@ class App extends Component {
     );
 
     const render = (isLoading) ? <Loading /> :
-      (isLogin) ? children : <LoginComponent login={login} user={user} />;
+      (isLogin) ? children : <LoginComponent login={login} regist={regist} user={user} />;
 
     return (
       <MuiThemeProvider muiTheme={theme}>
