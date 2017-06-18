@@ -18,8 +18,11 @@ export function* isLogin() {
     yield fork(notLogin);
     yield cancel();
   }
-  const user = yield select(selectors.getUser);
-  if (user.id) {
+  const { isSsr } = yield select(selectors.getFromApp);
+  if (isSsr) {
+    yield put({
+      type: actionTypes.typeSsr(actionTypes.GET_USER),
+    });
     yield cancel();
   }
   try {

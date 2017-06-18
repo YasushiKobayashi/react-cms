@@ -4,6 +4,7 @@ import * as actionTypes from '../../actions/actionTypes';
 const initialState = {
   isLogin: false,
   isLoading: true,
+  isSsr: false,
   user: {
     id: null,
     name: '',
@@ -27,6 +28,11 @@ export default function app(state = initialState, action) {
         isLoading: false,
         isLogin: false,
         user: initialState.user,
+      };
+    case actionTypes.typeSsr(actionTypes.GET_USER):
+      return {
+        ...state,
+        isSSr: false,
       };
     default:
       return state;

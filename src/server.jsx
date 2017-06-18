@@ -19,6 +19,8 @@ const safeStringify = (obj) => {
 };
 const renderPage = (appHtml, title, initialState) => {
   const appState = safeStringify(initialState);
+  console.log('title');
+  console.log(title);
   return `
     <!DOCTYPE html>
     <html lang="ja">
@@ -36,6 +38,7 @@ const renderPage = (appHtml, title, initialState) => {
       <div id=app>${appHtml}</div>
       <script>
         var APP_STATE = ${appState};
+        var TITLE = ${title};
       </script>
       <script src="/bundle.js"></script>
     </body>
@@ -46,11 +49,19 @@ const renderPage = (appHtml, title, initialState) => {
 app.get('*', (req, res) => {
   match({ routes, location: req.url }, (err, redirect, renderProps) => {
     if (renderProps) {
-      const token = req.cookies.token;
-      const fetchInfo = serverContent(renderProps, token);
-      const title = `${config.siteTitle}`;
-      const appHtml = renderToString(<Loading />);
-      res.status(200).send(renderPage(appHtml, title, fetchInfo.initialState));
+      (async () => {
+        try {
+          const token = req.cookies.token;
+          const fetchInfo = await serverContent(renderProps, token);
+          const appHtml = renderToString(<Loading />);
+          res.status(200).send(renderPage(appHtml, fetchInfo.title, fetchInfo.initialState));
+        } catch (e) {
+          console.log(e);
+          const title = `500 INTERNAL SERVER ERRPR | ${config.siteTitle}`;
+          const appHtml = renderToString(<ServerError />);
+          res.status(500).send(renderPage(appHtml, title));
+        }
+      })();
     } else if (err) {
       const title = `500 INTERNAL SERVER ERRPR | ${config.siteTitle}`;
       const appHtml = renderToString(<ServerError />);

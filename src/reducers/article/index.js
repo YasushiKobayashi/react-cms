@@ -10,6 +10,7 @@ const initialState = {
     updated: new Date(),
   },
   isLoading: true,
+  isSsr: false,
 };
 
 export default function article(state = initialState, action) {
@@ -25,6 +26,11 @@ export default function article(state = initialState, action) {
         ...state,
         errorMessage: action.errorMessage,
         isLoading: false,
+      };
+    case actionTypes.typeSsr(actionTypes.SET_ARTICLE):
+      return {
+        ...state,
+        isSSr: false,
       };
     default:
       return state;

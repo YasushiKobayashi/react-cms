@@ -20,6 +20,7 @@ const initialState = {
   },
   categoryLists: [],
   isLoading: true,
+  isSsr: false,
 };
 
 export default function edit(state = initialState, action) {
@@ -58,6 +59,11 @@ export default function edit(state = initialState, action) {
         ...state,
         errorMessage: action.errorMessage,
         isLoading: false,
+      };
+    case actionTypes.typeSsr(actionTypes.SET_ARTICLE):
+      return {
+        ...state,
+        isSSr: false,
       };
     case actionTypes.INIT_ARTICLE:
       return initialState;

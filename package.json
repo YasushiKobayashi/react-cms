@@ -23,6 +23,8 @@
     "build:client": "webpack --config webpack.production.config.babel.js --progress --profile --colors",
     "build:server": "webpack --config webpack.server.config.babel.js --progress --profile --colors",
     "start": "NODE_ENV=develop webpack-dashboard -- webpack-dev-server --progress --profile --colors",
+    "watch:client": "webpack -w --config webpack.production.config.babel.js --progress --profile --colors",
+    "watch:server": "webpack -w --config webpack.server.config.babel.js --progress --profile --colors",
     "dev": "NODE_ENV=develop npm run build:server && node server.bundle.js",
     "test": "NODE_ENV=test mocha --compilers js:babel-register --recursive $(find src/test/mocha -name '*.spec.js')",
     "lint": "npm run lint:js && npm run lint:sass",

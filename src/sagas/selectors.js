@@ -3,13 +3,23 @@ export default class {
    * [sagaのselect用のメソッド]
    * [userのsstateを返す]
    * @param  {obj} state [sagaで管理しているstate]
-   * @return {obj}       [userのsstateを返す]
+   * @return {obj}       [userのstateを返す]
    */
   static getUser(state) {
     return state.app.user;
   }
 
-/**
+  /**
+   * [sagaのselect用のメソッド]
+   * [appのsstateを返す]
+   * @param  {obj} state [sagaで管理しているstate]
+   * @return {obj}       [appのstateを返す]
+   */
+  static getFromApp(state) {
+    return state.app;
+  }
+
+  /**
    * [sagaのselect用のメソッド]
    * [topのarchivessのstateを返す]
    * @param  {obj} state [sagaで管理しているstate]
@@ -37,6 +47,16 @@ export default class {
    */
   static getArticleFromArticle(state) {
     return state.article.article;
+  }
+
+  /**
+   * [sagaのselect用のメソッド]
+   * [articleのstateを返す]
+   * @param  {obj} state [sagaで管理しているstate]
+   * @return {obj}       [articleのsstateを返す]
+   */
+  static getFromArticle(state) {
+    return state.article;
   }
 
   /**
