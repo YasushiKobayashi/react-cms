@@ -8,6 +8,9 @@ export default (async (props, token) => {
   const state = store.getState();
 
   try {
+    if (typeof token === 'undefined') {
+      throw new Error('not login');
+    }
     const routes = props.router.routes;
     const params = props.router.params;
     const displayName = routes[1].component.displayName;
