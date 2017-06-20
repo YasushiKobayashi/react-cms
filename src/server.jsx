@@ -38,7 +38,6 @@ const renderPage = (appHtml, title, initialState) => {
       <div id=app>${appHtml}</div>
       <script>
         var APP_STATE = ${appState};
-        var TITLE = ${title};
       </script>
       <script src="/bundle.js"></script>
     </body>

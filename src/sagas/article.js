@@ -22,15 +22,15 @@ function* validErr(valid) {
 }
 
 export function* getArticle(payload) {
-  const { isSsr } = yield select(selectors.getFromArticle);
-  if (isSsr) {
+  const id = payload.payload;
+  const { isSsr, article } = yield select(selectors.getFromArticle);
+  if (isSsr && article.id === id) {
     yield put({
       type: actionTypes.typeSsr(actionTypes.SET_ARTICLE),
     });
     yield cancel();
   }
 
-  const id = payload.payload;
   try {
     const article = yield call(Archive.getSigleArticle, id);
     yield put({
