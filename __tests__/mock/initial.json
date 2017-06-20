@@ -1,0 +1,63 @@
+{
+    "app": {
+        "isLogin": false,
+        "isLoading": true,
+        "isSsr": false,
+        "user": {
+            "id": null,
+            "name": "",
+            "email": "",
+            "image": ""
+        }
+    },
+    "top": {
+        "archives": [],
+        "categories": [],
+        "selectedCat": [],
+        "isLoading": true,
+        "isSsr": false
+    },
+    "article": {
+        "article": {
+            "title": "",
+            "content": "",
+            "htmlContent": "",
+            "created": "2017-06-20T07:54:47.614Z",
+            "updated": "2017-06-20T07:54:47.614Z"
+        },
+        "isLoading": true,
+        "isSsr": false
+    },
+    "edit": {
+        "article": {
+            "title": "",
+            "content": "",
+            "htmlContent": "",
+            "created": "2017-06-20T07:54:47.614Z",
+            "updated": "2017-06-20T07:54:47.614Z",
+            "categories": []
+        },
+        "valid": {
+            "titleError": "",
+            "catNameError": "",
+            "catSlugErrror": ""
+        },
+        "categoryNew": {
+            "name": "",
+            "slug": ""
+        },
+        "categoryLists": [],
+        "isLoading": true,
+        "isSsr": false
+    },
+    "mypage": {
+        "archives": [],
+        "isLoading": true,
+        "user": {
+            "id": null,
+            "name": "",
+            "email": "",
+            "image": ""
+        }
+    }
+}

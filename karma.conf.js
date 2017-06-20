@@ -8,14 +8,15 @@ module.exports = (config) => {
     basePath: '',
     frameworks: ['mocha'],
     files: [
-      'test/karma/*.spec.js',
+      '__tests__/karma/*.spec.js',
     ],
     preprocessors: {
-      'src/**/*.js': ['webpack'],
-      'test/karma/*.spec.js': ['webpack'],
+      'src/**/*.js': ['webpack', 'sourcemap'],
+      '__tests__/karma/*.spec.js': ['webpack', 'sourcemap'],
     },
 
     webpack: {
+      devtool: 'inline-source-map',
       resolve: {
         extensions: ['.js', '.jsx'],
       },
@@ -35,6 +36,7 @@ module.exports = (config) => {
     plugins: [
       'karma-webpack',
       'karma-mocha',
+      'karma-sourcemap-loader',
       'karma-chrome-launcher',
       'karma-phantomjs-launcher',
     ],
