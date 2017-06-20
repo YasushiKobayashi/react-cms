@@ -23,7 +23,6 @@ function* validErr(valid) {
 
 export function* getArticle(payload) {
   const id = payload.payload;
-
   const { isSsr, article } = yield select(selectors.getFromArticle);
   if (isSsr && article.id === id) {
     yield put({
