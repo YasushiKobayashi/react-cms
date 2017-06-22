@@ -105,7 +105,7 @@ export default class Login extends Component {
       userError,
     } = this.state;
 
-    const idType = type !== 'SIGN IN' ? 'signin' : 'signup';
+    const idType = type === 'SIGN IN' ? 'signin' : 'signup';
     const name = type !== 'SIGN IN' ? (<TextField
       id={`name_${idType}`}
       floatingLabelText='name'

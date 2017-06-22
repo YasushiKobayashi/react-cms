@@ -2,9 +2,12 @@ machine:
   timezone: Asia/Tokyo
   node:
     version: 8.1.0
+  python:
+    version: 3.6.0
 
 dependencies:
   pre:
+    - pip install selenium
     - npm install -g yarn mocha
     - yarn
     - npm rebuild node-sass

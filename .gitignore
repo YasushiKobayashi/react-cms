@@ -18,6 +18,7 @@ node_modules
 .vagrant
 *.map
 *.css
+*.pyc
 
 logs
 *.log
