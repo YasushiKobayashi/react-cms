@@ -36,3 +36,4 @@ public/assets/img
 *.bundle.js
 bundle.js
 config.js
+__tests__/selenium/img/

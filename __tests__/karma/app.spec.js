@@ -26,7 +26,7 @@ function setup() {
         commentsCount: 0,
         created: new Date(),
         updated: new Date(),
-        wpFlg: false,
+        wpFlg: true,
         user: {
           name: 'hoge',
         },
@@ -38,9 +38,11 @@ function setup() {
 }
 
 describe('ListView', () => {
-  it("contains spec with an expectation", () => {
+  it('props通りのループをしているか', () => {
     const props = setup();
     const wrapper = shallow(<ContentList {...props} />);
     expect(wrapper.find('dl').at(0).key()).to.equal('1');
+    expect(wrapper.find('dl').at(1).key()).to.equal('2');
+    expect(wrapper.contains('WIP')).to.equal(false);
   });
 });
