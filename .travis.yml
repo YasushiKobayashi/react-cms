@@ -1,8 +1,17 @@
-language: node_js
-node_js:
-  - 6.7.0
+os: linux
+node_js: '8.1.0'
+sudo: required
+env: DISPLAY=':99.0'
+dist: trusty
+addons:
+  apt:
+    sources:
+      - google-chrome
+    packages:
+      - google-chrome-stable
 
 before_script:
+  - sh -e /etc/init.d/xvfb start
   - npm i -g yarn
   - yarn
   - cd src && mv config.sample.js config.js

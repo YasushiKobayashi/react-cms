@@ -105,7 +105,9 @@ export default class Login extends Component {
       userError,
     } = this.state;
 
+    const idType = type !== 'SIGN IN' ? 'signin' : 'signup';
     const name = type !== 'SIGN IN' ? (<TextField
+      id={`name_${idType}`}
       floatingLabelText='name'
       onChange={(event) => { this.handleRegister(event, 'name'); }}
       value={user.name}
@@ -114,10 +116,11 @@ export default class Login extends Component {
     />) : false;
 
     return (
-      <div styleName='conteiner'>
+      <div id={`conteiner_${idType}`} styleName='conteiner'>
         <Paper style={style.paper} zDepth={1} >
           {name}
           <TextField
+            id={`email_${idType}`}
             floatingLabelText='email'
             onChange={(event) => { this.handleRegister(event, 'email'); }}
             value={user.email}
@@ -126,6 +129,7 @@ export default class Login extends Component {
             type="email"
           />
           <TextField
+            id={`password_${idType}`}
             floatingLabelText='password'
             onChange={(event) => { this.handleRegister(event, 'password'); }}
             value={user.password}
@@ -135,6 +139,7 @@ export default class Login extends Component {
           />
           <RaisedButton
             styleName='btn'
+            id={`btn_${idType}`}
             label={type}
             onClick={this.handlePost}
             primary

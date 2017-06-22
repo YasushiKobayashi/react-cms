@@ -55,7 +55,7 @@ module.exports = [
           js: ['bundle.js'],
         },
       }),
-    ]
+    ],
   }, {
     entry: [
       './public/assets/css/style.scss',
@@ -72,14 +72,14 @@ module.exports = [
             fallback: 'style-loader',
             loader: [
               'css-loader',
-              'postcss-loader'
+              'postcss-loader',
             ],
           }),
-        }
+        },
       ],
     },
     plugins: [
       new ExtractTextPlugin('style.css'),
     ],
-  }
+  },
 ];

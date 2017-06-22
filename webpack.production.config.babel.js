@@ -48,14 +48,14 @@ module.exports = [
             fallback: 'style-loader',
             loader: [
               'css-loader?minimize',
-              'postcss-loader'
+              'postcss-loader',
             ],
           }),
-        }
+        },
       ],
     },
     plugins: [
       new ExtractTextPlugin('style.css'),
     ],
-  }
+  },
 ];
