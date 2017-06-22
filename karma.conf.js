@@ -11,8 +11,8 @@ module.exports = (config) => {
       '__tests__/karma/*.spec.js',
     ],
     preprocessors: {
-      'src/**/*.js': ['webpack', 'sourcemap'],
-      '__tests__/karma/*.spec.js': ['webpack', 'sourcemap'],
+      'src/**/*.js': ['webpack'],
+      '__tests__/karma/*.spec.js': ['webpack'],
     },
 
     webpack: {
@@ -36,9 +36,7 @@ module.exports = (config) => {
     plugins: [
       'karma-webpack',
       'karma-mocha',
-      'karma-sourcemap-loader',
       'karma-chrome-launcher',
-      'karma-phantomjs-launcher',
     ],
     babelPreprocessor: {
       options: {
