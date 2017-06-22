@@ -43,6 +43,5 @@ describe('ListView', () => {
     const wrapper = shallow(<ContentList {...props} />);
     expect(wrapper.find('dl').at(0).key()).to.equal('1');
     expect(wrapper.find('dl').at(1).key()).to.equal('2');
-    expect(wrapper.contains('WIP')).to.equal(false);
   });
 });
