@@ -11,6 +11,10 @@ machine:
     PATH: $PATH:$GOPATH/bin
     DOCUMENT_ENV: test
     GO15VENDOREXPERIMENT: 1
+  post:
+    - ./daemon:
+      background: true
+    - sleep 5
 
 database:
   override:
