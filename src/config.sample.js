@@ -5,8 +5,8 @@ function config(setting) {
 }
 
 const apiUrl = config({
-  develop: '//localhost:9000/',
-  production: '//api.hoge.jp/',
+  develop: '//localhost:5000/',
+  production: '//localhost:5000/',
 });
 
 const siteTitle = config({
@@ -16,7 +16,7 @@ const siteTitle = config({
 
 const url = config({
   develop: '//localhost:7000/',
-  production: '//hoge.jp/',
+  production: '//localhost:3000/',
 });
 
 const fbAppId = config({
