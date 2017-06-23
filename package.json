@@ -17,7 +17,7 @@
   ],
   "scripts": {
     "server": "npm run server:stop && npm run server:start",
-    "server:stop": "forever stop -c node server.bundle.js",
+    "server:stop": "pgrep -f 'server.bundle.js' | xargs kill",
     "server:start": "forever start -c node server.bundle.js",
     "build": "NODE_ENV=production npm run build:client && npm run build:server",
     "build:client": "webpack --config webpack.production.config.babel.js --progress --profile --colors",

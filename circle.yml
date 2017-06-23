@@ -38,4 +38,6 @@ test:
     - npm run flow
     - npm run test
     - npm run build
+    - npm run server
+    - python selenium/test_webdriver.py
     - exit 0
