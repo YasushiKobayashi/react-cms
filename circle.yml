@@ -45,4 +45,5 @@ test:
     - npm run build
     - npm run server
     - python selenium/test_webdriver.py
+    - mv selenium/img $CIRCLE_ARTIFACTS
     - exit 0
