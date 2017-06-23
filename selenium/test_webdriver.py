@@ -14,7 +14,7 @@ class TestWebdriver(unittest.TestCase):
         self.WEIT = 30
         self.SLEEP = 2
 
-    def test_新規登録失敗（アドレス不正）(self):
+    def test_アドレス不正なため新規登録失敗(self):
         try:
             driver = self.driver
             driver.get(self.URL)
