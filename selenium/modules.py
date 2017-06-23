@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import time
+import os
+
+from datetime import datetime
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -9,20 +12,26 @@ from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import NoSuchElementException
 
 SLEEP = 2
+now = datetime.now().strftime('%Y%m%d%H%M%S')
 
 
 def start_firefox():
     driver = webdriver.Firefox()
+    driver.set_window_size(1366, 768)
     return driver
 
 
 def start_chrome():
     driver = webdriver.Chrome()
+    driver.set_window_size(1366, 768)
     return driver
 
 
-def take_screen_shot(driver):
-    driver.save_screenshot()
+def take_screen_shot(driver, filename):
+    filename = 'img/' + filename + now + '.png'
+    path = os.path
+    file_path = path.join(path.dirname(path.abspath(__file__)), filename)
+    driver.save_screenshot(file_path)
 
 
 def login_success(driver):
