@@ -2,6 +2,7 @@
 
 import time
 import os
+import logging
 
 from datetime import datetime
 
@@ -10,6 +11,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+
 
 SLEEP = 2
 now = datetime.now().strftime('%Y%m%d%H%M%S')
@@ -22,13 +25,34 @@ def start_firefox():
 
 
 def start_chrome():
+    d = DesiredCapabilities.CHROME
+    d['loggingPrefs'] = {'browser': 'ALL'}
     driver = webdriver.Chrome()
     driver.set_window_size(1366, 768)
     return driver
 
 
-def take_screen_shot(driver, filename):
-    filename = 'img/' + filename + now + '.png'
+def print_chrome_console(driver, method):
+    log_message = method + ' start log'
+    log(log_message, 'console')
+
+    for entry in driver.get_log('browser'):
+        log(entry, 'console')
+
+    log_message = method + ' end log'
+    log(log_message, 'console')
+
+
+def log(message, log_name):
+    path = os.path
+    log_name = 'log/' + log_name + '.log'
+    log_file = path.join(path.dirname(path.abspath(__file__)), log_name)
+    logging.basicConfig(level=logging.DEBUG, filename=log_file)
+    logging.debug(message)
+
+
+def take_screen_shot(driver, method):
+    filename = 'log/' + method + now + '.png'
     path = os.path
     file_path = path.join(path.dirname(path.abspath(__file__)), filename)
     driver.save_screenshot(file_path)

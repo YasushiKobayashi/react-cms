@@ -37,4 +37,4 @@ public/assets/img
 *.bundle.js
 bundle.js
 config.js
-selenium/img/
+selenium/log
