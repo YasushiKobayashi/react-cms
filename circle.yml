@@ -27,15 +27,15 @@ dependencies:
     - pip install selenium
     - git clone https://github.com/YasushiKobayashi/go-api.git
     - curl https://glide.sh/get | sh
-    - cd go-api/src/document/config && mv sample.tml config.tml
-    - cd go-api/src/document/config && mv env.sample env.go
-    - cd go-api/src/document && glide install
-    - cd go-api/src/document && go build main.go
-    - cd go-api/src/document && ./main &
-    - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-    - sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
-    - sudo apt-get update
-    - sudo apt-get --only-upgrade install google-chrome-stable
+    - cd go-api/src/app/config && mv sample.tml config.tml
+    - cd go-api/src/app && glide install
+    - cd go-api/src/app && go build main.go
+    - cd go-api/src/app && ./main &
+    # - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+    # - sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+    # - sudo apt-get update
+    # - sudo apt-get --only-upgrade install google-chrome-stable
+    - sudo apt-get install chromium-chromedriver
     - npm install -g yarn mocha
     - yarn
     - npm rebuild node-sass
@@ -48,6 +48,6 @@ test:
     - npm run test
     - npm run build
     - npm run server
-    - python selenium/test_webdriver.py
-    - mv selenium/log $CIRCLE_ARTIFACTS
+    - npm run test:selenium
+    - cp selenium/log/* $CIRCLE_ARTIFACTS
     - exit 0

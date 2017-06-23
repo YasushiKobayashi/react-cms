@@ -5,7 +5,7 @@ import unittest
 import time
 import inspect
 
-from modules import start_chrome, send_keys_by_id, login_success, take_screen_shot, print_chrome_console
+from modules import start_chrome, start_firefox, send_keys_by_id, login_success, take_screen_shot, print_chrome_console
 
 
 class TestWebdriver(unittest.TestCase):

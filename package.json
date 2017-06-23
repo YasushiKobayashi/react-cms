@@ -30,6 +30,7 @@
     "test:mocha": "mocha --compilers js:babel-register --recursive $(find __tests__/mocha -name '*.spec.js')",
     "test:karma": "karma start --single-run",
     "karma:watch": "karma start",
+    "test:selenium": "python selenium/test_webdriver.py",
     "lint": "npm run lint:js && npm run lint:sass",
     "lint:js": "eslint --ext js --ext jsx src",
     "lint:sass": "sass-lint -c .sass-lint.yml -q -v",
