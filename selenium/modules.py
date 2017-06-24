@@ -27,7 +27,7 @@ def start_firefox():
 def start_chrome():
     d = DesiredCapabilities.CHROME
     d['loggingPrefs'] = {'browser': 'ALL'}
-    driver = webdriver.Chrome('/usr/lib/chromium-browser/chromedriver')
+    driver = webdriver.Chrome('/usr/local/share/chromedriver')
     driver.set_window_size(1366, 768)
     return driver
 
