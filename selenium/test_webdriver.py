@@ -3,8 +3,9 @@
 
 import unittest
 import time
+import inspect
 
-from modules import start_chrome, send_keys_by_id, login_success
+from modules import start_chrome, start_firefox, send_keys_by_id, login_success, take_screen_shot, print_chrome_console
 
 
 class TestWebdriver(unittest.TestCase):
@@ -14,8 +15,9 @@ class TestWebdriver(unittest.TestCase):
         self.WEIT = 30
         self.SLEEP = 2
 
-    def test_新規登録失敗（アドレス不正）(self):
+    def test_アドレス不正なため新規登録失敗(self):
         try:
+            method = inspect.currentframe().f_code.co_name
             driver = self.driver
             driver.get(self.URL)
             driver.implicitly_wait(self.WEIT)
@@ -24,6 +26,8 @@ class TestWebdriver(unittest.TestCase):
             send_keys_by_id(driver, 'password_signup', 'pythonpython')
             driver.find_element_by_id('btn_signup').click()
             time.sleep(self.SLEEP)
+            take_screen_shot(driver, method)
+            print_chrome_console(driver, method)
             token = driver.get_cookie('token')
             self.assertEqual(None, token)
         except Exception as e:
@@ -32,8 +36,10 @@ class TestWebdriver(unittest.TestCase):
         finally:
             driver.quit()
 
+
     def test_新規登録成功(self):
         try:
+            method = inspect.currentframe().f_code.co_name
             driver = self.driver
             driver.get(self.URL)
             driver.implicitly_wait(self.WEIT)
@@ -41,8 +47,11 @@ class TestWebdriver(unittest.TestCase):
             send_keys_by_id(driver, 'email_signup', 'python@gmail.com')
             send_keys_by_id(driver, 'password_signup', 'pythonpython')
             driver.find_element_by_id('btn_signup').click()
+
             time.sleep(self.SLEEP)
             token = driver.get_cookie('token')
+            take_screen_shot(driver, method)
+            print_chrome_console(driver, method)
             self.assertNotEqual('', token['value'])
         except Exception as e:
             print(e)
@@ -50,13 +59,17 @@ class TestWebdriver(unittest.TestCase):
         finally:
             driver.quit()
 
+
     def test_ログイン成功(self):
         try:
+            method = inspect.currentframe().f_code.co_name
             driver = self.driver
             driver.get(self.URL)
             driver.implicitly_wait(self.WEIT)
             login_success(driver)
             token = driver.get_cookie('token')
+            take_screen_shot(driver, method)
+            print_chrome_console(driver, method)
             self.assertNotEqual('', token['value'])
         except Exception as e:
             print(e)

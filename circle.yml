@@ -4,10 +4,34 @@ machine:
     version: 8.1.0
   python:
     version: 3.6.0
+  services:
+    - mysql
+  environment:
+    GOPATH: $HOME/$CIRCLE_PROJECT_REPONAME/go-api
+    PATH: $PATH:$GOPATH/bin
+    # DISPLAY: 1
+    DOCUMENT_ENV: test
+    GO15VENDOREXPERIMENT: 1
+  # post:
+  #   - ./daemon:
+  #     background: true
+  #   - sleep 5
+
+database:
+  override:
+    - 'mysql -u ubuntu -e "CREATE DATABASE IF NOT EXISTS circle_default DEFAULT CHARSET utf8"'
+    - 'mysql -u ubuntu -e "CREATE DATABASE IF NOT EXISTS circle_test DEFAULT CHARSET utf8"'
+
 
 dependencies:
   pre:
-    - pip install selenium
+    # - pip install selenium
+    # - git clone https://github.com/YasushiKobayashi/go-api.git
+    # - curl https://glide.sh/get | sh
+    # - cd go-api/src/app/config && mv sample.tml config.tml
+    # - cd go-api/src/app && glide install
+    # - cd go-api/src/app && go build main.go
+    # - cd go-api/src/app && ./main &
     - npm install -g yarn mocha
     - yarn
     - npm rebuild node-sass
@@ -19,4 +43,7 @@ test:
     - npm run flow
     - npm run test
     - npm run build
+    # - npm run server
+    # - npm run test:selenium
+    # - cp selenium/log/* $CIRCLE_ARTIFACTS
     - exit 0
