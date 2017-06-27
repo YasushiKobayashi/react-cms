@@ -9,7 +9,7 @@ machine:
   environment:
     GOPATH: $HOME/$CIRCLE_PROJECT_REPONAME/go-api
     PATH: $PATH:$GOPATH/bin
-    DISPLAY: 1
+    # DISPLAY: 1
     DOCUMENT_ENV: test
     GO15VENDOREXPERIMENT: 1
   # post:
