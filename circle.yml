@@ -45,5 +45,5 @@ test:
     - npm run build
     # - npm run server
     # - npm run test:selenium
-    - cp selenium/log/* $CIRCLE_ARTIFACTS
+    # - cp selenium/log/* $CIRCLE_ARTIFACTS
     - exit 0
