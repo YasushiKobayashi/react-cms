@@ -5,7 +5,7 @@
 https://github.com/YasushiKobayashi/go-api
 
 ### set up
-```javascript
+```bash
 yarn
 cd src && cp config.sample.js config.js
 // start webpack dev server
@@ -16,7 +16,7 @@ npm run dev
 ```
 
 ### test
-```javascript
+```bash
 npm run lint
 npm run test
 ```
@@ -32,18 +32,35 @@ echo 'eval "$(nodenv init -)"' >> ~/.bash_profile
 source ~/.bash_profile
 ```
 
+### run e2e test
+```bash
+brew install pyenv
+echo 'export PYENV_ROOT="${HOME}/.pyenv"' >> ~/.bash_profile
+echo 'export PATH="${PYENV_ROOT}/bin:$PATH"' >> ~/.bash_profile
+echo 'eval "$(pyenv init -)"' >> ~/.bash_profile
+
+npm run test:selenium
+```
 
 ### directory
 ```
-├── assets
+├── __tests__
+├── selenium
+├── public
 ├── src
 │   ├── index.jsx
+│   ├── server.jsx
 │   ├── config.js
 │   ├── actions
+│   ├── api
+│   ├── model
+│   ├── reducers
+│   ├── sagas
+│   ├── store
+│   ├── types
 │   ├── components
 │   ├── containers
 │   ├── parts
-│   ├── model
-│   ├── test
+│   ├── ssrCompornents
 │   ├── utils
 ```
