@@ -14,11 +14,11 @@ import './index.scss';
 
 class Mypage extends Component {
   props: {
-    user: UserType,
+    user: UserType;
     actions: {
-      setUserInfo: Function,
-      getUserInfo: Function,
-      updateUserInfo: Function,
+      setUserInfo: Function;
+      getUserInfo: Function;
+      updateUserInfo: Function;
     },
     mypage: {
       user: UserType;
@@ -111,13 +111,13 @@ class Mypage extends Component {
             />
           </div>
         </div>
+        <h2>Contents list</h2>
+        <ContentList archives={archives} user={user} />
         <Modal
           message={msessage}
           isModalOpen={isModalOpen}
           handleModal={this.handleModal}
         />
-        <h2>Contents list</h2>
-        <ContentList archives={archives} user={user} />
       </div>
     );
   }

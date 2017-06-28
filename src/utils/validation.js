@@ -12,13 +12,26 @@ export default class {
     return res;
   }
 
+  /**
+   * [validLengthMin description]
+   * @param  {[type]} text   [description]
+   * @param  {[type]} length [description]
+   * @param  {[type]} name   [description]
+   * @return {[type]}        [description]
+   */
   static validLengthMin(text, length, name) {
     let res = '';
     if (text.length < length) res = `${name}は${length}文字以上で設定して下さい。`;
     return res;
   }
 
-
+  /**
+   * [validLengthMax description]
+   * @param  {[type]} text   [description]
+   * @param  {[type]} length [description]
+   * @param  {[type]} name   [description]
+   * @return {[type]}        [description]
+   */
   static validLengthMax(text, length, name) {
     let res = '';
     if (text.length > length) res = `${name}は${length}文字以下で設定して下さい。`;

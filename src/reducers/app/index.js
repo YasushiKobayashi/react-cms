@@ -1,15 +1,24 @@
 import * as actionTypes from '../../actions/actionTypes';
 
-
 const initialState = {
   isLogin: false,
   isLoading: true,
   isSsr: false,
+  message: '',
   user: {
     id: null,
     name: '',
     email: '',
     image: '',
+  },
+  signUpUser: {
+    name: '',
+    email: '',
+    password: '',
+  },
+  signInUser: {
+    name: '',
+    email: '',
   },
 };
 
@@ -21,6 +30,7 @@ export default function app(state = initialState, action) {
         isLoading: false,
         isLogin: true,
         user: action.user,
+        message: '',
       };
     case actionTypes.LOGOUT:
       return {
@@ -29,6 +39,12 @@ export default function app(state = initialState, action) {
         isLogin: false,
         isSSr: false,
         user: initialState.user,
+        message: '',
+      };
+    case actionTypes.LOGIN_ERROR:
+      return {
+        ...state,
+        message: action.message,
       };
     case actionTypes.typeSsr(actionTypes.GET_USER):
       return {

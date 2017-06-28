@@ -27,6 +27,9 @@ class App extends Component {
     },
     app: {
       user: UserType;
+      signUpUser: UserType;
+      signInUser: UserType;
+      message: string;
       isLoading: boolean;
       isLogin: boolean;
     },
@@ -36,7 +39,14 @@ class App extends Component {
   }
 
   render() {
-    const { isLoading, isLogin, user } = this.props.app;
+    const {
+      isLoading,
+      isLogin,
+      user,
+      message,
+      signInUser,
+      signUpUser,
+    } = this.props.app;
 
     const {
       login,
@@ -52,7 +62,11 @@ class App extends Component {
     );
 
     const render = (isLoading) ? <Loading /> :
-      (isLogin) ? children : <LoginComponent login={login} regist={regist} user={user} />;
+      (isLogin) ? children :
+      <LoginComponent
+        login={login} regist={regist} message={message}
+        signUpUser={signUpUser} signInUser={signInUser}
+      />;
 
     return (
       <MuiThemeProvider muiTheme={theme}>

@@ -23,6 +23,7 @@ export const typeSsr = (type) => {
 // status
 export const LOGINED = 'LOGINED';
 export const NOT_LOGIN = 'NOT_LOGIN';
+export const LOGIN_ERROR = 'LOGIN_ERROR';
 
 // user
 export const LOGIN = 'LOGIN';
