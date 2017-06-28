@@ -9,12 +9,16 @@ export const regist = (payload) => {
   return createAction(actionTypes.REGIST, payload);
 };
 
-export const getUserArticle = (payload) => {
-  return createAction(actionTypes.typeReqest(actionTypes.USER_ARTICLE), payload);
+export const setUserInfo = (payload) => {
+  return createAction(actionTypes.typeReqest(actionTypes.SET_USER), payload);
 };
 
 export const getUserInfo = (payload) => {
   return createAction(actionTypes.typeReqest(actionTypes.GET_USER), payload);
+};
+
+export const updateUserInfo = (payload) => {
+  return createAction(actionTypes.typeReqest(actionTypes.UPDATE_USER), payload);
 };
 
 export function logout() {

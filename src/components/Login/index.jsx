@@ -71,10 +71,7 @@ export default class Login extends Component {
   handlePost() {
     const { user } = this.state;
     const { type, sendUserInfo } = this.props;
-    const urlType = (type !== 'SIGN IN') ? 'register' : 'login';
-    console.log(urlType);
     if (this.handelValid(type)) {
-      // user.urlType = urlType;
       sendUserInfo(user);
     }
   }

@@ -67,24 +67,14 @@ export function* regist(payload) {
   }
 }
 
-
-export function* update(payload) {
-  const param = payload.payload;
+export function* setUserInfo() {
+  const user = yield select(selectors.getUser);
+  yield put({
+    type: actionTypes.typeLoaded(actionTypes.SET_USER),
+    user: user,
+  });
   try {
-    const user = yield call(User.put(param));
-    yield put({
-      type: actionTypes.LOGINED,
-      user: user,
-    });
-  } catch (e) {
-    console.log(e);
-    yield fork(notLogin);
-  }
-}
-
-export function* getUserArticle() {
-  try {
-    const archives = yield call(Archive.getAllArticle('post/user'));
+    const archives = yield call(Archive.getAllArticle, 'post/user');
     yield put({
       type: actionTypes.typeLoaded(actionTypes.USER_ARTICLE),
       archives: archives,
@@ -93,6 +83,22 @@ export function* getUserArticle() {
     console.log(e);
     yield put({
       type: actionTypes.typeError(actionTypes.USER_ARTICLE),
+    });
+  }
+}
+
+export function* updateUserInfo(payload) {
+  const user = payload.payload;
+  try {
+    User.put(user);
+    yield put({
+      type: actionTypes.typeLoaded(actionTypes.UPDATE_USER),
+      msessage: 'ユーザー情報の更新を行いました。',
+    });
+  } catch (e) {
+    console.log(e);
+    yield put({
+      type: actionTypes.typeError(actionTypes.UPDATE_USER),
     });
   }
 }
