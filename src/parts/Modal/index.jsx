@@ -17,7 +17,9 @@ export default class Modal extends Component {
         modal={false}
         open={isModalOpen}
       >
-        {message}
+        <p>
+          {message}
+        </p>
       </Dialog>
     );
   }
