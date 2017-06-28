@@ -11,6 +11,13 @@ function* notLogin() {
   });
 }
 
+function* errorMessage(message) {
+  console.log(message);
+  yield put({
+    type: actionTypes.LOGIN_ERROR,
+    message,
+  });
+}
 
 export function* isLogin() {
   const token = cookie.read('token');
@@ -40,6 +47,9 @@ const handleLogin = (async (payload, urlType) => {
   const param = payload.payload;
   try {
     const tokenObj = await request.POST(apiUrl('v1', urlType), param);
+    if (tokenObj.token === '') {
+      throw new Error('トークンの取得エラー');
+    }
     cookie.write('token', tokenObj.token);
     return true;
   } catch (e) {
@@ -49,11 +59,13 @@ const handleLogin = (async (payload, urlType) => {
 
 export function* login(payload) {
   try {
+    console.log('ログインしよう');
     yield call(handleLogin, payload, 'login');
     yield fork(isLogin);
   } catch (e) {
+    console.log('ログインに失敗しました。');
     console.log(e);
-    yield fork(notLogin);
+    yield fork(errorMessage, 'ログインに失敗しました。');
   }
 }
 
@@ -63,7 +75,7 @@ export function* regist(payload) {
     yield fork(isLogin);
   } catch (e) {
     console.log(e);
-    yield fork(notLogin);
+    yield fork(errorMessage, '新規登録に失敗しました。');
   }
 }
 
