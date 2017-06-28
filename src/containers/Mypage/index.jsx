@@ -24,14 +24,13 @@ class Mypage extends Component {
       user: UserType;
       archives: Array<ArticleType>;
       isLoading: boolean;
-      isModalOpen: boolean;
       msessage: string;
     },
   };
   state: {
     isDropZone: boolean;
     isModalOpen: boolean;
-  }
+  };
   setState: Function;
   handleDrag: Function;
   handleUploadImage: Function;
@@ -56,7 +55,7 @@ class Mypage extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.mypage.isModalOpen) {
+    if (nextProps.mypage.msessage !== '') {
       this.handleModal();
     }
   }

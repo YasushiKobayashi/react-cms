@@ -4,7 +4,6 @@ const initialState = {
   archives: [],
   isLoading: true,
   msessage: '',
-  isModalOpen: false,
   user: {
     id: null,
     name: '',
@@ -19,27 +18,26 @@ export default function mypage(state = initialState, action) {
       return {
         ...state,
         msessage: action.msessage,
-        isModalOpen: true,
       };
     case actionTypes.typeLoaded(actionTypes.SET_USER):
       return {
         ...state,
         user: action.user,
         isLoading: false,
-        isModalOpen: false,
+        msessage: '',
       };
     case actionTypes.typeLoaded(actionTypes.USER_ARTICLE):
       return {
         ...state,
         archives: action.archives,
         isLoading: false,
-        isModalOpen: false,
+        msessage: '',
       };
     case actionTypes.typeError(actionTypes.USER_ARTICLE):
       return {
         ...state,
         isLoading: false,
-        isModalOpen: false,
+        msessage: '',
       };
     default:
       return state;
