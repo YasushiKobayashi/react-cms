@@ -9,47 +9,60 @@ import type { ArticleType } from '../../types/ArticleType';
 import { request } from '../../utils';
 
 import { ContentList, Login } from '../../components';
-import { DropZone, Loading } from '../../parts';
+import { DropZone, Loading, Modal } from '../../parts';
 import './index.scss';
 
 class Mypage extends Component {
   props: {
-    actions: Array<Function>,
     user: UserType,
     actions: {
-      getUserArticle: Function,
+      setUserInfo: Function,
       getUserInfo: Function,
+      updateUserInfo: Function,
     },
     mypage: {
+      user: UserType;
       archives: Array<ArticleType>;
-      isLoading: boolean,
+      isLoading: boolean;
+      isModalOpen: boolean;
+      msessage: string;
     },
   };
   state: {
     isDropZone: boolean;
+    isModalOpen: boolean;
   }
   setState: Function;
   handleDrag: Function;
   handleUploadImage: Function;
   updateUserInfo: Function;
+  handleModal: Function;
 
   constructor() {
     super();
     this.state = {
       isDropZone: false,
+      isModalOpen: false,
     };
 
     this.handleDrag = this.handleDrag.bind(this);
     this.handleUploadImage = this.handleUploadImage.bind(this);
     this.updateUserInfo = this.updateUserInfo.bind(this);
+    this.handleModal = this.handleModal.bind(this);
   }
 
   componentWillMount() {
-    this.props.actions.getUserArticle();
+    this.props.actions.setUserInfo();
   }
 
-  updateUserInfo() {
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.mypage.isModalOpen) {
+      this.handleModal();
+    }
+  }
 
+  updateUserInfo(user: UserType) {
+    this.props.actions.updateUserInfo(user);
   }
 
   handleUploadImage(file: any) {
@@ -69,10 +82,15 @@ class Mypage extends Component {
     });
   }
 
+  handleModal() {
+    this.setState({
+      isModalOpen: !this.state.isModalOpen,
+    });
+  }
+
   render() {
-    const { user } = this.props;
-    const { archives, isLoading } = this.props.mypage;
-    const { isDropZone } = this.state;
+    const { archives, isLoading, user, msessage } = this.props.mypage;
+    const { isDropZone, isModalOpen } = this.state;
     if (isLoading) return <Loading />;
 
     return (
@@ -82,11 +100,11 @@ class Mypage extends Component {
             <Login
               type='Update'
               user={user}
-              updateUserInfo={this.updateUserInfo}
+              sendUserInfo={this.updateUserInfo}
             />
           </div>
           <div styleName='image' onDragOver={this.handleDrag} onDragLeave={this.handleDrag} >
-            <img src={user.image} alt={user.name} />
+            <img src={this.props.user.image} alt={this.props.user.name} />
             <DropZone
               isDropZone={isDropZone}
               handleDragExit={this.handleDrag}
@@ -94,6 +112,11 @@ class Mypage extends Component {
             />
           </div>
         </div>
+        <Modal
+          message={msessage}
+          isModalOpen={isModalOpen}
+          handleModal={this.handleModal}
+        />
         <h2>Contents list</h2>
         <ContentList archives={archives} user={user} />
       </div>
@@ -102,7 +125,6 @@ class Mypage extends Component {
 }
 
 const mapState = (state) => {
-  console.log(state.mypage);
   return {
     mypage: state.mypage,
   };

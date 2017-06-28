@@ -47,7 +47,7 @@ class App extends Component {
     const children = cloneElement(
       this.props.children,
       {
-        user: user,
+        user,
       },
     );
 

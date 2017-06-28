@@ -30,7 +30,9 @@ export const REGIST = 'REGIST';
 export const LOGOUT = 'LOGOUT';
 
 export const USER_ARTICLE = 'USER_ARTICLE';
+export const SET_USER = 'SET_USER';
 export const GET_USER = 'GET_USER';
+export const UPDATE_USER = 'UPDATE_USER';
 
 // archive
 export const ALL_ARCHIVES = 'ALL_ARCHIVES';

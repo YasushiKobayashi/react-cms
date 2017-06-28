@@ -15,8 +15,10 @@ export default function* rootSaga() {
     takeEvery(actionTypes.REGIST, user.regist),
 
     // user関連
-    takeEvery(actionTypes.typeReqest(actionTypes.USER_ARTICLE), user.getUserArticle),
+    takeEvery(actionTypes.typeReqest(actionTypes.SET_USER), user.setUserInfo),
     takeEvery(actionTypes.typeReqest(actionTypes.GET_USER), user.isLogin),
+    takeEvery(actionTypes.typeReqest(actionTypes.UPDATE_USER), user.updateUserInfo),
+
     // archive関連
     takeEvery(actionTypes.typeReqest(actionTypes.ALL_ARCHIVES), archives.loadAll),
     takeEvery(actionTypes.typeReqest(actionTypes.SORT), archives.sortArticles),
