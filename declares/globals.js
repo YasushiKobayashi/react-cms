@@ -25,6 +25,10 @@ declare module 'clipboard-js' {
   declare var exports: any;
 }
 
+declare module 'react-helmet' {
+  declare var exports: any;
+}
+
 declare module 'moment' {
   declare var exports: any;
 }

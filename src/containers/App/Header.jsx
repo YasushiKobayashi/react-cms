@@ -25,7 +25,6 @@ export default class Header extends Component {
     logout: Function;
   };
   state: {
-    siteTitle: string;
     mainMenu: {
       open: boolean;
       anchorEl: any;
