@@ -2,11 +2,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { Helmet } from 'react-helmet';
 
 import * as actions from '../../actions/userAction';
 import type { UserType } from '../../types/UserType';
 import type { ArticleType } from '../../types/ArticleType';
-import { request } from '../../utils';
+import * as constant from '../../constant';
+import { request, hamlet } from '../../utils';
 
 import { ContentList, Login } from '../../components';
 import { DropZone, Loading, Modal } from '../../parts';
@@ -94,6 +96,10 @@ class Mypage extends Component {
 
     return (
       <div styleName='content'>
+        <Helmet
+          title={hamlet.title(constant.TITLE_MYPAGE)}
+          meta={hamlet.meta(constant.TITLE_MYPAGE)}
+        />
         <div styleName='loginWrapper'>
           <div styleName='login'>
             <Login

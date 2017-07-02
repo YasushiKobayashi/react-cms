@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { Helmet } from 'react-helmet';
 import { SelectField, MenuItem, TextField } from 'material-ui';
 import SearchedFor from 'material-ui/svg-icons/action/youtube-searched-for';
 import ViewList from 'material-ui/svg-icons/action/view-list';
@@ -10,6 +11,8 @@ import Sort from 'material-ui/svg-icons/content/sort';
 import * as actions from '../../actions/archivesAction';
 import type { ArticleType } from '../../types/ArticleType';
 import type { CategoryType } from '../../types/CategoryType';
+import * as constant from '../../constant';
+import { hamlet } from '../../utils';
 
 import { ContentList } from '../../components';
 import { Loading } from '../../parts';
@@ -126,6 +129,10 @@ class Top extends Component {
 
     return (
       <div>
+        <Helmet
+          title={hamlet.title(constant.TITLE_TOP)}
+          meta={hamlet.meta(hamlet.title(constant.TITLE_TOP))}
+        />
         <div styleName='topHeader'>
           <div styleName='list'>
             <span>

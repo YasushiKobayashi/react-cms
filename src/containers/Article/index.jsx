@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { Helmet } from 'react-helmet';
 import { Link } from 'react-router';
 import Highlight from 'react-highlight';
 import Edit from 'material-ui/svg-icons/image/edit';
@@ -9,6 +10,7 @@ import Edit from 'material-ui/svg-icons/image/edit';
 import * as actions from '../../actions/articleAction';
 import type { UserType } from '../../types/UserType';
 import type { ArticleType } from '../../types/ArticleType';
+import { hamlet } from '../../utils';
 
 import { CommentList, CommentForm } from '../../components';
 import { Loading } from '../../parts';
@@ -78,6 +80,10 @@ class Article extends Component {
 
     return (
       <div styleName='container'>
+        <Helmet
+          title={hamlet.title(article.title)}
+          meta={hamlet.meta(article.title)}
+        />
         <div styleName='articleTitle'>
           <h1>
             <span styleName='wip' style={wipStyle} >WIP</span>
