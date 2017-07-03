@@ -18,7 +18,6 @@ export default class {
       .end((err, res) => {
         if (err) {
           reject(err);
-          throw new Error(err);
         } else {
           resolve(res.body);
         }
@@ -43,7 +42,6 @@ export default class {
       .end((err, res) => {
         if (err) {
           reject(err);
-          throw new Error(err);
         } else {
           resolve(res.body);
         }
@@ -68,7 +66,6 @@ export default class {
       .end((err, res) => {
         if (err) {
           reject(err);
-          throw new Error(err);
         } else {
           resolve(res.body);
         }

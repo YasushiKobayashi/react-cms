@@ -54,7 +54,6 @@ app.get('*', (req, res) => {
         try {
           const token = req.cookies.token;
           const fetchInfo = await serverContent(renderProps, token);
-          console.log(fetchInfo.title);
           const appHtml = renderToString(<Loading title={fetchInfo.title} />);
           res.status(200).send(renderPage(appHtml, head, fetchInfo.initialState));
         } catch (e) {
