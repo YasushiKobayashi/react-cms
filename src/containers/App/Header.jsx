@@ -25,7 +25,6 @@ export default class Header extends Component {
     logout: Function;
   };
   state: {
-    siteTitle: string;
     mainMenu: {
       open: boolean;
       anchorEl: any;
@@ -45,7 +44,6 @@ export default class Header extends Component {
   constructor() {
     super();
     this.state = {
-      siteTitle: config.siteTitle,
       mainMenu: {
         open: false,
         anchorEl: null,
@@ -114,7 +112,6 @@ export default class Header extends Component {
   render() {
     const { user, logout } = this.props;
     const {
-      siteTitle,
       mainMenu,
       subMenu,
     } = this.state;
@@ -136,7 +133,7 @@ export default class Header extends Component {
               onClick={(event) => { this.handleMainMenu(event, true); }}
             ><MenuIcon /></IconButton>}
           iconElementRight={picture}
-          title={<Link to='/'>{siteTitle}</Link>}
+          title={<Link to='/'>{config.siteTitle}</Link>}
         />
         <Popover
           open={mainMenu.open}

@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { Helmet } from 'react-helmet';
 import { TextField, RaisedButton } from 'material-ui';
 
 import * as actions from '../../actions/articleAction';
@@ -9,8 +10,9 @@ import type { ArticleType } from '../../types/ArticleType';
 import type { CategoryType } from '../../types/CategoryType';
 import type { UserType } from '../../types/UserType';
 import type { ValidType } from '../../types/ValidType';
+import * as constant from '../../constant';
 
-import { editContent, request } from '../../utils';
+import { editContent, request, hamlet } from '../../utils';
 
 import EditArticle from './EditArticle';
 import EditSide from './EditSide';
@@ -175,6 +177,10 @@ class Edit extends Component {
     return (
       <div>
         <div styleName='container'>
+          <Helmet
+            title={hamlet.title(constant.TITLE_EDIT)}
+            meta={hamlet.meta(constant.TITLE_EDIT)}
+          />
           <div styleName='content'>
             <TextField
               floatingLabelText='title'

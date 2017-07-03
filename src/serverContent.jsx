@@ -1,9 +1,9 @@
 import configureStore from './store/configureStore';
 import { User, Archive, Category } from './api';
-import config from './config';
+import * as constant from './constant';
 
 export default (async (props, token) => {
-  let title = `${config.siteTitle}`;
+  let title = constant.TITLE_LOGIN;
   const store = configureStore();
   const state = store.getState();
 
@@ -27,7 +27,9 @@ export default (async (props, token) => {
       state.top.categories = await Category.get(token);
       state.top.isLoading = false;
       state.top.isSsr = true;
+      title = constant.TITLE_TOP;
     }
+
     // article
     if (displayName.match(/Article/)) {
       const id = params.id;
@@ -35,26 +37,33 @@ export default (async (props, token) => {
       state.article.article = article;
       state.article.isLoading = false;
       state.article.isSsr = true;
-      title = `${article.title} | ${title}`;
+      title = article.title;
     }
+
     // edit
-    // if (displayName.match(/Edit/)) {
-    //   const id = params.id;
-    //   state.edit.categoryLists = await Category.get(token);
-    //   state.edit.article = await Archive.getSigleArticle(id, token);
-    //   state.edit.isLoading = false;
-    //   state.edit.isSsr = true;
-    // }
+    if (displayName.match(/Edit/)) {
+      // const id = params.id;
+      // state.edit.categoryLists = await Category.get(token);
+      // state.edit.article = await Archive.getSigleArticle(id, token);
+      // state.edit.isLoading = false;
+      // state.edit.isSsr = true;
+      title = constant.TITLE_EDIT;
+    }
+
+    // mypage
+    if (displayName.match(/Mypage/)) {
+      title = constant.TITLE_MYPAGE;
+    }
 
     return {
       initialState: state,
-      title: title,
+      title,
     };
   } catch (e) {
     console.log(e);
     return {
       initialState: state,
-      title: title,
+      title,
     };
   }
 });

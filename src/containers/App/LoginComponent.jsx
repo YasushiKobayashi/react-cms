@@ -1,9 +1,12 @@
 /* @flow */
 import React, { Component } from 'react';
+import { Helmet } from 'react-helmet';
 
 import type { UserType } from '../../types/UserType';
+import { hamlet } from '../../utils';
 
 import { Login } from '../../components';
+import * as constant from '../../constant';
 import { Modal } from '../../parts';
 import './LoginComponent.scss';
 
@@ -53,6 +56,10 @@ export default class LoginComponent extends Component {
 
     return (
       <div styleName='conteiner'>
+        <Helmet
+          title={hamlet.title(constant.TITLE_LOGIN)}
+          meta={hamlet.meta(constant.TITLE_LOGIN)}
+        />
         <div styleName='content'>
           <Login
             type='SIGN UP'

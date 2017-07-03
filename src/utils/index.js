@@ -7,3 +7,4 @@ export staticImage from './staticImage';
 export editContent from './editContent';
 export createAction from './createAction';
 export params from './params';
+export hamlet from './hamlet';
