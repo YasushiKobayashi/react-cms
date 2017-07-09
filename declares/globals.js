@@ -33,6 +33,30 @@ declare module 'moment' {
   declare var exports: any;
 }
 
+declare module 'codemirror' {
+  declare var exports: any;
+}
+
+declare module 'codemirror/mode/markdown/markdown' {
+  declare var exports: any;
+}
+
+declare module 'codemirror/mode/htmlmixed/htmlmixed' {
+  declare var exports: any;
+}
+
+declare module 'codemirror/addon/edit/continuelist' {
+  declare var exports: any;
+}
+
+declare module 'codemirror/addon/hint/html-hint' {
+  declare var exports: any;
+}
+
+declare module 'codemirror/keymap/sublime' {
+  declare var exports: any;
+}
+
 declare module './index.scss' {
   declare var exports: any;
 }

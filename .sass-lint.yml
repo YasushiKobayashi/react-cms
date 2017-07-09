@@ -2,7 +2,7 @@ files:
   include:
     - './**/*.scss'
   ignore:
-    - 'public/assets/css/plugin/*.scss'
+    - './public/assets/css/plugin/*.scss'
     - './node_modules/**/*.scss'
 options:
   formatter: stylish

@@ -1,4 +1,6 @@
 @import 'plugin/highlight.scss';
+@import 'plugin/codemirror.scss';
+@import 'plugin/monokai.scss';
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Yu Gothic', YuGothic, Verdana, Meiryo, 'M+ 1p', sans-serif;
@@ -58,4 +60,8 @@ blockquote {
   padding: 10px;
   margin: 10px;
   position: relative;
+}
+
+.CodeMirror {
+  height: 100%;
 }

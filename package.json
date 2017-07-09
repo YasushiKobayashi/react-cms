@@ -37,6 +37,7 @@
   },
   "dependencies": {
     "clipboard-js": "^0.3.3",
+    "codemirror": "^5.27.4",
     "cookie-parser": "^1.4.3",
     "express": "^4.15.2",
     "forever": "^0.15.3",

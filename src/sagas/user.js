@@ -59,7 +59,6 @@ const handleLogin = (async (payload, urlType) => {
 
 export function* login(payload) {
   try {
-    console.log('ログインしよう');
     yield call(handleLogin, payload, 'login');
     yield fork(isLogin);
   } catch (e) {
