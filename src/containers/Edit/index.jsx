@@ -12,7 +12,7 @@ import type { UserType } from '../../types/UserType';
 import type { ValidType } from '../../types/ValidType';
 import * as constant from '../../constant';
 
-import { editContent, request, hamlet } from '../../utils';
+import { editContent, hamlet } from '../../utils';
 
 import EditArticle from './EditArticle';
 import EditSide from './EditSide';
@@ -53,30 +53,28 @@ class Edit extends Component {
     },
   };
   state: {
-    selectionStart: number;
+    tabValue: string;
   };
   setState: Function;
   handleTitle: Function;
   handleContent: Function;
-  handleUploadImage: Function;
-  manegeContent: Function;
   sendArticle: Function;
   handleAddCat: Function;
   handleRemoveCat: Function;
+  handleTab: Function;
 
   constructor() {
     super();
     this.state = {
-      selectionStart: 0,
+      tabValue: tabMark,
     };
 
     this.handleTitle = this.handleTitle.bind(this);
     this.handleContent = this.handleContent.bind(this);
-    this.handleUploadImage = this.handleUploadImage.bind(this);
-    this.manegeContent = this.manegeContent.bind(this);
     this.sendArticle = this.sendArticle.bind(this);
     this.handleAddCat = this.handleAddCat.bind(this);
     this.handleRemoveCat = this.handleRemoveCat.bind(this);
+    this.handleTab = this.handleTab.bind(this);
   }
 
   componentWillMount() {
@@ -100,16 +98,10 @@ class Edit extends Component {
     this.props.actions.editArticle(article);
   }
 
-  handleContent(e, type) {
-    this.setState({
-      selectionStart: e.target.selectionStart,
-    });
-    this.manegeContent(e.target.value, type);
-  }
-
-  manegeContent(newContent, type) {
+  handleContent(newContent) {
+    const { tabValue } = this.state;
     const { article } = this.props.edit;
-    if (type === 'markdown') {
+    if (tabValue === 'markdown') {
       article.content = newContent;
       article.htmlContent = editContent.toHtml(newContent);
     } else {
@@ -117,24 +109,6 @@ class Edit extends Component {
       article.htmlContent = newContent;
     }
     this.props.actions.editArticle(article);
-  }
-  handleUploadImage(file, type) {
-    const { selectionStart } = this.state;
-    const { article } = this.props.edit;
-    (async () => {
-      try {
-        const upload = await request.UPLOAD('post/upload', file);
-        const imagePath = upload.path;
-        const addStr = (type === 'markdown') ? `\n![](${imagePath})\n` :
-          `\n<p><img src="${imagePath}" ></p>\n`;
-
-        let content = (type === 'markdown') ? article.content : article.htmlContent;
-        content = editContent.insertStr(content, selectionStart, addStr);
-        this.manegeContent(content, type);
-      } catch (e) {
-        console.log(e);
-      }
-    })();
   }
 
   sendArticle(flag) {
@@ -159,6 +133,12 @@ class Edit extends Component {
     this.props.actions.removeCategories(id);
   }
 
+  handleTab(value) {
+    this.setState({
+      tabValue: value,
+    });
+  }
+
   render() {
     const {
       article,
@@ -172,6 +152,9 @@ class Edit extends Component {
       editCatSlug,
       createCategory,
     } = this.props.actions;
+    const {
+      tabValue,
+    } = this.state;
     if (isLoading) return <Loading />;
 
     return (
@@ -190,12 +173,13 @@ class Edit extends Component {
               style={style.titleField}
             />
             <EditArticle
+              handleTab={this.handleTab}
               content={article.content}
               htmlContent={article.htmlContent}
               tabMark={tabMark}
               tabHtml={tabHtml}
+              tabValue={tabValue}
               handleContent={this.handleContent}
-              handleUploadImage={this.handleUploadImage}
             />
             <h3>category lists</h3>
             <Categories
