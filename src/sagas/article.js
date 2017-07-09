@@ -47,8 +47,9 @@ export function* editArticle(payload) {
   const article = payload.payload;
   const valid = yield select(selectors.getValidFromEdit);
   valid.titleError = validation.validTitle(article.title);
-
-  yield fork(validErr, valid);
+  if (valid.titleError) {
+    yield fork(validErr, valid);
+  }
   yield put({
     type: actionTypes.typeLoaded(actionTypes.SET_ARTICLE),
     article: article,

@@ -71,6 +71,7 @@ export default class EditArticle extends Component {
     this.mdEditor.on('cursorActivity', this.handleChange);
     this.mdEditor.on('dragstart', this.handleDrag);
     this.mdEditor.on('dragover', this.handleDrag);
+    this.mdEditor.setValue(this.props.content);
 
     const htmlEditor = {
       mode: 'text/html',
@@ -84,6 +85,7 @@ export default class EditArticle extends Component {
     this.htmlEditor.on('change', this.handleChange);
     this.htmlEditor.on('dragstart', this.handleDrag);
     this.htmlEditor.on('dragover', this.handleDrag);
+    this.htmlEditor.setValue(this.props.htmlContent);
   }
 
   componentWillReceiveProps(nextProps: any) {
@@ -102,6 +104,8 @@ export default class EditArticle extends Component {
 
   handleChange() {
     const {
+      content,
+      htmlContent,
       handleContent,
       tabValue,
       tabMark,
@@ -109,7 +113,10 @@ export default class EditArticle extends Component {
     const { mdEditor, htmlEditor } = this;
 
     const val = (tabValue === tabMark) ? mdEditor.getValue() : htmlEditor.getValue();
-    handleContent(val);
+    const prevVal = (tabValue === tabMark) ? content : htmlContent;
+    if (val !== prevVal) {
+      handleContent(val);
+    }
   }
 
   handleUploadImage(file: any) {
