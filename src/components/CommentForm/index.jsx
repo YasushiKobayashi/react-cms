@@ -20,6 +20,7 @@ export default class CommentForm extends Component {
   props: {
     sendComment: Function;
     comment: CommentType;
+    isCommentSaveFlg: boolean;
   };
   static defaultProps = {
     comment: {
@@ -59,6 +60,14 @@ export default class CommentForm extends Component {
     this.setState({
       content: this.props.comment.content,
     });
+  }
+
+  componentWillReceiveProps(nextProps: any) {
+    if (nextProps.isCommentSaveFlg) {
+      this.setState({
+        content: '',
+      });
+    }
   }
 
   handleTab(value: string) {
@@ -103,7 +112,6 @@ export default class CommentForm extends Component {
       tabValue,
       isDropZone,
     } = this.state;
-
     return (
       <div styleName='container'>
         <Tabs

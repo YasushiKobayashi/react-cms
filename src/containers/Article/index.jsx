@@ -32,6 +32,7 @@ class Article extends Component {
     article: {
       article: ArticleType;
       isLoading: boolean;
+      isCommentSaveFlg: boolean;
     },
   };
   createComment: Function;
@@ -60,7 +61,7 @@ class Article extends Component {
   }
 
   render() {
-    const { article, isLoading } = this.props.article;
+    const { article, isLoading, isCommentSaveFlg } = this.props.article;
     if (isLoading) return <Loading />;
 
     const cat = article.categories.map((category) => {
@@ -103,7 +104,10 @@ class Article extends Component {
           comments={article.comments} user={this.props.user}
           editComment={this.editComment}
         />
-        <CommentForm sendComment={this.createComment} />
+        <CommentForm
+          sendComment={this.createComment}
+          isCommentSaveFlg={isCommentSaveFlg}
+        />
       </div>
     );
   }
