@@ -34,8 +34,9 @@ export default class Article {
       obj.comments.map((commnet) => {
         return new Comment(commnet);
       }) : [];
-    this.categories = obj.categories.map((category) => {
+    this.categories = (obj.categories !== null) ?
+    obj.categories.map((category) => {
       return new Category(category);
-    });
+    }) : [];
   }
 }
