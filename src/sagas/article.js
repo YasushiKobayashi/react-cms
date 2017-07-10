@@ -65,7 +65,7 @@ export function* createArticle(payload) {
     browserHistory.push(`/article/${article.id}`);
   } catch (e) {
     console.log(e);
-    yield fork(getErr, actionTypes.SET_ARTICLE, '記事の取得に失敗しました。<br/>再度お試しください。');
+    yield fork(getErr, actionTypes.SET_ARTICLE, '記事の作成に失敗しました。<br/>再度お試しください。');
   }
 }
 
@@ -78,6 +78,6 @@ export function* putArticle(payload) {
     browserHistory.push(`/article/${article.id}`);
   } catch (e) {
     console.log(e);
-    yield fork(getErr, actionTypes.SET_ARTICLE, '記事の取得に失敗しました。<br/>再度お試しください。');
+    yield fork(getErr, actionTypes.SET_ARTICLE, '記事の更新に失敗しました。<br/>再度お試しください。');
   }
 }
