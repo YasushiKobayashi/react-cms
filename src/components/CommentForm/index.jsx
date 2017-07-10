@@ -70,14 +70,6 @@ export default class CommentForm extends Component {
     }
   }
 
-  // componentWillReceiveProps(props: any) {
-  //   if (props.isCommentSaveFlg) {
-  //     this.setState({
-  //       content: '',
-  //     });
-  //   }
-  // }
-
   handleTab(value: string) {
     this.setState({
       tabValue: value,
