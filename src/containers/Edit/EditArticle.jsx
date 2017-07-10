@@ -2,12 +2,6 @@
 import React, { Component } from 'react';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import _ from 'lodash';
-import CodeMirror from 'codemirror';
-import 'codemirror/mode/markdown/markdown';
-import 'codemirror/mode/htmlmixed/htmlmixed';
-import 'codemirror/addon/edit/continuelist';
-import 'codemirror/addon/hint/html-hint';
-import 'codemirror/keymap/sublime';
 
 import { request } from '../../utils';
 
@@ -47,45 +41,54 @@ export default class EditArticle extends Component {
   }
 
   componentDidMount() {
-    const editor = {
-      lineNumbers: true,
-      lineWrapping: true,
-      smartIndent: true,
-      matchBrackets: true,
-      dragDrop: true,
-      indentUnit: 4,
-      theme: 'monokai',
-      keyMap: 'sublime',
-    };
+    if (typeof window !== 'undefined' && typeof window.navigator !== 'undefined') {
+      const CodeMirror = require('codemirror');
+      require('codemirror/mode/markdown/markdown');
+      require('codemirror/mode/htmlmixed/htmlmixed');
+      require('codemirror/addon/edit/continuelist');
+      require('codemirror/addon/hint/html-hint');
+      require('codemirror/keymap/sublime');
 
-    const mdEditor = {
-      mode: 'markdown',
-      extraKeys: {
-        Enter: 'newlineAndIndentContinueMarkdownList',
-      },
-    };
-    this.mdEditor = CodeMirror.fromTextArea(this.refs.mdEditor,
-      _.merge(editor, mdEditor),
-    );
-    this.mdEditor.on('change', this.handleChange);
-    this.mdEditor.on('cursorActivity', this.handleChange);
-    this.mdEditor.on('dragstart', this.handleDrag);
-    this.mdEditor.on('dragover', this.handleDrag);
-    this.mdEditor.setValue(this.props.content);
+      const editor = {
+        lineNumbers: true,
+        lineWrapping: true,
+        smartIndent: true,
+        matchBrackets: true,
+        dragDrop: true,
+        indentUnit: 4,
+        theme: 'monokai',
+        keyMap: 'sublime',
+      };
 
-    const htmlEditor = {
-      mode: 'text/html',
-      extraKeys: {
-        'Ctrl-Space': 'autocomplete',
-      },
-    };
-    this.htmlEditor = CodeMirror.fromTextArea(this.refs.htmlEditor,
-      _.merge(editor, htmlEditor),
-    );
-    this.htmlEditor.on('change', this.handleChange);
-    this.htmlEditor.on('dragstart', this.handleDrag);
-    this.htmlEditor.on('dragover', this.handleDrag);
-    this.htmlEditor.setValue(this.props.htmlContent);
+      const mdEditor = {
+        mode: 'markdown',
+        extraKeys: {
+          Enter: 'newlineAndIndentContinueMarkdownList',
+        },
+      };
+      this.mdEditor = CodeMirror.fromTextArea(this.refs.mdEditor,
+        _.merge(editor, mdEditor),
+      );
+      this.mdEditor.on('change', this.handleChange);
+      this.mdEditor.on('cursorActivity', this.handleChange);
+      this.mdEditor.on('dragstart', this.handleDrag);
+      this.mdEditor.on('dragover', this.handleDrag);
+      this.mdEditor.setValue(this.props.content);
+
+      const htmlEditor = {
+        mode: 'text/html',
+        extraKeys: {
+          'Ctrl-Space': 'autocomplete',
+        },
+      };
+      this.htmlEditor = CodeMirror.fromTextArea(this.refs.htmlEditor,
+        _.merge(editor, htmlEditor),
+      );
+      this.htmlEditor.on('change', this.handleChange);
+      this.htmlEditor.on('dragstart', this.handleDrag);
+      this.htmlEditor.on('dragover', this.handleDrag);
+      this.htmlEditor.setValue(this.props.htmlContent);
+    }
   }
 
   componentWillReceiveProps(nextProps: any) {
