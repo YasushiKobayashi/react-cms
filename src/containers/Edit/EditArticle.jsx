@@ -2,18 +2,23 @@
 import React, { Component } from 'react';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import _ from 'lodash';
-import CodeMirror from 'codemirror';
-import 'codemirror/mode/markdown/markdown';
-import 'codemirror/mode/htmlmixed/htmlmixed';
-import 'codemirror/addon/edit/continuelist';
-import 'codemirror/addon/hint/html-hint';
-import 'codemirror/keymap/sublime';
 
 import { request } from '../../utils';
 
 import { DropZone } from '../../parts';
 
 import './EditArticle.scss';
+
+let CodeMirror = null;
+if (typeof window !== 'undefined' && typeof window.navigator !== 'undefined') {
+  // import CodeMirror from 'codemirror';
+  CodeMirror = require('codemirror');
+  require('codemirror/mode/markdown/markdown');
+  require('codemirror/mode/htmlmixed/htmlmixed');
+  require('codemirror/addon/edit/continuelist');
+  require('codemirror/addon/hint/html-hint');
+  require('codemirror/keymap/sublime');
+}
 
 export default class EditArticle extends Component {
   props: {
