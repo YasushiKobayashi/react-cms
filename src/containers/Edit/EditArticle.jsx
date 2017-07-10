@@ -11,7 +11,6 @@ import './EditArticle.scss';
 
 let CodeMirror = null;
 if (typeof window !== 'undefined' && typeof window.navigator !== 'undefined') {
-  // import CodeMirror from 'codemirror';
   CodeMirror = require('codemirror');
   require('codemirror/mode/markdown/markdown');
   require('codemirror/mode/htmlmixed/htmlmixed');
