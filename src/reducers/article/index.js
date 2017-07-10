@@ -11,6 +11,7 @@ const initialState = {
   },
   isLoading: true,
   isSsr: false,
+  isCommentSaveFlg: false,
 };
 
 export default function article(state = initialState, action) {
@@ -21,6 +22,7 @@ export default function article(state = initialState, action) {
         article: action.article,
         isLoading: false,
         isSSr: false,
+        isCommentSaveFlg: true,
       };
     case actionTypes.typeError(actionTypes.SET_ARTICLE):
       return {
@@ -28,11 +30,13 @@ export default function article(state = initialState, action) {
         errorMessage: action.errorMessage,
         isLoading: false,
         isSSr: false,
+        isCommentSaveFlg: false,
       };
     case actionTypes.typeSsr(actionTypes.SET_ARTICLE):
       return {
         ...state,
         isSSr: false,
+        isCommentSaveFlg: false,
       };
     default:
       return state;

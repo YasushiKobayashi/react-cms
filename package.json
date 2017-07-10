@@ -92,7 +92,7 @@
     "eslint-plugin-flowtype-errors": "^3.3.0",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "4",
-    "eslint-plugin-react": "^6.10.0",
+    "eslint-plugin-react": "7.0.0",
     "extract-text-webpack-plugin": "^2.1.0",
     "flow-bin": "^0.47.0",
     "flow-status-webpack-plugin": "^0.1.7",
