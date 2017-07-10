@@ -20,7 +20,6 @@ const safeStringify = (obj) => {
 };
 const renderPage = (appHtml, head, initialState) => {
   const appState = safeStringify(initialState);
-  console.log('head.meta.toString()');
   return `
     <!DOCTYPE html>
     <html lang="ja">
