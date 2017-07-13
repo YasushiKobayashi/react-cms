@@ -62,6 +62,20 @@ blockquote {
   position: relative;
 }
 
+.pagination {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  li {
+    margin-right: 10px;
+    padding: 3px;
+    border: 1px solid #333;
+    &:last-child {
+      margin-right: 0px;
+    }
+  }
+}
+
 .CodeMirror {
   height: 100%;
 }

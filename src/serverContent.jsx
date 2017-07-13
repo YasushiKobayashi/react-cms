@@ -24,6 +24,7 @@ export default (async (props, token) => {
     // top
     if (displayName.match(/Top/)) {
       state.top.archives = await Archive.getAllArticle('post', token);
+      state.top.count = await Archive.count(token);
       state.top.categories = await Category.get(token);
       state.top.isLoading = false;
       state.top.isSsr = true;

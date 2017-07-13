@@ -14,7 +14,7 @@ import type { CategoryType } from '../../types/CategoryType';
 import * as constant from '../../constant';
 import { hamlet } from '../../utils';
 
-import { ContentList } from '../../components';
+import { ContentList, Paginate } from '../../components';
 import { Loading } from '../../parts';
 
 import style from '../../style';
@@ -32,6 +32,7 @@ class Top extends Component {
     top: {
       archives: Array<ArticleType>,
       categories: Array<CategoryType>,
+      count: number;
       isLoading: boolean,
     },
   };
@@ -46,6 +47,7 @@ class Top extends Component {
   handleSerach: Function;
   handleSort: Function;
   handleSelectedCat: Function;
+  handlePaging: Function;
 
   constructor() {
     super();
@@ -106,16 +108,24 @@ class Top extends Component {
     this.props.actions.sortArticles(value);
   }
 
+  handlePaging(pageNum) {
+    console.log(pageNum);
+  }
+
   render() {
     const {
       serach,
       selectedCat,
       sorted,
     } = this.state;
-    const { categories, archives, isLoading } = this.props.top;
+    const {
+      categories, archives, isLoading,
+      count,
+    } = this.props.top;
 
     if (isLoading) return <Loading />;
 
+    const pages = Math.ceil(count / 20);
     const iconStyle = Object.assign(style.icon, style.grayTxt, style.topIcon);
     const cat = categories.map((category) => {
       return (
@@ -178,6 +188,12 @@ class Top extends Component {
           </div>
         </div>
         <ContentList archives={archives} />
+        <Paginate
+          containerClass={'pagination'}
+          childClass={'pager'}
+          pageNumber={pages}
+          current={1}
+        />
       </div>
     );
   }

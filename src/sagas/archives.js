@@ -23,10 +23,12 @@ export function* loadAll() {
   try {
     const categories = yield call(Category.get);
     const archives = yield call(Archive.getAllArticle, 'post');
+    const count = yield call(Archive.count);
     yield put({
       type: actionTypes.typeLoaded(actionTypes.ALL_ARCHIVES),
-      categories: categories,
-      archives: archives,
+      categories,
+      archives,
+      count,
     });
   } catch (e) {
     yield fork(getErr, actionTypes.ALL_ARCHIVES, '記事の取得に失敗しました。<br/>再度お試しください。');

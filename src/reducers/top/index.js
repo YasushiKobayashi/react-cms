@@ -5,6 +5,7 @@ const initialState = {
   archives: [],
   categories: [],
   selectedCat: [],
+  count: 0,
   isLoading: true,
   isSsr: false,
 };
@@ -16,6 +17,7 @@ export default function top(state = initialState, action) {
         ...state,
         categories: action.categories,
         archives: action.archives,
+        count: action.count,
         isLoading: false,
       };
     case actionTypes.typeLoaded(actionTypes.FILTER_ARTICLE):
