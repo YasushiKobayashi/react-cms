@@ -70,7 +70,11 @@ blockquote {
   li {
     margin-right: 10px;
     padding: 3px 7px;
-    border: 1px solid #333;
+    border: 1px solid #666;
+    &.disable {
+      color: #DBDADB;
+      background-color: #666;
+    }
     &:last-child {
       margin-right: 0px;
     }
