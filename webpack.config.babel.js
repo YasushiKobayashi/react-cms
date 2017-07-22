@@ -36,7 +36,6 @@ module.exports = [
       noInfo: true,
       hot: true,
       inline: true,
-      // serve index.html in place of 404 responses to allow HTML5 history
       historyApiFallback: true,
       port: PORT,
       host: HOST,
@@ -71,13 +70,14 @@ module.exports = [
           loader: ExtractTextPlugin.extract({
             fallback: 'style-loader',
             loader: [
-              'css-loader',
+              'css-loader?sourceMap!sass-loader',
               'postcss-loader',
             ],
           }),
         },
       ],
     },
+    devtool: 'source-map',
     plugins: [
       new ExtractTextPlugin('style.css'),
     ],

@@ -36,7 +36,8 @@ export const GET_USER = 'GET_USER';
 export const UPDATE_USER = 'UPDATE_USER';
 
 // archive
-export const ALL_ARCHIVES = 'ALL_ARCHIVES';
+export const ARCHIVES_INIT = 'ARCHIVES_INIT';
+export const ARCHIVES = 'ARCHIVES';
 export const SORT = 'SORT';
 export const SEARCH = 'SEARCH';
 export const GET_FROM_CATEGORY = 'GET_FROM_CATEGORY';

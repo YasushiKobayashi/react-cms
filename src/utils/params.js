@@ -5,8 +5,11 @@ export default class {
     return window.location.href;
   }
 
-  static decode() {
-    let url = this.url();
+  static decode(url = null) {
+    url = url || this.url();
+    if (url.indexOf('?') === -1) {
+      return false;
+    }
     url = url.split('?');
     return params.decode(url[1]);
   }

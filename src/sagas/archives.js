@@ -12,7 +12,7 @@ function* getErr(type, message) {
   });
 }
 
-export function* loadAll() {
+export function* loadInit() {
   const { isSsr } = yield select(selectors.getStateFromTop);
   if (isSsr) {
     yield put({
@@ -22,16 +22,31 @@ export function* loadAll() {
   }
   try {
     const categories = yield call(Category.get);
-    const archives = yield call(Archive.getAllArticle, 'post');
     const count = yield call(Archive.count);
     yield put({
-      type: actionTypes.typeLoaded(actionTypes.ALL_ARCHIVES),
+      type: actionTypes.typeLoaded(actionTypes.INIT_ARTICLE),
       categories,
-      archives,
       count,
     });
   } catch (e) {
     yield fork(getErr, actionTypes.ALL_ARCHIVES, '記事の取得に失敗しました。<br/>再度お試しください。');
+  }
+}
+
+export function* getArchives(payload) {
+  try {
+    const pageNumber = payload.payload;
+    const url = pageNumber > 1 ? `post?pages=${pageNumber}` : 'post';
+
+    const archives = yield call(Archive.getAllArticle, url);
+    console.log(pageNumber);
+    yield put({
+      type: actionTypes.typeLoaded(actionTypes.FILTER_ARTICLE),
+      archives,
+      pageNumber,
+    });
+  } catch (e) {
+    yield fork(getErr, actionTypes.FILTER_ARTICLE, '記事の検索に失敗しました。<br/>再度お試しください。');
   }
 }
 
@@ -60,16 +75,4 @@ export function* sortArticles(payload) {
     type: actionTypes.typeLoaded(actionTypes.FILTER_ARTICLE),
     archives: archives,
   });
-}
-
-export function* serachArticles(payload) {
-  try {
-    const archives = yield call(Archive.serachArticles, payload);
-    yield put({
-      type: actionTypes.typeLoaded(actionTypes.FILTER_ARTICLE),
-      archives: archives,
-    });
-  } catch (e) {
-    yield fork(getErr, actionTypes.FILTER_ARTICLE, '記事の検索に失敗しました。<br/>再度お試しください。');
-  }
 }

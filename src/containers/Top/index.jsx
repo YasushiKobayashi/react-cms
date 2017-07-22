@@ -12,7 +12,7 @@ import * as actions from '../../actions/archivesAction';
 import type { ArticleType } from '../../types/ArticleType';
 import type { CategoryType } from '../../types/CategoryType';
 import * as constant from '../../constant';
-import { hamlet } from '../../utils';
+import { hamlet, params } from '../../utils';
 
 import { ContentList, Paginate } from '../../components';
 import { Loading } from '../../parts';
@@ -23,24 +23,26 @@ import './index.scss';
 class Top extends Component {
   props: {
     actions: {
-      loadAllContent: Function,
-      getArticlesFromCat: Function,
-      serachArticles: Function,
-      sortArticles: Function,
-      loadAllFromCategory: Function,
+      loadInit: Function;
+      getArchives: Function;
+      getArticlesFromCat: Function;
+      serachArticles: Function;
+      sortArticles: Function;
+      loadAllFromCategory: Function;
     },
     top: {
-      archives: Array<ArticleType>,
-      categories: Array<CategoryType>,
+      archives: Array<ArticleType>;
+      categories: Array<CategoryType>;
       count: number;
+      pageNumber: number;
       isLoading: boolean,
     },
   };
 
   state: {
-    serach: string,
-    sorted: string,
-    selectedCat: string,
+    serach: string;
+    sorted: string;
+    selectedCat: string;
   };
   setState: Function;
   sendSearch: Function;
@@ -64,13 +66,21 @@ class Top extends Component {
   }
 
   componentWillMount() {
-    this.props.actions.loadAllContent();
+    const param = params.decode();
+    const pager = param ? param.pages : 1;
+    this.props.actions.getArchives(pager);
+    this.props.actions.loadInit();
+  }
 
-    // @TODO カテゴリパラメータ
-    // const getParam = params.decode();
-    // if (getParam.category) {
-    //   this.handleSelectedCategory(getParam.category);
-    // }
+  componentWillUpdate() {
+    const param = params.decode();
+    const pager = param ? param.pages : 1;
+    if (pager !== this.props.top.pageNumber) {
+      console.log('ふがふが');
+      console.log(pager);
+      console.log(this.props.top.pageNumber);
+      this.props.actions.getArchives(pager);
+    }
   }
 
   handleSelectedCat(event, index, value) {
@@ -108,10 +118,6 @@ class Top extends Component {
     this.props.actions.sortArticles(value);
   }
 
-  handlePaging(pageNum) {
-    console.log(pageNum);
-  }
-
   render() {
     const {
       serach,
@@ -120,12 +126,11 @@ class Top extends Component {
     } = this.state;
     const {
       categories, archives, isLoading,
-      count,
+      pageNumber, count,
     } = this.props.top;
 
     if (isLoading) return <Loading />;
 
-    const pages = Math.ceil(count / 20);
     const iconStyle = Object.assign(style.icon, style.grayTxt, style.topIcon);
     const cat = categories.map((category) => {
       return (
@@ -142,6 +147,13 @@ class Top extends Component {
         <Helmet
           title={hamlet.title(constant.TITLE_TOP)}
           meta={hamlet.meta(hamlet.title(constant.TITLE_TOP))}
+        />
+        <Paginate
+          containerClass={'pagination'}
+          childClass={'pager'}
+          pageCount={count}
+          perPage={20}
+          current={pageNumber}
         />
         <div styleName='topHeader'>
           <div styleName='list'>
@@ -188,12 +200,6 @@ class Top extends Component {
           </div>
         </div>
         <ContentList archives={archives} />
-        <Paginate
-          containerClass={'pagination'}
-          childClass={'pager'}
-          pageNumber={pages}
-          current={1}
-        />
       </div>
     );
   }

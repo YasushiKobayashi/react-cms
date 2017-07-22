@@ -5,6 +5,7 @@ import React from 'react';
 import { match } from 'react-router';
 import { renderToString } from 'react-dom/server';
 import { Helmet } from 'react-helmet';
+import 'newrelic';
 
 import routes from './routes';
 import serverContent from './serverContent';

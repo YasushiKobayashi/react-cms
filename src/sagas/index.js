@@ -20,9 +20,9 @@ export default function* rootSaga() {
     takeEvery(actionTypes.typeReqest(actionTypes.UPDATE_USER), user.updateUserInfo),
 
     // archive関連
-    takeEvery(actionTypes.typeReqest(actionTypes.ALL_ARCHIVES), archives.loadAll),
+    takeEvery(actionTypes.typeReqest(actionTypes.INIT_ARTICLE), archives.loadInit),
     takeEvery(actionTypes.typeReqest(actionTypes.SORT), archives.sortArticles),
-    takeEvery(actionTypes.typeReqest(actionTypes.SEARCH), archives.serachArticles),
+    takeEvery(actionTypes.typeReqest(actionTypes.ARCHIVES), archives.getArchives),
     takeEvery(actionTypes.typeReqest(actionTypes.GET_FROM_CATEGORY), archives.loadAllFromCategory),
 
     takeEvery(actionTypes.typeReqest(actionTypes.GET_ARTICLE), article.getArticle),
