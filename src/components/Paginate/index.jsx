@@ -23,38 +23,56 @@ export default class Paginate extends Component {
       perPage,
     } = this.props;
     const pager = [];
-    const pageNumber = Math.ceil(pageCount / perPage);
+    const maxPageNumber = Math.ceil(pageCount / perPage);
+    const currentNumber = parseInt(current, 10);
 
     let i;
-    for (i = 1; i <= pageNumber; i += 1) {
-      const active = current === i ? 'current' : 'active';
+    for (i = 1; i <= maxPageNumber; i += 1) {
+      const active = currentNumber === i ? 'current' : 'active';
+      const pagerClass = `${active} ${childClass}`;
       pager.push(
         <Pager
           key={i}
           pages={i}
           active={active}
-          childClass={childClass}
+          childClass={pagerClass}
         />,
       );
     }
 
+    let prevLink;
+    const prevNumber = currentNumber - 1;
+    if (prevNumber > 0) {
+      const prevUrl = prevNumber === 1 ? '/' : `/?pages=${prevNumber}`;
+      prevLink = <Link to={prevUrl} style={style.link} />;
+    } else {
+      prevLink = false;
+    }
+
+    const nextNumber = currentNumber + 1;
+    const nextLink = nextNumber <= maxPageNumber ?
+      <Link to={`/pages=${nextNumber}`} style={style.link} /> :
+      false;
+
     const first = '/';
-    const last = `/?pages=${pageNumber}`;
+    const last = `/?pages=${maxPageNumber}`;
 
     return (
       <ul className={containerClass}>
         <li style={style.pager}>
-          Page {current} / {pageNumber}
+          Page {current} / {maxPageNumber}
         </li>
         <li style={style.pager}>
           <Link to={first} style={style.link} />
           first
         </li>
         <li style={style.pager}>
+          {prevLink}
           prev
         </li>
         {pager}
         <li style={style.pager}>
+          {nextLink}
           next
         </li>
         <li style={style.pager}>

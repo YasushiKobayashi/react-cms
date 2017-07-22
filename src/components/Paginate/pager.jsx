@@ -18,7 +18,7 @@ export default class Pager extends Component {
       childClass,
     } = this.props;
 
-    const href = `/?pages=${pages}`;
+    const href = (pages === 1) ? '/' : `/?pages=${pages}`;
 
     const link = active === 'active' ?
       <Link to={href} style={style.link} /> : false;

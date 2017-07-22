@@ -39,7 +39,6 @@ export function* getArchives(payload) {
     const url = pageNumber > 1 ? `post?pages=${pageNumber}` : 'post';
 
     const archives = yield call(Archive.getAllArticle, url);
-    console.log(pageNumber);
     yield put({
       type: actionTypes.typeLoaded(actionTypes.FILTER_ARTICLE),
       archives,

@@ -76,9 +76,6 @@ class Top extends Component {
     const param = params.decode();
     const pager = param ? param.pages : 1;
     if (pager !== this.props.top.pageNumber) {
-      console.log('ふがふが');
-      console.log(pager);
-      console.log(this.props.top.pageNumber);
       this.props.actions.getArchives(pager);
     }
   }
