@@ -43,6 +43,8 @@ class Top extends Component {
     serach: string;
     sorted: string;
     selectedCat: string;
+    firstUrl: string;
+    pagerUrl: string;
   };
   setState: Function;
   sendSearch: Function;
@@ -57,6 +59,8 @@ class Top extends Component {
       serach: '',
       sorted: 'created',
       selectedCat: '未選択',
+      firstUrl: '/',
+      pagerUrl: '/?pages=',
     };
 
     this.sendSearch = this.sendSearch.bind(this);
@@ -117,9 +121,8 @@ class Top extends Component {
 
   render() {
     const {
-      serach,
-      selectedCat,
-      sorted,
+      serach, selectedCat, sorted,
+      pagerUrl, firstUrl,
     } = this.state;
     const {
       categories, archives, isLoading,
@@ -144,13 +147,6 @@ class Top extends Component {
         <Helmet
           title={hamlet.title(constant.TITLE_TOP)}
           meta={hamlet.meta(hamlet.title(constant.TITLE_TOP))}
-        />
-        <Paginate
-          containerClass={'pagination'}
-          childClass={'pager'}
-          pageCount={count}
-          perPage={20}
-          current={pageNumber}
         />
         <div styleName='topHeader'>
           <div styleName='list'>
@@ -197,6 +193,15 @@ class Top extends Component {
           </div>
         </div>
         <ContentList archives={archives} />
+        <Paginate
+          containerClass={'pagination'}
+          childClass={'pager'}
+          firstUrl={firstUrl}
+          pagerUrl={pagerUrl}
+          pageCount={count}
+          perPage={20}
+          current={pageNumber}
+        />
       </div>
     );
   }

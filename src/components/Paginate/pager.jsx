@@ -8,6 +8,8 @@ export default class Pager extends Component {
   props: {
     childClass: string;
     active: string;
+    firstUrl: string;
+    pagerUrl: string;
     pages: number;
   }
 
@@ -16,9 +18,11 @@ export default class Pager extends Component {
       pages,
       active,
       childClass,
+      firstUrl,
+      pagerUrl,
     } = this.props;
 
-    const href = (pages === 1) ? '/' : `/?pages=${pages}`;
+    const href = (pages === 1) ? firstUrl : `${pagerUrl}${pages}`;
 
     const link = active === 'active' ?
       <Link to={href} style={style.link} /> : false;

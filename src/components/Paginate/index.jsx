@@ -9,6 +9,8 @@ export default class Paginate extends Component {
   props: {
     containerClass: string;
     childClass: string;
+    firstUrl: string;
+    pagerUrl: string;
     pageCount: number;
     perPage: number;
     current: number;
@@ -21,6 +23,8 @@ export default class Paginate extends Component {
       current,
       pageCount,
       perPage,
+      firstUrl,
+      pagerUrl,
     } = this.props;
     const pager = [];
     const maxPageNumber = Math.ceil(pageCount / perPage);
@@ -36,6 +40,8 @@ export default class Paginate extends Component {
           pages={i}
           active={active}
           childClass={pagerClass}
+          firstUrl={firstUrl}
+          pagerUrl={pagerUrl}
         />,
       );
     }
@@ -44,7 +50,7 @@ export default class Paginate extends Component {
     let prevClass;
     const prevNumber = currentNumber - 1;
     if (prevNumber > 0) {
-      const prevUrl = prevNumber === 1 ? '/' : `/?pages=${prevNumber}`;
+      const prevUrl = prevNumber === 1 ? firstUrl : `${pagerUrl}${prevNumber}`;
       prevLink = <Link to={prevUrl} style={style.link} />;
       prevClass = 'active';
     } else {
@@ -63,8 +69,7 @@ export default class Paginate extends Component {
       nextClass = 'disable';
     }
 
-    const first = '/';
-    const last = `/?pages=${maxPageNumber}`;
+    const last = `${pagerUrl}${maxPageNumber}`;
 
     return (
       <ul className={containerClass}>
@@ -72,7 +77,7 @@ export default class Paginate extends Component {
           Page {current} / {maxPageNumber}
         </li>
         <li style={style.pager}>
-          <Link to={first} style={style.link} />
+          <Link to={firstUrl} style={style.link} />
           first
         </li>
         <li style={style.pager} className={prevClass}>
