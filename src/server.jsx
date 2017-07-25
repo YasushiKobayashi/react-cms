@@ -34,6 +34,7 @@ const renderPage = (appHtml, head, initialState) => {
       <link rel="stylesheet" href="/assets/css/style.css" type="text/css" media="all" />
       <link rel="shortcut icon" href="/assets/img/favicon.ico" />
       <link rel="apple-touch-icon-precomposed" href="/assets/img/apple-touch-icon-precomposed.png" />
+      <script src="/public/assets/js/analitics.js"></script>
     </head>
     <body>
       <div id=app>${appHtml}</div>

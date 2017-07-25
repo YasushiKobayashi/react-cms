@@ -38,3 +38,4 @@ public/assets/img
 bundle.js
 config.js
 selenium/log
+public/assets/js/analytics.js
