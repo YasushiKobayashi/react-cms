@@ -70,18 +70,26 @@ class Top extends Component {
   }
 
   componentWillMount() {
-    const param = params.decode();
-    const pager = param ? param.pages : 1;
-    this.props.actions.getArchives(pager);
     this.props.actions.loadInit();
+    const paramUrl = params.getParam();
+    const param = params.decode(paramUrl);
+    const pager = param ? param.pages : 1;
+    if (pager !== this.props.top.pageNumber) {
+      this.getArchives(paramUrl);
+    }
   }
 
   componentWillUpdate() {
-    const param = params.decode();
+    const paramUrl = params.getParam();
+    const param = params.decode(paramUrl);
     const pager = param ? param.pages : 1;
     if (pager !== this.props.top.pageNumber) {
-      this.props.actions.getArchives(pager);
+      this.getArchives(paramUrl);
     }
+  }
+
+  getArchives(params) {
+    this.props.actions.getArchives(params);
   }
 
   handleSelectedCat(event, index, value) {

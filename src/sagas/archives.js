@@ -3,6 +3,7 @@ import _ from 'lodash';
 
 import { Archive, Category } from '../api';
 import * as actionTypes from '../actions/actionTypes';
+import { params } from '../utils';
 import selectors from './selectors';
 
 function* getErr(type, message) {
@@ -16,7 +17,7 @@ export function* loadInit() {
   const { isSsr } = yield select(selectors.getStateFromTop);
   if (isSsr) {
     yield put({
-      type: actionTypes.typeSsr(actionTypes.ALL_ARCHIVES),
+      type: actionTypes.typeSsr(actionTypes.INIT_ARTICLE),
     });
     yield cancel();
   }
@@ -35,8 +36,13 @@ export function* loadInit() {
 
 export function* getArchives(payload) {
   try {
-    const pageNumber = payload.payload;
-    const url = pageNumber > 1 ? `post?pages=${pageNumber}` : 'post';
+    const param = payload.payload;
+    const url = `post?${param}`;
+    const query = params.decode(param);
+
+    console.log(param);
+    console.log(query);
+    const pageNumber = query ? query.pages : 1;
 
     const archives = yield call(Archive.getAllArticle, url);
     yield put({

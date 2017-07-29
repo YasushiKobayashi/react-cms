@@ -34,7 +34,7 @@ const renderPage = (appHtml, head, initialState) => {
       <link rel="stylesheet" href="/assets/css/style.css" type="text/css" media="all" />
       <link rel="shortcut icon" href="/assets/img/favicon.ico" />
       <link rel="apple-touch-icon-precomposed" href="/assets/img/apple-touch-icon-precomposed.png" />
-      <script src="/public/assets/js/analitics.js"></script>
+      <script src="/assets/js/analytics.js"></script>
     </head>
     <body>
       <div id=app>${appHtml}</div>
@@ -54,7 +54,8 @@ app.get('*', (req, res) => {
       (async () => {
         try {
           const token = req.cookies.token;
-          const fetchInfo = await serverContent(renderProps, token);
+          global.token = token;
+          const fetchInfo = await serverContent(renderProps, req.url);
           const appHtml = renderToString(<Loading title={fetchInfo.title} />);
           res.status(200).send(renderPage(appHtml, head, fetchInfo.initialState));
         } catch (e) {

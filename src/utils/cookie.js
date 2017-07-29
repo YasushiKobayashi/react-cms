@@ -6,7 +6,9 @@ export default class {
   }
 
   static read(key) {
-    return cookie.get(key);
+    const token = (key === 'token' && typeof window === 'undefined') ?
+      global.token : cookie.get(key);
+    return token;
   }
 
   static delite(key) {

@@ -6,7 +6,18 @@ import loaders from './webpack.loaders';
 import cssloaders from './webpack.cssloaders';
 
 loaders.push(cssloaders);
-
+const env = process.env.NODE_ENV || 'production';
+const plugins = env !== 'production' ? [] : [
+  new webpack.optimize.UglifyJsPlugin(
+    {
+      compress: {
+        warnings: false,
+        drop_console: true,
+        drop_debugger: true,
+      },
+    },
+  ),
+];
 module.exports = [
   {
     entry: [
@@ -23,15 +34,7 @@ module.exports = [
     module: {
       loaders,
     },
-    plugins: [
-      new webpack.optimize.UglifyJsPlugin({
-        compress: {
-          warnings: false,
-          drop_console: true,
-          drop_debugger: true,
-        },
-      }),
-    ],
+    plugins,
   }, {
     entry: [
       './public/assets/css/style.scss',
