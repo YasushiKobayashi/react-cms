@@ -38,6 +38,7 @@ export const UPDATE_USER = 'UPDATE_USER';
 // archive
 export const ARCHIVES_INIT = 'ARCHIVES_INIT';
 export const ARCHIVES = 'ARCHIVES';
+export const COUNT = 'COUNT';
 export const SORT = 'SORT';
 export const SEARCH = 'SEARCH';
 export const GET_FROM_CATEGORY = 'GET_FROM_CATEGORY';

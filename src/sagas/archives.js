@@ -23,28 +23,38 @@ export function* loadInit() {
   }
   try {
     const categories = yield call(Category.get);
-    const count = yield call(Archive.count);
     yield put({
       type: actionTypes.typeLoaded(actionTypes.INIT_ARTICLE),
       categories,
-      count,
     });
   } catch (e) {
     yield fork(getErr, actionTypes.ALL_ARCHIVES, '記事の取得に失敗しました。<br/>再度お試しください。');
   }
 }
 
+
+export function* getCount(payload) {
+  try {
+    let query = payload.payload;
+    query = query ? `?q=${query}` : '';
+    const count = yield call(Archive.count, query);
+    yield put({
+      type: actionTypes.typeLoaded(actionTypes.COUNT),
+      count,
+    });
+  } catch (e) {
+    yield fork(getErr, actionTypes.FILTER_ARTICLE, '記事の検索に失敗しました。<br/>再度お試しください。');
+  }
+}
+
 export function* getArchives(payload) {
   try {
     const param = payload.payload;
-    const url = `post?${param}`;
+    const url = param ? `post?${param}` : 'post';
     const query = params.decode(param);
-
-    console.log(param);
-    console.log(query);
-    const pageNumber = query ? query.pages : 1;
-
+    const pageNumber = query.pages || 1;
     const archives = yield call(Archive.getAllArticle, url);
+
     yield put({
       type: actionTypes.typeLoaded(actionTypes.FILTER_ARTICLE),
       archives,

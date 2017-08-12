@@ -16,8 +16,12 @@ export default function top(state = initialState, action) {
       return {
         ...state,
         categories: action.categories,
-        count: action.count,
         isLoading: false,
+      };
+    case actionTypes.typeLoaded(actionTypes.COUNT):
+      return {
+        ...state,
+        count: action.count,
       };
     case actionTypes.typeLoaded(actionTypes.FILTER_ARTICLE):
       return {

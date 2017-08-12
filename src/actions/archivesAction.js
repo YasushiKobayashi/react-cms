@@ -9,6 +9,10 @@ export const getArchives = (payload) => {
   return createAction(actionTypes.typeReqest(actionTypes.ARCHIVES), payload);
 };
 
+export const getCount = (payload) => {
+  return createAction(actionTypes.typeReqest(actionTypes.COUNT), payload);
+};
+
 export const sortArticles = (payload) => {
   return createAction(actionTypes.typeReqest(actionTypes.SORT), payload);
 };

@@ -2,7 +2,10 @@ import cookie from 'js-cookie';
 
 export default class {
   static write(key, param) {
-    cookie.set(key, param, { expires: 7 });
+    cookie.set(key, param, {
+      expires: 7,
+      secure: (document.location.protocol === 'https:'),
+    });
   }
 
   static read(key) {

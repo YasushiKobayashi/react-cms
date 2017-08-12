@@ -21,6 +21,7 @@ export default function* rootSaga() {
 
     // archive関連
     takeEvery(actionTypes.typeReqest(actionTypes.INIT_ARTICLE), archives.loadInit),
+    takeEvery(actionTypes.typeReqest(actionTypes.COUNT), archives.getCount),
     takeEvery(actionTypes.typeReqest(actionTypes.SORT), archives.sortArticles),
     takeEvery(actionTypes.typeReqest(actionTypes.ARCHIVES), archives.getArchives),
     takeEvery(actionTypes.typeReqest(actionTypes.GET_FROM_CATEGORY), archives.loadAllFromCategory),

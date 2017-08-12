@@ -58,11 +58,22 @@ export default class Paginate extends Component {
       prevClass = 'disable';
     }
 
+    let firstClass;
+    let firstLink;
+    if (currentNumber === 1) {
+      firstClass = 'disable';
+      firstLink = false;
+    } else {
+      firstClass = 'active';
+      firstLink = <Link to={firstUrl} style={style.link} />;
+    }
+
     let nextLink;
     let nextClass;
     const nextNumber = currentNumber + 1;
     if (nextNumber <= maxPageNumber) {
-      nextLink = <Link to={`/?pages=${nextNumber}`} style={style.link} />;
+      const nextUrl = `${pagerUrl}${nextNumber}`;
+      nextLink = <Link to={nextUrl} style={style.link} />;
       nextClass = 'active';
     } else {
       nextLink = false;
@@ -70,14 +81,23 @@ export default class Paginate extends Component {
     }
 
     const last = `${pagerUrl}${maxPageNumber}`;
+    let lastClass;
+    let lastLink;
+    if (currentNumber === maxPageNumber) {
+      lastClass = 'disable';
+      lastLink = false;
+    } else {
+      lastClass = 'active';
+      lastLink = <Link to={last} style={style.link} />;
+    }
 
     return (
       <ul className={containerClass}>
         <li style={style.pager}>
           Page {current} / {maxPageNumber}
         </li>
-        <li style={style.pager}>
-          <Link to={firstUrl} style={style.link} />
+        <li style={style.pager} className={firstClass}>
+          {firstLink}
           first
         </li>
         <li style={style.pager} className={prevClass}>
@@ -89,8 +109,8 @@ export default class Paginate extends Component {
           {nextLink}
           next
         </li>
-        <li style={style.pager}>
-          <Link to={last} style={style.link} />
+        <li style={style.pager} className={lastClass}>
+          {lastLink}
           last
         </li>
       </ul>

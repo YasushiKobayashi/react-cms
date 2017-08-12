@@ -19,10 +19,7 @@ export default class {
     return params.decode(param);
   }
 
-  // static encode(param) {
-  //   let url = this.url();
-  //   const idQuery = url.match(/?/) ? '' : '?';
-  //   url = url + idQuery + params.encode(param);
-  //   return url;
-  // }
+  static encode(param) {
+    return params.encode(param);
+  }
 }
