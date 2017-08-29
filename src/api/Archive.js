@@ -2,9 +2,9 @@ import { request, apiUrl } from '../utils';
 import { Archive, Article } from '../model';
 
 export default class {
-  static getAllArticle(url, token = null) {
+  static getAllArticle(url) {
     return new Promise((resolve, reject) => {
-      request.GET(apiUrl('v1', url), token).then((arr) => {
+      request.GET(apiUrl('v1', url)).then((arr) => {
         resolve(arr.map((obj) => {
           return new Archive(obj);
         }));
@@ -29,10 +29,21 @@ export default class {
     });
   }
 
-  static getSigleArticle(id, token = null) {
+  static getSigleArticle(id) {
     return new Promise((resolve, reject) => {
-      request.GET(apiUrl('v1', `post/${id}`), token).then((obj) => {
+      request.GET(apiUrl('v1', `post/${id}`)).then((obj) => {
         resolve(new Article(obj));
+      }).catch((err) => {
+        reject(err);
+        throw new Error(err);
+      });
+    });
+  }
+
+  static count(query) {
+    return new Promise((resolve, reject) => {
+      request.GET(apiUrl('v1', `post/count${query}`)).then((obj) => {
+        resolve(obj.count);
       }).catch((err) => {
         reject(err);
         throw new Error(err);
@@ -43,9 +54,6 @@ export default class {
   static postArticle(params) {
     return new Promise((resolve, reject) => {
       request.POST(apiUrl('v1', 'post'), params).then((obj) => {
-        console.log('postArticle');
-        console.log(obj);
-        console.log('postArticle');
         resolve(new Article(obj));
       }).catch((err) => {
         reject(err);

@@ -5,16 +5,21 @@ export default class {
     return window.location.href;
   }
 
-  static decode() {
-    let url = this.url();
+  static getParam(url = null) {
+    url = url || this.url();
+    if (url.indexOf('?') === -1) {
+      return '';
+    }
     url = url.split('?');
-    return params.decode(url[1]);
+    return url[1];
   }
 
-  // static encode(param) {
-  //   let url = this.url();
-  //   const idQuery = url.match(/?/) ? '' : '?';
-  //   url = url + idQuery + params.encode(param);
-  //   return url;
-  // }
+  static decode(param = null) {
+    param = param || this.getParam();
+    return params.decode(param);
+  }
+
+  static encode(param) {
+    return params.encode(param);
+  }
 }

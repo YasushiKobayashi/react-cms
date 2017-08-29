@@ -12,6 +12,7 @@ export default class {
       simplifiedAutoLink: true,
       tables: true,
       tasklists: true,
+      openLinksInNewWindow: true,
       requireSpaceBeforeHeadingText: true,
     });
     return converter.makeHtml(val);

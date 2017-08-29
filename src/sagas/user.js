@@ -36,6 +36,7 @@ export function* isLogin() {
     const user = yield call(User.get, 'user');
     yield put({
       type: actionTypes.LOGINED,
+      isLogin: true,
       user: user,
     });
   } catch (e) {

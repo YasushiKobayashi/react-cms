@@ -3,6 +3,7 @@ import _ from 'lodash';
 
 import { Archive, Category } from '../api';
 import * as actionTypes from '../actions/actionTypes';
+import { params } from '../utils';
 import selectors from './selectors';
 
 function* getErr(type, message) {
@@ -12,24 +13,55 @@ function* getErr(type, message) {
   });
 }
 
-export function* loadAll() {
+export function* loadInit() {
   const { isSsr } = yield select(selectors.getStateFromTop);
   if (isSsr) {
     yield put({
-      type: actionTypes.typeSsr(actionTypes.ALL_ARCHIVES),
+      type: actionTypes.typeSsr(actionTypes.INIT_ARTICLE),
     });
     yield cancel();
   }
   try {
     const categories = yield call(Category.get);
-    const archives = yield call(Archive.getAllArticle, 'post');
     yield put({
-      type: actionTypes.typeLoaded(actionTypes.ALL_ARCHIVES),
-      categories: categories,
-      archives: archives,
+      type: actionTypes.typeLoaded(actionTypes.INIT_ARTICLE),
+      categories,
     });
   } catch (e) {
     yield fork(getErr, actionTypes.ALL_ARCHIVES, '記事の取得に失敗しました。<br/>再度お試しください。');
+  }
+}
+
+
+export function* getCount(payload) {
+  try {
+    let query = payload.payload;
+    query = query ? `?q=${query}` : '';
+    const count = yield call(Archive.count, query);
+    yield put({
+      type: actionTypes.typeLoaded(actionTypes.COUNT),
+      count,
+    });
+  } catch (e) {
+    yield fork(getErr, actionTypes.FILTER_ARTICLE, '記事の検索に失敗しました。<br/>再度お試しください。');
+  }
+}
+
+export function* getArchives(payload) {
+  try {
+    const param = payload.payload;
+    const url = param ? `post?${param}` : 'post';
+    const query = params.decode(param);
+    const pageNumber = query.pages || 1;
+    const archives = yield call(Archive.getAllArticle, url);
+
+    yield put({
+      type: actionTypes.typeLoaded(actionTypes.FILTER_ARTICLE),
+      archives,
+      pageNumber,
+    });
+  } catch (e) {
+    yield fork(getErr, actionTypes.FILTER_ARTICLE, '記事の検索に失敗しました。<br/>再度お試しください。');
   }
 }
 
@@ -58,16 +90,4 @@ export function* sortArticles(payload) {
     type: actionTypes.typeLoaded(actionTypes.FILTER_ARTICLE),
     archives: archives,
   });
-}
-
-export function* serachArticles(payload) {
-  try {
-    const archives = yield call(Archive.serachArticles, payload);
-    yield put({
-      type: actionTypes.typeLoaded(actionTypes.FILTER_ARTICLE),
-      archives: archives,
-    });
-  } catch (e) {
-    yield fork(getErr, actionTypes.FILTER_ARTICLE, '記事の検索に失敗しました。<br/>再度お試しください。');
-  }
 }
