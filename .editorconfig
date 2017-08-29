@@ -10,13 +10,6 @@ end_of_line = lf
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-[*.bat]
-end_of_line = crlf
-
-[*.md]
-trim_trailing_whitespace = false
-end_of_line = crlf
-
 [*.py]
 indent_size = 4
 
@@ -29,10 +22,6 @@ indent_size = 4
 [*.go]
 indent_style = tab
 
-[*.bat]
-end_of_line = crlf
-
 [*.md]
+indent_size = 4
 trim_trailing_whitespace = false
-end_of_line = crlf
-
