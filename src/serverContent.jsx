@@ -1,9 +1,9 @@
 import configureStore from './store/configureStore';
-import { User, Archive, Category } from './api';
+import { Archive } from './api';
 import * as constant from './constant';
-import { params } from './utils';
+// import { params } from './utils';
 
-export default (async (props, url) => {
+export default (async (props) => {
   let title = constant.TITLE_LOGIN;
   const store = configureStore();
   const state = store.getState();
