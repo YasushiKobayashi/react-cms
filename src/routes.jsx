@@ -12,6 +12,7 @@ import {
 module.exports = (
   <Route path="/" component={App}>
     <IndexRoute component={Top} />
+    <Route path='category/:slug' component={Top} />
     <Route path='mypage' component={Mypage} />
     <Route path='edit' component={Edit}>
       <Route path=':id' />

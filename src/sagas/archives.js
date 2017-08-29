@@ -35,15 +35,14 @@ export function* loadInit() {
 
 export function* getCount(payload) {
   try {
-    let query = payload.payload;
-    query = query ? `?q=${query}` : '';
-    const count = yield call(Archive.count, query);
+    const url = payload.payload;
+    const count = yield call(Archive.count, url);
     yield put({
       type: actionTypes.typeLoaded(actionTypes.COUNT),
       count,
     });
   } catch (e) {
-    yield fork(getErr, actionTypes.FILTER_ARTICLE, '記事の検索に失敗しました。<br/>再度お試しください。');
+    yield fork(getErr, actionTypes.FILTER_ARTICLE, '記事数の取得に失敗しました。<br/>再度お試しください。');
   }
 }
 
@@ -67,11 +66,14 @@ export function* getArchives(payload) {
 
 export function* loadAllFromCategory(payload) {
   try {
-    const selectedCat = payload.payload;
-    const archives = yield call(Archive.getAllArticle, `post/category/${selectedCat}`);
+    const { categoryId } = payload.payload;
+    const url = `categories/${categoryId}/posts`;
+    const pageNumber = 1;
+    const archives = yield call(Archive.getArticleFromCategory, url);
     yield put({
       type: actionTypes.typeLoaded(actionTypes.FILTER_ARTICLE),
-      archives: archives,
+      archives,
+      pageNumber,
     });
   } catch (e) {
     yield fork(getErr, actionTypes.ALL_ARCHIVES, '記事の取得に失敗しました。<br/>再度お試しください。');

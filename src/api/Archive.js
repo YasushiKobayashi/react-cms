@@ -15,11 +15,10 @@ export default class {
     });
   }
 
-  static serachArticles(payload) {
-    const params = payload.payload;
+  static getArticleFromCategory(url) {
     return new Promise((resolve, reject) => {
-      request.POST(apiUrl('v1', 'post/search'), params).then((arr) => {
-        resolve(arr.map((obj) => {
+      request.GET(apiUrl('v1', url)).then((arr) => {
+        resolve(arr.posts.map((obj) => {
           return new Archive(obj);
         }));
       }).catch((err) => {
@@ -40,9 +39,9 @@ export default class {
     });
   }
 
-  static count(query) {
+  static count(url) {
     return new Promise((resolve, reject) => {
-      request.GET(apiUrl('v1', `post/count${query}`)).then((obj) => {
+      request.GET(apiUrl('v1', url)).then((obj) => {
         resolve(obj.count);
       }).catch((err) => {
         reject(err);

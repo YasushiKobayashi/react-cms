@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { browserHistory } from 'react-router';
 import { Helmet } from 'react-helmet';
+import _ from 'lodash';
 import { SelectField, MenuItem, TextField } from 'material-ui';
 import SearchedFor from 'material-ui/svg-icons/action/youtube-searched-for';
 import ViewList from 'material-ui/svg-icons/action/view-list';
@@ -26,9 +27,8 @@ class Top extends Component {
     actions: {
       loadInit: Function;
       getArchives: Function;
-      getArticlesFromCat: Function;
-      sortArticles: Function;
       loadAllFromCategory: Function;
+      sortArticles: Function;
       getCount: Function;
     },
     top: {
@@ -37,6 +37,9 @@ class Top extends Component {
       count: number;
       pageNumber: number;
       isLoading: boolean,
+    },
+    params: {
+      slug?: string;
     },
   };
 
@@ -83,13 +86,15 @@ class Top extends Component {
 
     const query = param.q || '';
     const search = decodeURI(query);
-    this.props.actions.getCount(search);
     this.setState({
       search,
     });
     if (search) {
       this.setQuery(search);
     }
+    const baseUrl = 'post/count';
+    const countUrl = query ? `${baseUrl}?q=${query}` : baseUrl;
+    this.props.actions.getCount(countUrl);
   }
 
   componentWillUpdate() {
@@ -110,12 +115,16 @@ class Top extends Component {
     this.setState({
       selectedCat: value,
     });
-    this.props.actions.loadAllFromCategory(value);
-  }
-
-  updateContent() {
-    const { selectedCat } = this.state;
-    this.props.actions.getArticlesFromCat(selectedCat);
+    const { categories } = this.props.top;
+    const category = _.filter(categories, { id: value });
+    let url = '/';
+    if (category.length) {
+      url = `/category/${category[0].slug}`;
+      const countUrl = `categories/${category[0].id}/count-posts`;
+      this.props.actions.getCount(countUrl);
+      this.props.actions.loadAllFromCategory(category[0].id);
+    }
+    browserHistory.push(url);
   }
 
   handleSerach(e) {
