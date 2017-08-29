@@ -52,4 +52,11 @@ export default {
     width: '100%',
     marginBottom: '30px',
   },
+  paper: {
+    height: '100%',
+    width: '100%',
+    padding: 20,
+    textAlign: 'center',
+    display: 'inline-block',
+  },
 };
