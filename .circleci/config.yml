@@ -17,7 +17,6 @@ jobs:
       #     MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     steps:
       - checkout
-      - run: apt-get install -y language-pack-ja
       - run: cd src && mv config.sample.js config.js
       - run: yarn
       - run: npm run lint
@@ -25,7 +24,6 @@ jobs:
       - run: npm run build
       - run: npm run test:mocha
       - run: npm run server
-      - run: apt-get install -y git
       - run: git clone https://github.com/YasushiKobayashi/go-api.git
       - run: cd go-api/src/app/config && mv sample.tml config.tml
       - run: cd go-api/src/app && glide install
