@@ -25,6 +25,7 @@ dependencies:
     - /opt/circleci/.pyenv
   pre:
     - pip install selenium
+    - rm -rf go-api
     - git clone https://github.com/YasushiKobayashi/go-api.git || true
     - mkdir $GOPATH/bin || true
     - cd go-api && git pull origin master
