@@ -25,13 +25,13 @@ database:
 
 dependencies:
   pre:
-    # - pip install selenium
-    # - git clone https://github.com/YasushiKobayashi/go-api.git
-    # - curl https://glide.sh/get | sh
-    # - cd go-api/src/app/config && mv sample.tml config.tml
-    # - cd go-api/src/app && glide install
-    # - cd go-api/src/app && go build main.go
-    # - cd go-api/src/app && ./main &
+    - pip install selenium
+    - git clone https://github.com/YasushiKobayashi/go-api.git
+    - curl https://glide.sh/get | sh
+    - cd go-api/src/app/config && mv sample.tml config.tml
+    - cd go-api/src/app && glide install
+    - cd go-api/src/app && go build main.go
+    - cd go-api/src/app && ./main &
     - npm install -g yarn mocha
     - yarn
     - npm rebuild node-sass
@@ -43,7 +43,7 @@ test:
     - npm run flow
     - npm run test
     - npm run build
-    # - npm run server
-    # - npm run test:selenium
-    # - cp selenium/log/* $CIRCLE_ARTIFACTS
+    - npm run server
+    - npm run test:selenium
+    - cp selenium/log/* $CIRCLE_ARTIFACTS
     - exit 0
