@@ -6,12 +6,9 @@ jobs:
       - image: circleci/node:8.1.0
     steps:
       - checkout
-      - run:
-        name: System information
-        command: |
-          echo "Node $(node -v)"
-          echo "Yarn v$(yarn --version)"
-      - run: npm i -g yarn mocha
+      - run: echo "hello world"
+      # - run: npm i -g yarn mocha
+      - run: yarn
       - run: npm run lint
       - run: npm run flow
       - run: npm run test
