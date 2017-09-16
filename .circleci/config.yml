@@ -1,7 +1,7 @@
 version: 2
 jobs:
   build:
-    working_directory: $HOME/work
+    working_directory: ~/work
     docker:
       - image: ptpadan1246/ubuntu-chrome-node-go:latest
         environment:
