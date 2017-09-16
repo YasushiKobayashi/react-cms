@@ -7,11 +7,11 @@ jobs:
     steps:
       - checkout
       - run: echo "hello world"
-      # - run: npm i -g yarn mocha
       - run: cd src && mv config.sample.js config.js
       - run: yarn
       - run: npm run lint
       - run: npm run flow
-      - run: npm run test
+      # - run: npm run test
       - run: npm run build
+      - run: npm run server
 
