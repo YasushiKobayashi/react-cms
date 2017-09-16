@@ -21,8 +21,7 @@ database:
 dependencies:
   cache_directories:
     - node_modules
-    - go-api/src/vender
-    - go-api/bin
+    - go-api
     - /opt/circleci/.pyenv
   pre:
     - pip install selenium
