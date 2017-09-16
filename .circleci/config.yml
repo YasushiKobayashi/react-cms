@@ -4,14 +4,30 @@ jobs:
     working_directory: ~/webproject/document
     docker:
       - image: ptpadan1246/ubuntu-chrome-node-go
+        environment:
+          GOPATH: ~/webproject/document/go-api
+          PATH: $PATH:$GOPATH/bin
+          DOCUMENT_ENV: test
+        - image: mysql:5.7
+        command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_bin --innodb-large-prefix=true --innodb-file-format=Barracuda
+        environment:
+          MYSQL_USER: ubuntu
+          MYSQL_PASSWORD:
+          MYSQL_DATABASE: circle_default
+          MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     steps:
       - checkout
       - run: cd src && mv config.sample.js config.js
-      - run: npm i -g yarn mocha
       - run: yarn
       - run: npm run lint
       - run: npm run flow
       - run: npm run build
-      - run: npm run test
+      - run: npm run test:mocha
       - run: npm run server
-
+      - run: apt-get install -y git
+      - run: git clone https://github.com/YasushiKobayashi/go-api.git
+      - run: cd go-api/src/app/config && mv sample.tml config.tml
+      - run: cd go-api/src/app && glide install
+      - run: cd go-api/src/app && go build main.go
+      - run: cd go-api/src/app && ./main &
+      - run: npm run test:selenium
