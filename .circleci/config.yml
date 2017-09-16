@@ -17,6 +17,7 @@ jobs:
       #     MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     steps:
       - checkout
+      - run: echo $PATH
       - run: cd src && mv config.sample.js config.js
       - run: yarn
       - run: npm run lint
