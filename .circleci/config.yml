@@ -1,0 +1,10 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/webproject/document
+    docker:
+      - image: circleci/node:8.1.0
+    steps:
+      - checkout
+      - run: echo "hello world"
+
