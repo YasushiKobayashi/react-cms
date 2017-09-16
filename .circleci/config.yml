@@ -1,20 +1,18 @@
 version: 2
 jobs:
   build:
-    working_directory: /work
+    working_directory: $HOME/work
     docker:
       - image: ptpadan1246/ubuntu-chrome-node-go:latest
         environment:
           DOCUMENT_ENV: test
-          GOPATH: /work/go
-          PATH: $PATH:$GOPATH/bin
-      # - image: mysql:5.7
-      #   command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_bin --innodb-large-prefix=true --innodb-file-format=Barracuda
-      #   environment:
-      #     MYSQL_USER: ubuntu
-      #     MYSQL_PASSWORD:
-      #     MYSQL_DATABASE: circle_default
-      #     MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      - image: mysql:5.7
+        command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_bin --innodb-large-prefix=true --innodb-file-format=Barracuda
+        environment:
+          MYSQL_USER: ubuntu
+          MYSQL_PASSWORD:
+          MYSQL_DATABASE: circle_default
+          MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     steps:
       - checkout
       - run: mkdir -p go/bin
