@@ -6,6 +6,8 @@ jobs:
       - image: ptpadan1246/ubuntu-chrome-node-go:latest
         environment:
           DOCUMENT_ENV: test
+          GOPATH: /work/go
+          PATH: $PATH:$GOPATH/bin
       # - image: mysql:5.7
       #   command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_bin --innodb-large-prefix=true --innodb-file-format=Barracuda
       #   environment:
@@ -15,6 +17,7 @@ jobs:
       #     MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     steps:
       - checkout
+      - run: mkdir -p go/bin
       - run: echo $PATH
       - run: cd src && mv config.sample.js config.js
       - run: yarn
