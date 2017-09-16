@@ -1,7 +1,7 @@
 version: 2
 jobs:
   build:
-    working_directory: /work
+    working_directory: $HOME/work
     docker:
       - image: ptpadan1246/ubuntu-chrome-node-go:latest
         environment:
@@ -15,6 +15,7 @@ jobs:
           MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     steps:
       - checkout
+      - run: pwd
       - run: cd src && mv config.sample.js config.js
       - run: yarn
       - run: npm run lint
@@ -22,9 +23,9 @@ jobs:
       - run: npm run build
       - run: npm run test:mocha
       - run: npm run server
-      - run: cd go && git clone https://github.com/YasushiKobayashi/go-api.git ./
-      - run: cd go/src/app/config && mv sample.tml config.tml
-      - run: cd go/src/app && glide install
-      - run: cd go/src/app && go build main.go
-      - run: cd go/src/app && ./main &
+      - run: cd $GOPATH && git clone https://github.com/YasushiKobayashi/go-api.git ./
+      - run: cd $GOPATH/src/app/config && mv sample.tml config.tml
+      - run: cd $GOPATH/src/app && glide install
+      - run: cd $GOPATH/src/app && go build main.go
+      - run: cd $GOPATH/src/app && ./main &
       - run: npm run test:selenium
