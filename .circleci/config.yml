@@ -3,15 +3,14 @@ jobs:
   build:
     working_directory: ~/webproject/document
     docker:
-      - image: circleci/node:8.1.0
+      - image: ptpadan1246/ubuntu-chrome-node-go
     steps:
       - checkout
-      - run: echo "hello world"
       - run: cd src && mv config.sample.js config.js
       - run: yarn
       - run: npm run lint
       - run: npm run flow
-      # - run: npm run test
       - run: npm run build
+      - run: npm run test
       - run: npm run server
 
