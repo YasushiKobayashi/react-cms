@@ -22,10 +22,12 @@ dependencies:
   cache_directories:
     - node_modules
     - go-api/src/vender
+    - go-api/bin
     - /opt/circleci/.pyenv
   pre:
     - pip install selenium
     - git clone https://github.com/YasushiKobayashi/go-api.git || true
+    - mkdir $GOPATH/bin || true
     - cd go-api && git pull origin master
     - curl https://glide.sh/get | sh
     - cd go-api/src/app/config && mv sample.tml config.tml
