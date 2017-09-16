@@ -25,9 +25,7 @@ dependencies:
     - /opt/circleci/.pyenv
   pre:
     - pip install selenium
-    - rm -rf go-api
     - git clone https://github.com/YasushiKobayashi/go-api.git || true
-    - mkdir $GOPATH/bin || true
     - cd go-api && git pull origin master
     - curl https://glide.sh/get | sh
     - cd go-api/src/app/config && mv sample.tml config.tml
@@ -52,5 +50,5 @@ test:
     - cd go-api/src/app && ./main &
     - npm run test:selenium
     - cp selenium/log/* $CIRCLE_ARTIFACTS
-    - cp go-api/src/app/log $CIRCLE_ARTIFACTS
+    - cp go-api/src/app/log/* $CIRCLE_ARTIFACTS
     - exit 0
