@@ -7,6 +7,7 @@ jobs:
     steps:
       - checkout
       - run: cd src && mv config.sample.js config.js
+      - run: npm i -g yarn mocha
       - run: yarn
       - run: npm run lint
       - run: npm run flow
