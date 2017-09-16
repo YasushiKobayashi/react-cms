@@ -3,18 +3,18 @@ jobs:
   build:
     working_directory: ~/webproject/document
     docker:
-      - image: ptpadan1246/ubuntu-chrome-node-go
+      - image: ptpadan1246/ubuntu-chrome-node-go:latest
         environment:
           GOPATH: ~/webproject/document/go-api
           PATH: $PATH:$GOPATH/bin
-          DOCUMENT_ENV: test
-      - image: mysql:5.7
-        command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_bin --innodb-large-prefix=true --innodb-file-format=Barracuda
-        environment:
-          MYSQL_USER: ubuntu
-          MYSQL_PASSWORD:
-          MYSQL_DATABASE: circle_default
-          MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      #     DOCUMENT_ENV: test
+      # - image: mysql:5.7
+      #   command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_bin --innodb-large-prefix=true --innodb-file-format=Barracuda
+      #   environment:
+      #     MYSQL_USER: ubuntu
+      #     MYSQL_PASSWORD:
+      #     MYSQL_DATABASE: circle_default
+      #     MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     steps:
       - checkout
       - run: cd src && mv config.sample.js config.js
