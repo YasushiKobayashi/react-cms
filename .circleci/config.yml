@@ -17,7 +17,6 @@ jobs:
       #     MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     steps:
       - checkout
-      - run: localedef -f UTF-8 -i ja_JP ja_JP.UTF-8
       - run: cd src && mv config.sample.js config.js
       - run: yarn
       - run: npm run lint
