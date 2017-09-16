@@ -1,12 +1,10 @@
 version: 2
 jobs:
   build:
-    working_directory: ~/webproject/document
+    working_directory: ~/
     docker:
       - image: ptpadan1246/ubuntu-chrome-node-go:latest
         environment:
-          GOPATH: ~/webproject/document/go-api
-          PATH: $PATH:$GOPATH/bin:$PATH
           DOCUMENT_ENV: test
       # - image: mysql:5.7
       #   command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_bin --innodb-large-prefix=true --innodb-file-format=Barracuda
@@ -25,9 +23,9 @@ jobs:
       - run: npm run build
       - run: npm run test:mocha
       - run: npm run server
-      - run: git clone https://github.com/YasushiKobayashi/go-api.git
-      - run: cd go-api/src/app/config && mv sample.tml config.tml
-      - run: cd go-api/src/app && glide install
-      - run: cd go-api/src/app && go build main.go
-      - run: cd go-api/src/app && ./main &
+      - run: cd go && git clone https://github.com/YasushiKobayashi/go-api.git ./
+      - run: cd go/src/app/config && mv sample.tml config.tml
+      - run: cd go/src/app && glide install
+      - run: cd go/src/app && go build main.go
+      - run: cd go/src/app && ./main &
       - run: npm run test:selenium
