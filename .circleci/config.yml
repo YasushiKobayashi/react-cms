@@ -17,6 +17,7 @@ jobs:
       #     MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     steps:
       - checkout
+      - run: apt-get install -y language-pack-ja
       - run: cd src && mv config.sample.js config.js
       - run: yarn
       - run: npm run lint
