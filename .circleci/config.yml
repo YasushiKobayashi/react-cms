@@ -9,7 +9,6 @@ jobs:
       - image: mysql:5.7
         command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_bin --innodb-large-prefix=true --innodb-file-format=Barracuda
         environment:
-          MYSQL_USER: ubuntu
           MYSQL_PASSWORD:
           MYSQL_DATABASE: circle_default
           MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
