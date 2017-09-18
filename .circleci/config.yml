@@ -31,6 +31,5 @@ jobs:
       - run: cd $GOPATH/src/app && go build main.go
       - run:
           command: cd $GOPATH/src/app && nohup ./main
-          background: true
-      - run: curl http://127.0.0.1:5000
+          # background: true
       - run: npm run test:selenium
