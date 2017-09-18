@@ -32,4 +32,4 @@ jobs:
       - run:
           command: $GOPATH/src/app/main
           background: true
-      - run: npm run test:selenium
+      - run: sleep 15s && npm run test:selenium
