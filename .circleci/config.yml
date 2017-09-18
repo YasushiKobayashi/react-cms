@@ -30,7 +30,6 @@ jobs:
       - run: cd $GOPATH/src/app && glide install
       - run: cd $GOPATH/src/app && go build main.go
       - run:
-          command: cd $GOPATH/src/app && nohup ./main &
-          no_output_timeout: 30s
-          # background: true
+          command: .$GOPATH/src/app/main
+          background: true
       - run: npm run test:selenium
