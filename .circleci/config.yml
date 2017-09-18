@@ -14,15 +14,6 @@ jobs:
           MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     steps:
       - checkout
-      - run: pwd
-      - run: cd src && mv config.sample.js config.js
-      - run: npm rebuild node-sass
-      - run: yarn
-      - run: npm run lint
-      - run: npm run flow
-      - run: npm run build
-      - run: npm run test
-      - run: npm run server
       - run: mkdir -p $GOPATH
       - run: cd $GOPATH && git clone https://github.com/YasushiKobayashi/go-api.git ./
       - run: curl https://glide.sh/get | sh
@@ -32,4 +23,12 @@ jobs:
       - run:
           command: $GOPATH/src/app/main
           background: true
-      - run: sleep 15s && npm run test:selenium
+      - run: cd src && mv config.sample.js config.js
+      - run: npm rebuild node-sass
+      - run: yarn
+      - run: npm run lint
+      - run: npm run flow
+      - run: npm run build
+      - run: npm run test
+      - run: npm run server
+      - run: npm run test:selenium
