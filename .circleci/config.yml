@@ -30,5 +30,6 @@ jobs:
       - run: cd $GOPATH/src/app && glide install
       - run: cd $GOPATH/src/app && go build main.go
       - run: cd $GOPATH/src/app && nohup ./main &
+        background: true
       - run: curl http://localhost:5000
       - run: npm run test:selenium
