@@ -24,6 +24,7 @@ jobs:
       - run: npm run build
       - run: npm run test
       - run: npm run server
+      - run: mkdir -p $GOPATH
       - run: cd $GOPATH && git clone https://github.com/YasushiKobayashi/go-api.git ./
       - run: curl https://glide.sh/get | sh
       - run: cd $GOPATH/src/app/config && mv sample.tml config.tml
