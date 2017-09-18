@@ -17,13 +17,15 @@ jobs:
       - checkout
       - run: pwd
       - run: cd src && mv config.sample.js config.js
+      - run: npm rebuild node-sass
       - run: yarn
       - run: npm run lint
       - run: npm run flow
       - run: npm run build
-      - run: npm run test:mocha
+      - run: npm run test
       - run: npm run server
       - run: cd $GOPATH && git clone https://github.com/YasushiKobayashi/go-api.git ./
+      - run: curl https://glide.sh/get | sh
       - run: cd $GOPATH/src/app/config && mv sample.tml config.tml
       - run: cd $GOPATH/src/app && glide install
       - run: cd $GOPATH/src/app && go build main.go

@@ -15,7 +15,7 @@ class TestWebdriver(unittest.TestCase):
         self.WEIT = 30
         self.SLEEP = 2
 
-    def test_アドレス不正なため新規登録失敗(self):
+    def test_email_faile(self):
         try:
             method = inspect.currentframe().f_code.co_name
             driver = self.driver
@@ -37,7 +37,7 @@ class TestWebdriver(unittest.TestCase):
             driver.quit()
 
 
-    def test_新規登録成功(self):
+    def test_success_regist(self):
         try:
             method = inspect.currentframe().f_code.co_name
             driver = self.driver
@@ -60,7 +60,7 @@ class TestWebdriver(unittest.TestCase):
             driver.quit()
 
 
-    def test_ログイン成功(self):
+    def test_success_login(self):
         try:
             method = inspect.currentframe().f_code.co_name
             driver = self.driver
