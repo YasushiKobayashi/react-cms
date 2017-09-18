@@ -32,5 +32,5 @@ jobs:
       - run:
           command: cd $GOPATH/src/app && ./main
           background: true
-      - run: curl http://localhost:5000
+      - run: curl http://127.0.0.1:5000
       - run: npm run test:selenium
