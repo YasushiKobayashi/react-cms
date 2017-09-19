@@ -34,6 +34,9 @@ class TestWebdriver(unittest.TestCase):
             token = driver.get_cookie('token')
             self.assertEqual(None, token)
         except Exception as e:
+            print(e)
+            print_chrome_console(driver, method)
+            take_screen_shot(driver, method)
             raise Exception(e)
 
 
@@ -55,6 +58,8 @@ class TestWebdriver(unittest.TestCase):
             self.assertNotEqual('', token['value'])
         except Exception as e:
             print(e)
+            print_chrome_console(driver, method)
+            take_screen_shot(driver, method)
             raise Exception(e)
 
 
@@ -71,6 +76,8 @@ class TestWebdriver(unittest.TestCase):
             self.assertNotEqual('', token['value'])
         except Exception as e:
             print(e)
+            print_chrome_console(driver, method)
+            take_screen_shot(driver, method)
             raise Exception(e)
 
 

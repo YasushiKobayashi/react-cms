@@ -48,6 +48,9 @@ module.exports = [
         binaryPath: './node_modules/.bin/flow',
         failOnError: true,
       }),
+      new webpack.DefinePlugin({
+        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+      }),
       new HtmlWebpackPlugin({
         template: './index.html',
         files: {
