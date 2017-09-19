@@ -9,8 +9,10 @@ from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
@@ -70,4 +72,7 @@ def login_success(driver):
 
 
 def send_keys_by_id(driver, id, val):
+    WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.ID, id))
+    )
     driver.find_element_by_id(id).send_keys(val)

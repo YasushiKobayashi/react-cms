@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import unittest
-import time
 import inspect
 
 from modules import start_chrome, start_firefox, send_keys_by_id, login_success, take_screen_shot, print_chrome_console
@@ -28,7 +27,6 @@ class TestWebdriver(unittest.TestCase):
             send_keys_by_id(driver, 'email_signup', 'pythongmail.com')
             send_keys_by_id(driver, 'password_signup', 'pythonpython')
             driver.find_element_by_id('btn_signup').click()
-            time.sleep(self.SLEEP)
             take_screen_shot(driver, method)
             print_chrome_console(driver, method)
             token = driver.get_cookie('token')
@@ -48,7 +46,6 @@ class TestWebdriver(unittest.TestCase):
             send_keys_by_id(driver, 'password_signup', 'pythonpython')
             driver.find_element_by_id('btn_signup').click()
 
-            time.sleep(self.SLEEP)
             token = driver.get_cookie('token')
             take_screen_shot(driver, method)
             print_chrome_console(driver, method)
