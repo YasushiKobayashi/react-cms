@@ -5,8 +5,8 @@ function config(setting) {
 }
 
 const apiUrl = config({
-  develop: 'http//localhost:5000/',
-  production: 'http//localhost:5000/',
+  develop: 'http://127.0.0.1:5000/',
+  production: 'http://127.0.0.1:5000/',
 });
 
 const siteTitle = config({

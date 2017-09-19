@@ -12,10 +12,13 @@ class TestWebdriver(unittest.TestCase):
     def setUp(self):
         self.URL = 'http://localhost:3000/'
         self.driver = start_chrome()
-        self.WEIT = 30
+        self.WEIT = 50
         self.SLEEP = 2
 
-    def test_アドレス不正なため新規登録失敗(self):
+    def tearDown(self):
+        self.driver.quit()
+
+    def test1_email_faile(self):
         try:
             method = inspect.currentframe().f_code.co_name
             driver = self.driver
@@ -31,13 +34,10 @@ class TestWebdriver(unittest.TestCase):
             token = driver.get_cookie('token')
             self.assertEqual(None, token)
         except Exception as e:
-            print(e)
             raise Exception(e)
-        finally:
-            driver.quit()
 
 
-    def test_新規登録成功(self):
+    def test2_success_regist(self):
         try:
             method = inspect.currentframe().f_code.co_name
             driver = self.driver
@@ -56,11 +56,9 @@ class TestWebdriver(unittest.TestCase):
         except Exception as e:
             print(e)
             raise Exception(e)
-        finally:
-            driver.quit()
 
 
-    def test_ログイン成功(self):
+    def test3_success_login(self):
         try:
             method = inspect.currentframe().f_code.co_name
             driver = self.driver
@@ -74,8 +72,6 @@ class TestWebdriver(unittest.TestCase):
         except Exception as e:
             print(e)
             raise Exception(e)
-        finally:
-            driver.quit()
 
 
 if __name__ == "__main__":
