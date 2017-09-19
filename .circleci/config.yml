@@ -32,6 +32,9 @@ jobs:
       - run: npm run build
       - run: npm run test
       - run: npm run server
-      - run: npm run test:selenium
+      - run: python selenium/test_webdriver.py
+      - run: mkdir -p $CIRCLE_TEST_REPORTS
       - run: cp selenium/log/* $CIRCLE_TEST_REPORTS
       - run: cp $GOPATH/src/app/log/* $CIRCLE_TEST_REPORTS
+      - store_test_results:
+          path: /tmp/test-results
