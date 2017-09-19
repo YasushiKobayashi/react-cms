@@ -34,9 +34,9 @@ jobs:
       - run: npm run test
       - run: npm run server
       - run: python selenium/test_webdriver.py
-
-    artifacts:
       - run: cp selenium/log/* $CIRCLE_TEST_ARTIFACTS
       - run: cp $GOPATH/src/app/log/* $CIRCLE_TEST_ARTIFACTS
+      - run: cp $GOPATH/src/app/log/* $CIRCLE_TEST_ARTIFACTS
+          when: on_fail
       - store_artifacts:
           path: /tmp/artifacts
