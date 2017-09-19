@@ -35,7 +35,7 @@ jobs:
       - run: npm run server
       - run: python selenium/test_webdriver.py
       - store_artifacts:
-          commnd: |
+          command: |
               cp selenium/log/* $CIRCLE_TEST_ARTIFACTS;
               cp $GOPATH/src/app/log/* $CIRCLE_TEST_ARTIFACTS
           path: /tmp/artifacts
