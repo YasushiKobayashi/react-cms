@@ -12,7 +12,7 @@ class TestWebdriver(unittest.TestCase):
     def setUp(self):
         self.URL = 'http://localhost:3000/'
         self.driver = start_chrome()
-        self.WEIT = 30
+        self.WEIT = 50
         self.SLEEP = 2
 
     def tearDown(self):

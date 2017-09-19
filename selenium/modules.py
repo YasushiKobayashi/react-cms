@@ -72,7 +72,7 @@ def login_success(driver):
 
 
 def send_keys_by_id(driver, id, val):
-    WebDriverWait(driver, 10).until(
+    WebDriverWait(driver, 50).until(
         EC.presence_of_element_located((By.ID, id))
     )
     driver.find_element_by_id(id).send_keys(val)
