@@ -6,6 +6,7 @@ jobs:
       - image: ptpadan1246/ubuntu-chrome-node-go:latest
         environment:
           DOCUMENT_ENV: test
+          CIRCLE_TEST_REPORTS: /tmp/test-results
       - image: mysql:5.7
         command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_bin --innodb-large-prefix=true --innodb-file-format=Barracuda
         environment:
@@ -24,11 +25,13 @@ jobs:
           command: $GOPATH/src/app/main
           background: true
       - run: cd src && mv config.sample.js config.js
-      - run: npm rebuild node-sass
       - run: yarn
+      - run: npm rebuild node-sass
       - run: npm run lint
       - run: npm run flow
       - run: npm run build
       - run: npm run test
       - run: npm run server
       - run: npm run test:selenium
+      - run: cp selenium/log/* $CIRCLE_TEST_REPORTS
+      - run: cp $GOPATH/src/app/log/* $CIRCLE_TEST_REPORTS
