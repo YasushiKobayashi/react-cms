@@ -7,7 +7,14 @@ import cssloaders from './webpack.cssloaders';
 
 loaders.push(cssloaders);
 const env = process.env.NODE_ENV || 'production';
-const plugins = env !== 'production' ? [] : [
+const plugins = env !== 'production' ? [
+  new webpack.DefinePlugin({
+    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+  }),
+] : [
+  new webpack.DefinePlugin({
+    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+  }),
   new webpack.optimize.UglifyJsPlugin(
     {
       compress: {

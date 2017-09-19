@@ -1,3 +1,4 @@
+import webpack from 'webpack';
 import path from 'path';
 import fs from 'fs';
 import nodeExternals from 'webpack-node-externals';
@@ -33,4 +34,9 @@ module.exports = {
   module: {
     loaders,
   },
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+    }),
+  ],
 };
