@@ -16,13 +16,11 @@ class TestWebdriver(unittest.TestCase):
         self.SLEEP = 2
 
     def tearDown(self):
-        print("tearDown")
         self.driver.quit()
 
     def test1_email_faile(self):
         try:
             method = inspect.currentframe().f_code.co_name
-            print(method)
             driver = self.driver
             driver.get(self.URL)
             driver.implicitly_wait(self.WEIT)
@@ -42,7 +40,6 @@ class TestWebdriver(unittest.TestCase):
     def test2_success_regist(self):
         try:
             method = inspect.currentframe().f_code.co_name
-            print(method)
             driver = self.driver
             driver.get(self.URL)
             driver.implicitly_wait(self.WEIT)
@@ -64,7 +61,6 @@ class TestWebdriver(unittest.TestCase):
     def test3_success_login(self):
         try:
             method = inspect.currentframe().f_code.co_name
-            print(method)
             driver = self.driver
             driver.get(self.URL)
             driver.implicitly_wait(self.WEIT)
