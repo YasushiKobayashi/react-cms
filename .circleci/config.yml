@@ -25,8 +25,8 @@ jobs:
           command: $GOPATH/src/app/main
           background: true
       - run: cd src && mv config.sample.js config.js
-      - run: yarn
       - run: npm rebuild node-sass
+      - run: yarn
       - run: npm run lint
       - run: npm run flow
       - run: npm run build
