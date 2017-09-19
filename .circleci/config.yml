@@ -36,7 +36,10 @@ jobs:
       - run: python selenium/test_webdriver.py
       - run: cp selenium/log/* $CIRCLE_TEST_ARTIFACTS
       - run: cp $GOPATH/src/app/log/* $CIRCLE_TEST_ARTIFACTS
-      - run: cp $GOPATH/src/app/log/* $CIRCLE_TEST_ARTIFACTS
+      - run:
+          command: |
+              cp selenium/log/* $CIRCLE_TEST_ARTIFACTS;
+              cp $GOPATH/src/app/log/* $CIRCLE_TEST_ARTIFACTS
           when: on_fail
       - store_artifacts:
           path: /tmp/artifacts
